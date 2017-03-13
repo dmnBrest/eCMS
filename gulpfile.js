@@ -11,7 +11,6 @@ gulp.task('server:templates', function() {
 });
 
 gulp.task('server:build', function() {
-	gulp.src("./static/**/*").pipe(gulp.dest('./dist/static'));
 	var tsResult = gulp.src("./server/**/*.ts")
 		.pipe(sourcemaps.init())
 		.pipe(tsProject());
@@ -26,7 +25,7 @@ gulp.task('server:nodemon', ['server:templates', 'server:build'], function () {
 		script: './dist/app.js',
 		ext: 'html js',
 		watch: ['dist'],
-		ignore: ['dist/static'],
+		//ignore: ['dist/static'],
 		//tasks: ['tslint']
 	}).on('restart', function () {
 		 //console.log('restarted!');
@@ -34,7 +33,7 @@ gulp.task('server:nodemon', ['server:templates', 'server:build'], function () {
 });
 
 gulp.task('start', ['server:nodemon'], function () {
-	gulp.watch('src/server/**/*.ts', ['server:build']);
-	gulp.watch('src/server/templates/**/*.html', ['server:templates']);
+	gulp.watch('./server/**/*.ts', ['server:build']);
+	gulp.watch('./server/templates/**/*.html', ['server:templates']);
 });
 
