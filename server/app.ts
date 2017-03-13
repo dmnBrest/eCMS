@@ -5,6 +5,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as nunjucks from 'nunjucks'
 import * as http from 'http';
+import { ILocals } from './interfaces';
+import { AppConfig } from './config';
 import { AuthRouter } from './routers/auth.router';
 // import { RemoteActionRouter } from './routers/remote-action.router';
 
@@ -14,7 +16,7 @@ export class ExpressServer {
 	public server: http.Server;
 
 	public constructor() {
-		
+		let config = AppConfig.getInstance();
 	}
 
 	public run(): Promise<any> {
@@ -31,7 +33,11 @@ export class ExpressServer {
 			console.log(`Route: ${req.path}`);
 			next();
 		});
-		
+
+		//(this.app.locals as ILocals).project = this.ctrl.selectedProject;
+		//(this.app.locals as ILocals).projectConfig = this.ctrl.selectedProjectConfig;
+
+
 		this.app.use(bodyParser.urlencoded({ extended: false }));
 		this.app.use(bodyParser.json());
 
