@@ -5,17 +5,6 @@ export interface IConfig {
     dbPath: string
 }
 
-export class AppConfig {
+console.log('Init config');
 
-	private static instance: IConfig;
-	private constructor() {}
-	public static getInstance(): IConfig {
-		if (!AppConfig.instance) {
-			this.instance = JSON.parse(fs.readFileSync(path.join(__dirname, './../config.json'), 'utf8'));
-			console.log('Config init');
-			console.log(this.instance);
-		}
-		return this.instance;
-	}
-
-}
+export let appConfig:IConfig = JSON.parse(fs.readFileSync(path.join(__dirname, './../config.json'), 'utf8'));

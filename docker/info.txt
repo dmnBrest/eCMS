@@ -1,0 +1,6 @@
+https://hub.docker.com/_/postgres/
+
+docker run --name ddb1 -e POSTGRES_PASSWORD=password -d -p 5432:5432 postgres
+docker ps (-a)
+docker exec -it <id/name> bash
+docker start/stop <name>

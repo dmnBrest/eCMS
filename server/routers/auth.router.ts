@@ -1,15 +1,19 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
-import { AppConfig, IConfig } from './../config';
-//import { LocalsInterface } from './../server';
+import * as db from './../db';
 
 class Auth {
 
 	public index(req: Request, res: Response, next?: NextFunction) {
 
-		let config = AppConfig.getInstance();
-		console.log(config);
+		db.any('select * from public.user where username=$1', ['doom1'])
+		.then(data => {
+			console.log(data);
+		})
+		.catch(error => {
+			console.log(error);
+		});
 
 		res.render('auth/index.html', {});
 	}
@@ -19,7 +23,4 @@ class Auth {
 const auth = new Auth();
 
 export const AuthRouter = Router();
-// AppsManagerRouter.get('/', manager.index);
-//AppsManagerRouter.get('/new/:name', manager.createNewApp);
 AuthRouter.get('/', auth.index);
-//AuthRouter.get('/:app/*', manager.runApp);

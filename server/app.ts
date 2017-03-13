@@ -7,7 +7,7 @@ import * as nunjucks from 'nunjucks';
 import * as morgan from 'morgan';
 import * as http from 'http';
 // import { } from './interfaces';
-import { AppConfig, IConfig } from './config';
+import { appConfig } from './config';
 import { AuthRouter } from './routers/auth.router';
 // import { RemoteActionRouter } from './routers/remote-action.router';
 
@@ -17,7 +17,7 @@ export class ExpressServer {
 	public server: http.Server;
 
 	public constructor() {
-		let config:IConfig = AppConfig.getInstance();
+
 	}
 
 	public run(): Promise<any> {
@@ -34,10 +34,6 @@ export class ExpressServer {
 			console.log(`Route: ${req.path}`);
 			next();
 		});
-
-		//(this.app.locals as ILocals).project = this.ctrl.selectedProject;
-		//(this.app.locals as ILocals).projectConfig = this.ctrl.selectedProjectConfig;
-
 
 		this.app.use(bodyParser.urlencoded({ extended: false }));
 		this.app.use(bodyParser.json());
