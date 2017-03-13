@@ -1,13 +1,15 @@
-
 import * as fs from 'fs';
 import * as path from 'path';
-import { ILocals } from './interfaces';
+
+export interface IConfig {
+    dbPath: string
+}
 
 export class AppConfig {
 
-	private static instance: ILocals;
+	private static instance: IConfig;
 	private constructor() {}
-	public static getInstance(): ILocals {
+	public static getInstance(): IConfig {
 		if (!AppConfig.instance) {
 			this.instance = JSON.parse(fs.readFileSync(path.join(__dirname, './../config.json'), 'utf8'));
 			console.log('Config init');

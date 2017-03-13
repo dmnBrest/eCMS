@@ -1,12 +1,16 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
+import { AppConfig, IConfig } from './../config';
 //import { LocalsInterface } from './../server';
 
 class Auth {
 
 	public index(req: Request, res: Response, next?: NextFunction) {
-		//let locals:LocalsInterface = req.app.locals;
+
+		let config = AppConfig.getInstance();
+		console.log(config);
+
 		res.render('auth/index.html', {});
 	}
 

@@ -3,10 +3,11 @@ import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as path from 'path';
 import * as fs from 'fs';
-import * as nunjucks from 'nunjucks'
+import * as nunjucks from 'nunjucks';
+import * as morgan from 'morgan';
 import * as http from 'http';
-import { ILocals } from './interfaces';
-import { AppConfig } from './config';
+// import { } from './interfaces';
+import { AppConfig, IConfig } from './config';
 import { AuthRouter } from './routers/auth.router';
 // import { RemoteActionRouter } from './routers/remote-action.router';
 
@@ -16,13 +17,13 @@ export class ExpressServer {
 	public server: http.Server;
 
 	public constructor() {
-		let config = AppConfig.getInstance();
+		let config:IConfig = AppConfig.getInstance();
 	}
 
 	public run(): Promise<any> {
 		this.app = express();
 
-		/* SERVER Templates */
+		this.app.use(morgan('tiny'));
 
 		nunjucks.configure(path.join(__dirname, 'templates'), {
 			autoescape: true,
@@ -62,7 +63,7 @@ export class ExpressServer {
 				this.server = http.createServer(this.app);
 
 				this.server.listen(3001, () => {
-					console.log('NG2-SFDC listening on port 3001!');
+					console.log('SERVER started on port 3001!');
 					resolve();
 				}).on('error', (e) => {reject(e)});
 			} catch(e) {
