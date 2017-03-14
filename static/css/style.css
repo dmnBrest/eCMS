@@ -1,0 +1,39 @@
+/* inspiration http://webapplayers.com/inspinia_admin-v2.7/# */
+
+body {
+	font-family: 'Open Sans', sans-serif;
+}
+
+header {
+	background-color: #f3f3f4;
+	border-bottom: 1px solid #e7eaec;
+	color: #808080;
+}
+
+header .c-logo {
+	padding: 10px 0;
+	font-size: 20px;
+
+}
+
+header .c-top-menu {
+	text-align: right;
+	margin: 0;
+}
+
+header .c-top-menu li {
+	display: inline-block;
+	list-style: none;
+}
+
+header .c-top-menu a {
+	display: inline-block;
+	padding: 15px 15px;
+	font-size: 12px;
+	text-decoration: none;
+}
+
+header .c-top-menu a:hover {
+	background-color: #1AB394;
+	color: #fff;
+}

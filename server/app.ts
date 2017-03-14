@@ -8,7 +8,10 @@ import * as morgan from 'morgan';
 import * as http from 'http';
 // import { } from './interfaces';
 import { appConfig } from './config';
+import { HomeRouter } from './routers/home.router';
 import { AuthRouter } from './routers/auth.router';
+import { ForumRouter } from './routers/forum.router';
+import { ProfileRouter } from './routers/profile.router';
 // import { RemoteActionRouter } from './routers/remote-action.router';
 
 export class ExpressServer {
@@ -38,15 +41,12 @@ export class ExpressServer {
 		this.app.use(bodyParser.urlencoded({ extended: false }));
 		this.app.use(bodyParser.json());
 
-		this.app.use('/static', express.static(path.join(__dirname, 'static')));
-		this.app.use('/dist', express.static(path.join(__dirname, 'dist')));
+		this.app.use('/static', express.static(path.join(__dirname, '../static')));
+		//this.app.use('/dist', express.static(path.join(__dirname, '../dist/client')));
 		this.app.use('/auth', AuthRouter);
-
-		this.app.get('/', (req: express.Request, res: express.Response) => {
-
-			res.render('home/index.html', {});
-
-		});
+		this.app.use('/forum', ForumRouter);
+		this.app.use('/profile', ProfileRouter);
+		this.app.get('/', HomeRouter);
 	
 		// Handle 404
 		this.app.use(function(req, res) {
