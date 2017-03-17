@@ -15,7 +15,7 @@ class Profile {
 			console.log(error);
 		});
 
-		res.render('profile/index.html', {});
+		res.render('profile.index.html', {});
 	}
 
 }

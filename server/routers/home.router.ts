@@ -15,7 +15,7 @@ class Home {
 			console.log(error);
 		});
 
-		res.render('home/index.html', {});
+		res.render('home.index.html', {});
 	}
 
 }

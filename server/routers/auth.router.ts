@@ -15,7 +15,7 @@ class Auth {
 			console.log(error);
 		});
 
-		res.render('auth/index.html', {});
+		res.render('auth.index.html', {});
 	}
 
 }

@@ -15,7 +15,7 @@ class Forum {
 			console.log(error);
 		});
 
-		res.render('forum/index.html', {});
+		res.render('forum.index.html', {});
 	}
 
 }
