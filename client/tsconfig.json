@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "rootDirs": [
+            "./"
+        ],
+        "target": "es6",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "noImplicitAny": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "typeRoots" : ["./../node_modules/@types"]
+    },
+    "include": [
+        "./"
+    ],
+    "exclude": [
+        "./../node_modules",
+        "./.git"
+    ]
+}

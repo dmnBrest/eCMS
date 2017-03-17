@@ -7,4 +7,4 @@ export interface IConfig {
 
 console.log('Init config');
 
-export let appConfig:IConfig = JSON.parse(fs.readFileSync(path.join(__dirname, './../config.json'), 'utf8'));
+export const appConfig:IConfig = JSON.parse(fs.readFileSync(path.join(__dirname, './../config.json'), 'utf8'));
