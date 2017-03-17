@@ -11,10 +11,17 @@ import { SharedService } from './../../services/shared.service';
 	selector: 'app-login',
 	template: `
 		<h1>X APP LOGIN X</h1>
+		<button (click)="clickMe()">CLICK !</button>
 	`
 })
 class AppComponent {
-	
+
+	constructor(private sharedService:SharedService) { }
+
+	clickMe(): void {
+		console.log('D1', this.sharedService.st);
+		this.sharedService.doSomething().then((s) => {console.log('D2: ', s)});
+	}
 }
 
 /* APP MODULE */
@@ -24,10 +31,10 @@ class AppComponent {
 		FormsModule
 	],
 	declarations: [
-
+		AppComponent
 	],
 	providers: [
-		SharedService
+		{provide: SharedService, useValue: (window as any).sharedService}
 	],
 	bootstrap: [ AppComponent ]
 })
@@ -36,7 +43,6 @@ class AppModule { }
 
 /* APP BOOTSTRAP */
 platformBrowserDynamic().bootstrapModule(
-	AppModule, 
-	{ providers: [{provide: SharedService, useValue: (window as any).sharedService}] }
+	AppModule
 );
 

@@ -13,7 +13,7 @@ export class SharedService {
 	st: string = 'ZOOM!';
 }
 
+(window as any).sharedService = new SharedService();
 
-// export class SharedService {
-//   showModal:Subject = new Subject();
-// }
+console.log('Init Shared Service');
+console.log((window as any).sharedService);
