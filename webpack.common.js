@@ -13,7 +13,6 @@ var config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config.json'), 'ut
 
 var entryFromConfig = {
     'vendor': path.join(__dirname, 'client', 'vendor.ts'),
-	'sharedService': path.join(__dirname, 'client', 'services', 'shared.service.ts'),
     'globals': ['zone.js', 'reflect-metadata'],
 }
 

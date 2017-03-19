@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SharedService } from './../../../services/shared.service';
+import { StoreService } from './../../../services/store.service';
 
 @Component({
 	selector: 'c-login',
@@ -8,11 +8,11 @@ import { SharedService } from './../../../services/shared.service';
 
 export class LoginComponent implements OnInit {
 
-	constructor(private sharedService:SharedService) { }
+	constructor(private storeService:StoreService) { }
 
 	ngOnInit(): void {
-		console.log('D1', this.sharedService.st);
-		this.sharedService.doSomething().then((s) => {console.log('D2: ', s)});
+		console.log('D1', this.storeService.st);
+		this.storeService.doSomething().then((s) => {console.log('D2: ', s)});
 	}
 
 }

@@ -2,6 +2,11 @@
 
 body {
 	font-family: 'Open Sans', sans-serif;
+	background-color: #F3F3F4;
+}
+
+h1, h2, h3, h4, h5 {
+	margin: 0;
 }
 
 header {
@@ -36,4 +41,63 @@ header .c-top-menu a {
 header .c-top-menu a:hover {
 	background-color: #1AB394;
 	color: #fff;
+}
+
+footer {
+	min-height: 60px;
+}
+
+.c-sub-header {
+	background: #fff;
+	border-bottom: 1px solid #e7eaec;
+	text-align: right;
+}
+
+.c-sub-header ul {
+	margin: 0
+}
+
+.c-sub-header li {
+	display: inline-block;
+}
+.c-sub-header li a {
+	display: inline-block;
+	padding: 4px 6px;
+	font-size: 12px;
+}
+
+.c-panel {
+	background-color: #fff;
+	border: 1px solid #e7eaec;
+	border-radius: 4px;
+	font-size: 14px;
+	color: #676a6c;
+}
+
+.c-panel-header {
+	padding: 15px 20px;
+	color: #1AB394;
+	border-bottom: 1px solid #e7eaec;
+	font-size: 25px;
+	font-weight: 100;
+}
+
+.c-panel-body {
+	padding: 20px;	
+}
+
+.c-auth-app {
+	margin-top: 50px;
+}
+
+.c-auth-app-links {
+	margin-top: 20px;
+}
+
+.c-auth-app-links li {
+	list-style: none;
+}
+
+.c-auth-app-links .active-link {
+	display: none;
 }

@@ -3,31 +3,42 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, Router, NavigationStart } from '@angular/router';
 import { Component } from '@angular/core';
+import { StoreModule } from '@ngrx/store';
 
 import { LoginComponent } from './components/login.component';
 import { RegisterComponent } from './components/register.component';
-import { SharedService } from './../../services/shared.service';
+import { StoreService } from './../../services/store.service';
 
 /* APP COMPONENT */
 @Component({
 	selector: 'app-auth',
-	template: `
-		<a routerLink="/login" routerLinkActive="active-link">Login</a>
-		<a routerLink="/register" routerLinkActive="active-link">Register</a>
-		<router-outlet></router-outlet>
-	`
+	templateUrl: './auth.app.html'
 })
 class AppComponent {
-	title = 'Auth App ...';
+
+	currentUrl: string;
+
+	constructor(private router: Router) {
+		this.router.events.subscribe(event => {
+			if(event instanceof NavigationStart) {
+				console.log(event);
+				console.log(event.url);
+				this.currentUrl = event.url;
+			}
+		});
+	}
+
+	
+
 }
 
 /* APP MODULE */
 const routes: Routes = [
 	{ path: 'login', component: LoginComponent },
 	{ path: 'register', component: RegisterComponent },
-	{ path: '', redirectTo: '/login', pathMatch: 'full' },
+	{ path: '**', redirectTo: '/login', pathMatch: 'full' },
 ];
 
 @NgModule({
@@ -43,7 +54,7 @@ const routes: Routes = [
 		RegisterComponent
 	],
 	providers: [
-		{provide: SharedService, useValue: (window as any).sharedService}
+		{provide: StoreService, useValue: (window as any).storeService}
 	],
 	bootstrap: [ AppComponent ]
 })

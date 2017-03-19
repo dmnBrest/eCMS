@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 
-import { SharedService } from './../../services/shared.service';
+import { StoreService } from './../../services/store.service';
 
 /* APP COMPONENT */
 @Component({
@@ -16,11 +16,11 @@ import { SharedService } from './../../services/shared.service';
 })
 class AppComponent {
 
-	constructor(private sharedService:SharedService) { }
+	constructor(private storeService:StoreService) { }
 
 	clickMe(): void {
-		console.log('D1', this.sharedService.st);
-		this.sharedService.doSomething().then((s) => {console.log('D2: ', s)});
+		console.log('D1', this.storeService.st);
+		this.storeService.doSomething().then((s) => {console.log('D2: ', s)});
 	}
 }
 
@@ -34,7 +34,7 @@ class AppComponent {
 		AppComponent
 	],
 	providers: [
-		{provide: SharedService, useValue: (window as any).sharedService}
+		{provide: StoreService, useValue: (window as any).storeService}
 	],
 	bootstrap: [ AppComponent ]
 })
