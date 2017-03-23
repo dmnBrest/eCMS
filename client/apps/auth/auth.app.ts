@@ -5,11 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes, Router, NavigationStart } from '@angular/router';
 import { Component } from '@angular/core';
-import { StoreModule } from '@ngrx/store';
+
+import { StoreModule, provideStore } from '@ngrx/store';
 
 import { LoginComponent } from './components/login.component';
 import { RegisterComponent } from './components/register.component';
 import { StoreService } from './../../services/store.service';
+
+import { NgReduxModule } from '@angular-redux/store';
 
 /* APP COMPONENT */
 @Component({
@@ -30,8 +33,6 @@ class AppComponent {
 		});
 	}
 
-	
-
 }
 
 /* APP MODULE */
@@ -46,7 +47,8 @@ const routes: Routes = [
 		BrowserModule,
 		FormsModule,
 		HttpModule,
-		RouterModule.forRoot(routes, { useHash: true })
+		RouterModule.forRoot(routes, { useHash: true }),
+		NgReduxModule
 	],
 	declarations: [
 		AppComponent,
@@ -54,7 +56,7 @@ const routes: Routes = [
 		RegisterComponent
 	],
 	providers: [
-		{provide: StoreService, useValue: (window as any).storeService}
+		//{provide: StoreService, useValue: (window as any).storeService}
 	],
 	bootstrap: [ AppComponent ]
 })
@@ -62,6 +64,4 @@ class AppModule { }
 
 /* APP BOOTSTRAP */
 
-platformBrowserDynamic().bootstrapModule(
-	AppModule
-);
+platformBrowserDynamic().bootstrapModule(AppModule);

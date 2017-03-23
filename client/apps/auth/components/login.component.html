@@ -17,4 +17,12 @@
 			<button type="submit" class="btn btn-default">Login</button>
 		</div>
 	</form>
+
+	<div>
+		<button (click)="increment()">Increment</button>
+		<div>Current Count: {{ count$ | async }}</div>
+		<button (click)="decrement()">Decrement</button>
+	</div>
+
+
 </div>

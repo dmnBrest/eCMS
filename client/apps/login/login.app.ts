@@ -1,40 +1,67 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { NgModule } from '@angular/core';
+import { NgModule, NgZone } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 
-import { StoreService } from './../../services/store.service';
+import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
+import { StoreService, IAppState, INCREMENT, DECREMENT, RESET  } from './../../services/store.service';
+
+import { NgReduxModule, NgRedux } from '@angular-redux/store';
+import { select } from '@angular-redux/store';
 
 /* APP COMPONENT */
 @Component({
 	selector: 'app-login',
 	template: `
 		<h1>X APP LOGIN X</h1>
-		<button (click)="clickMe()">CLICK !</button>
+
+		<div>
+			<button (click)="increment()">Increment</button>
+			<div>Current Count: {{ count$ }}</div>
+			<button (click)="decrement()">Decrement</button>
+		</div>
+
 	`
 })
 class AppComponent {
 
-	constructor(private storeService:StoreService) { }
+	count$: number;
 
-	clickMe(): void {
-		console.log('D1', this.storeService.st);
-		this.storeService.doSomething().then((s) => {console.log('D2: ', s)});
+	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone) {
+		ngRedux.provideStore((window as any).store2);
+		//this.count$ = ngRedux.select<number>('count');
+		ngRedux.select<number>('count').subscribe((c) => {
+			this.zone.run(() => {
+				console.log(c);
+				this.count$ = c;
+			});
+		})
 	}
+
+	increment(){
+		this.ngRedux.dispatch({ type: INCREMENT });
+	}
+
+	decrement(){
+		this.ngRedux.dispatch({ type: DECREMENT });
+	}
+
 }
 
 /* APP MODULE */
 @NgModule({
 	imports: [
 		BrowserModule,
-		FormsModule
+		FormsModule,
+		NgReduxModule
 	],
 	declarations: [
 		AppComponent
 	],
 	providers: [
-		{provide: StoreService, useValue: (window as any).storeService}
+
 	],
 	bootstrap: [ AppComponent ]
 })
