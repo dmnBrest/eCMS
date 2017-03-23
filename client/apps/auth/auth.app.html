@@ -1,20 +1,18 @@
 <div class="c-auth-app">
-	<div class="row">
-		<div class="col-md-6 col-md-offset-3">
-			<div class="c-panel">
-				<div class="c-panel-header">
-					<span>{{currentUrl == '/register' ? 'Sign up' : 'Login'}}</span>
-				</div>
-				<div class="c-panel-body">
-					
-					<router-outlet></router-outlet>
+	<div class="uk-width-1-2 uk-align-center">
+		<div class="c-panel uk-card uk-card-default">
+			<div class="c-panel-header">
+				<span>{{currentUrl == '/register' ? 'Sign up' : 'Login'}}</span>
+			</div>
+			<div class="c-panel-body">
 				
-					<div class="c-auth-app-links text-right">
-						<ul>
-							<li><a routerLink="/login" routerLinkActive="active-link">Login</a></li>
-							<li><a routerLink="/register" routerLinkActive="active-link">Sign up</a></li>
-						</ul>
-					</div>
+				<router-outlet></router-outlet>
+			
+				<div class="c-auth-app-links uk-text-right">
+					<ul>
+						<li><a routerLink="/login" routerLinkActive="active-link">Login</a></li>
+						<li><a routerLink="/register" routerLinkActive="active-link">Sign up</a></li>
+					</ul>
 				</div>
 			</div>
 		</div>

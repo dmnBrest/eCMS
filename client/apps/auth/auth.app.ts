@@ -10,9 +10,9 @@ import { StoreModule, provideStore } from '@ngrx/store';
 
 import { LoginComponent } from './components/login.component';
 import { RegisterComponent } from './components/register.component';
-import { StoreService } from './../../services/store.service';
+import { StoreService, IAppState } from './../../services/store.service';
 
-import { NgReduxModule } from '@angular-redux/store';
+import { NgReduxModule, NgRedux } from '@angular-redux/store';
 
 /* APP COMPONENT */
 @Component({
@@ -23,7 +23,7 @@ class AppComponent {
 
 	currentUrl: string;
 
-	constructor(private router: Router) {
+	constructor(private router: Router, private ngRedux: NgRedux<IAppState>) {
 		this.router.events.subscribe(event => {
 			if(event instanceof NavigationStart) {
 				console.log(event);
@@ -31,6 +31,7 @@ class AppComponent {
 				this.currentUrl = event.url;
 			}
 		});
+		this.ngRedux.provideStore((window as any).store2);
 	}
 
 }
