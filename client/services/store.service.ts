@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Action } from 'redux';
-//import { ActionReducer, Action, provideStore, StoreModule } from '@ngrx/store';
-
-import { applyMiddleware, Store, combineReducers, compose, createStore } from 'redux';
-import { NgReduxModule, NgRedux } from '@angular-redux/store';
+import { Action, applyMiddleware, Store, combineReducers, compose, createStore } from 'redux';
 
 export const INCREMENT = 'INCREMENT';
 export const DECREMENT = 'DECREMENT';
@@ -37,9 +33,9 @@ console.log((window as any).store2);
 // ----------------------
 @Injectable()
 export class StoreService {
-	
+
 	counter: number = 0;
-	
+
 	doSomething(): Promise<String> {
 		this.counter++;
 		console.log('D1: doSomething: ', this.counter);
