@@ -29,17 +29,13 @@ export class LoginComponent implements OnInit, OnDestroy {
 	ngOnInit(): void {
 		console.log('login.component init');
 
-		this.increment();
-
-		// console.log('D1', this.storeService.st);
-		// this.storeService.doSomething().then((s) => {console.log('D2: ', s)});
 	}
 
 
 	ngOnDestroy() {
-		console.log('login.component destroy');		
+		console.log('login.component destroy');
 		this.counterSubscription.unsubscribe();
-	} 
+	}
 
 	increment(){
 		this.ngRedux.dispatch({ type: INCREMENT });

@@ -10,7 +10,7 @@ import { StoreModule, provideStore } from '@ngrx/store';
 
 import { LoginComponent } from './components/login.component';
 import { RegisterComponent } from './components/register.component';
-import { StoreService, IAppState } from './../../services/store.service';
+import { IAppState } from './../../services/store.service';
 
 import { NgReduxModule, NgRedux } from '@angular-redux/store';
 
@@ -31,7 +31,7 @@ class AppComponent {
 				this.currentUrl = event.url;
 			}
 		});
-		this.ngRedux.provideStore((window as any).store2);
+		this.ngRedux.provideStore((window as any).appStore);
 	}
 
 }

@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { StoreService, IAppState, INCREMENT, DECREMENT, RESET  } from './../../services/store.service';
+import { IAppState, INCREMENT, DECREMENT, RESET  } from './../../services/store.service';
 
 import { NgReduxModule, NgRedux } from '@angular-redux/store';
 import { select } from '@angular-redux/store';
@@ -30,8 +30,7 @@ class AppComponent {
 	count$: number;
 
 	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone) {
-		ngRedux.provideStore((window as any).store2);
-		//this.count$ = ngRedux.select<number>('count');
+		ngRedux.provideStore((window as any).appStore);
 		ngRedux.select<number>('count').subscribe((c) => {
 			this.zone.run(() => {
 				console.log(c);
@@ -43,7 +42,6 @@ class AppComponent {
 	increment(){
 		this.ngRedux.dispatch({ type: INCREMENT });
 	}
-
 	decrement(){
 		this.ngRedux.dispatch({ type: DECREMENT });
 	}
