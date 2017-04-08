@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy,  NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { StoreService, IAppState, INCREMENT, DECREMENT } from './../../../services/store.service';
+import { IAppState, INCREMENT, DECREMENT } from './../../../services/store.service';
 import { NgRedux, select } from '@angular-redux/store';
 
 
