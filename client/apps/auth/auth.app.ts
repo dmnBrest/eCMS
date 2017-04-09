@@ -1,8 +1,10 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { NgModule } from '@angular/core';
+import { NgModule, NgZone, OnDestroy } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { RouterModule, Routes, Router, NavigationStart } from '@angular/router';
 import { Component } from '@angular/core';
 
@@ -14,16 +16,24 @@ import { IAppState } from './../../services/store.service';
 
 import { NgReduxModule, NgRedux } from '@angular-redux/store';
 
+import { IUser } from './../../../common/models';
+
 /* APP COMPONENT */
 @Component({
 	selector: 'app-auth',
 	templateUrl: './auth.app.html'
 })
-class AppComponent {
+class AppComponent implements OnDestroy {
 
 	currentUrl: string;
+	currentUser: IUser;
+	currentUserSubscription: Subscription;
 
-	constructor(private router: Router, private ngRedux: NgRedux<IAppState>) {
+	constructor(
+		private router: Router,
+		private ngRedux: NgRedux<IAppState>,
+		private zone:NgZone
+	) {
 		this.router.events.subscribe(event => {
 			if(event instanceof NavigationStart) {
 				console.log(event);
@@ -32,6 +42,17 @@ class AppComponent {
 			}
 		});
 		this.ngRedux.provideStore((window as any).appStore);
+		this.currentUserSubscription = this.ngRedux.select<IUser>('currentUser').subscribe((c) => {
+			this.zone.run(() => {
+				console.log(c);
+				this.currentUser = c;
+			});
+		})
+	}
+
+	ngOnDestroy() {
+		console.log('login.component destroy');
+		this.currentUserSubscription.unsubscribe();
 	}
 
 }

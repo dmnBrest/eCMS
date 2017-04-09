@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy,  NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { IAppState, INCREMENT, DECREMENT } from './../../../services/store.service';
+import { IAppState, authLoginRemoteCall } from './../../../services/store.service';
 import { NgRedux, select } from '@angular-redux/store';
 
 
@@ -12,37 +12,34 @@ import { NgRedux, select } from '@angular-redux/store';
 
 export class LoginComponent implements OnInit, OnDestroy {
 
-	counter: Number;
-	counterSubscription: Subscription;
-
 	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone) {
 		console.log('login.component constructor');
-
-		this.counterSubscription = this.ngRedux.select<number>('count').subscribe((c) => {
-			this.zone.run(() => {
-				console.log(c);
-				this.counter = c;
-			});
-		})
 	}
 
 	ngOnInit(): void {
-		console.log('login.component init');
 
 	}
-
 
 	ngOnDestroy() {
-		console.log('login.component destroy');
-		this.counterSubscription.unsubscribe();
+
 	}
 
-	increment(){
-		this.ngRedux.dispatch({ type: INCREMENT });
+	form = {
+		email: 'test@test.com',
+		password: 'doomdoom1'
 	}
 
-	decrement(){
-		this.ngRedux.dispatch({ type: DECREMENT });
+	login() {
+		console.log('click login()');
+		authLoginRemoteCall(this.form);
 	}
+
+	// increment(){
+	// 	this.ngRedux.dispatch({ type: INCREMENT });
+	// }
+
+	// decrement(){
+	// 	this.ngRedux.dispatch({ type: DECREMENT });
+	// }
 
 }

@@ -5,9 +5,11 @@
 				<span>{{currentUrl == '/register' ? 'Sign up' : 'Login'}}</span>
 			</div>
 			<div class="c-panel-body">
-				
+
+				Current user: {{currentUser | json}}
+
 				<router-outlet></router-outlet>
-			
+
 				<div class="c-auth-app-links uk-text-right">
 					<ul>
 						<li><a routerLink="/login" routerLinkActive="active-link">Login</a></li>

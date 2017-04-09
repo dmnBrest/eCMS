@@ -18,9 +18,25 @@ class Auth {
 		res.render('auth.index.html', {});
 	}
 
+	public login(req: Request, res: Response, next?: NextFunction) {
+
+		console.log(req.body);
+
+		let currentUser = {
+			id: 1,
+			username: 'Doom',
+			password: '*****',
+			email: 'doom@doom.com'
+		}
+
+		res.setHeader('Content-Type', 'application/json');
+    	res.send(JSON.stringify({ currentUser: currentUser }));
+	}
+
 }
 
 const auth = new Auth();
 
 export const AuthRouter = Router();
 AuthRouter.get('/', auth.index);
+AuthRouter.post('/login', auth.login);
