@@ -1,4 +1,4 @@
-import { ILoginForm } from './../../common/forms.interfaces';
+import { ILoginForm } from './../../common/interfaces';
 
 export function authLoginFetch(form: ILoginForm) {
 	return fetch('/auth/login', {

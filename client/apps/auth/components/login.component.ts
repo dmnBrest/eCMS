@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { IAppState, authLoginRemoteCall } from './../../../services/store.service';
 import { NgRedux, select } from '@angular-redux/store';
 
-import { ILoginForm } from './../../../../common/forms.interfaces';
+import { ILoginForm } from './../../../../common/interfaces';
 
 @Component({
 	selector: 'c-login',
@@ -13,7 +13,10 @@ import { ILoginForm } from './../../../../common/forms.interfaces';
 
 export class LoginComponent implements OnInit, OnDestroy {
 
-	loginFormData:ILoginForm = {};
+	loginFormData:ILoginForm = {
+		email: null,
+		password: null
+	};
 
 	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone) {
 		console.log('login.component constructor');
