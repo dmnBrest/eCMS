@@ -2,12 +2,14 @@ import { Action, applyMiddleware, Store, createStore, Dispatch } from 'redux';
 import thunk from 'redux-thunk';
 let createLogger = require('redux-logger');
 
-import { IUser } from './../../common/models';
+import { IUser, ILoginForm, ISpinner } from './../../common/interfaces';
+
+import { authLoginFetch } from './remote.service'
 
 const loggerMiddleware = createLogger();
 
 export interface IAppState {
-	count: number;
+	spinner: ISpinner;
 	currentUser: IUser;
 };
 
@@ -16,9 +18,12 @@ export interface IAppAction extends Action {
 	response?: any;
 }
 
-
+// INITIAL STATE (TODO: mix with remote on load)
 const INITIAL_STATE: IAppState = {
-	count: 0,
+	spinner: {
+		show: false,
+		counter: 0
+	},
 	currentUser: {
 		id: null
 	}
@@ -32,24 +37,20 @@ const AUTH_REGISTER_RESPONSE = 'AUTH_REGISTER_RESPONSE'
 // https://github.com/github/fetch
 
 // ACTION CREATORS
-export function authLoginRemoteCall(form: any) {
-	console.log('authLoginRemoteCall', form);
-	store.dispatch((dispatch:Dispatch<IAppAction>) => {
-		let action:IAppAction = { type: AUTH_LOGIN, form: form };
-		dispatch(action);
-		return fetch('/auth/login', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(form)
-			})
-			.then((response) => {
-				console.log(response);
-				return response.json()})
-			.then((json) => {
-				authLoginResponseHandler(json)
+export function authLoginRemoteCall(data: ILoginForm) {
+	return new Promise((resolve, reject) => {
+		console.log('authLoginRemoteCall', data);
+		store.dispatch((dispatch:Dispatch<IAppAction>) => {
+			let action:IAppAction = { type: AUTH_LOGIN, form: data };
+			dispatch(action);
+			return authLoginFetch(data).then((json) => {
+				authLoginResponseHandler(json);
+				resolve(json);
+			}).catch(function(ex) {
+				console.log('authLoginFetch ERROR', ex)
+				reject(ex);
 			});
+		});
 	});
 }
 

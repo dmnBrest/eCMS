@@ -3,6 +3,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as db from './../db';
 
+import { ILoginForm } from './../../common/forms.interfaces'
+
 class Auth {
 
 	public index(req: Request, res: Response, next?: NextFunction) {
@@ -19,6 +21,8 @@ class Auth {
 	}
 
 	public login(req: Request, res: Response, next?: NextFunction) {
+
+		let form = req.body as ILoginForm
 
 		console.log(req.body);
 

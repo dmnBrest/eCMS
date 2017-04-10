@@ -16,7 +16,7 @@ import { IAppState } from './../../services/store.service';
 
 import { NgReduxModule, NgRedux } from '@angular-redux/store';
 
-import { IUser } from './../../../common/models';
+import { IUser } from './../../../common/models.interfaces';
 
 /* APP COMPONENT */
 @Component({
