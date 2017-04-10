@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as db from './../db';
 
-import { ILoginForm } from './../../common/forms.interfaces'
+import { ILoginForm } from './../../common/interfaces'
 
 class Auth {
 
