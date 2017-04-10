@@ -22,6 +22,8 @@ class Auth {
 
 	public login(req: Request, res: Response, next?: NextFunction) {
 
+		res.setHeader('Content-Type', 'application/json');
+
 		let form = req.body as ILoginForm
 
 		console.log(req.body);
@@ -33,8 +35,7 @@ class Auth {
 			email: 'doom@doom.com'
 		}
 
-		res.setHeader('Content-Type', 'application/json');
-    	res.send(JSON.stringify({ currentUser: currentUser }));
+		res.send(JSON.stringify({ status: 'ok', currentUser: currentUser }));
 	}
 
 }
