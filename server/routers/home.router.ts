@@ -2,18 +2,36 @@ import { Router, Request, Response, NextFunction } from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as db from './../db';
+import * as passport from 'passport'
 
 class Home {
 
 	public index(req: Request, res: Response, next?: NextFunction) {
 
-		db.any('select * from public.user where username=$1', ['doom1'])
-		.then(data => {
-			console.log(data);
-		})
-		.catch(error => {
-			console.log(error);
-		});
+		// db.any('select * from public.user where username=$1', ['doom1'])
+		// .then(data => {
+		// 	console.log(data);
+		// })
+		// .catch(error => {
+		// 	console.log(error);
+		// });
+
+		// res.cookie( 'ddddd', 'vvvvv', { maxAge: 1000 * 60 * 10, httpOnly: false });
+		// req.session['key-name'] = 'Hello, world!';
+
+		console.log( 'ddddd: ', req.cookies['ddddd'])
+		console.log('key-name: ', req.session['key-name']);
+
+		console.log('Counter: ' + req.session.counter);
+		if (!req.session.counter) {
+			req.session.counter = 10;
+		} else {
+			req.session.counter++;
+		}
+
+		console.log('Counter: ' + req.session.counter);
+
+
 
 		res.render('home.index.html', {});
 	}

@@ -41,11 +41,19 @@
 		</div>
 	</header>
 	<div class="uk-container uk-container-expand c-sub-header">
-		<ul>
-			<li><a href="/auth#/login">Login</a></li>
-			<li><span style="color: #c0c0c0">|</span></li>
-			<li><a href="/auth#/register">Sign up</a></li>
-		</ul>
+		{% if user.id %}
+			<ul>
+				<li><span>Welcome, {{user.username}}</span></li>
+				<li><span style="color: #c0c0c0">|</span></li>
+				<li><a href="/auth/logout">Logout</a></li>
+			</ul>
+		{% else %}
+			<ul>
+				<li><a href="/auth#/login">Login</a></li>
+				<li><span style="color: #c0c0c0">|</span></li>
+				<li><a href="/auth#/register">Sign up</a></li>
+			</ul>
+		{% endif %}
 	</div>
 	<div class="c-body">
 {% block main %}{% endblock %}
@@ -53,6 +61,13 @@
 	<footer>
 
 	</footer>
+
+	<script>
+		var p = window.location.pathname;
+		if (p == '/') {
+			history.pushState('', document.title, window.location.pathname);
+		}
+	</script>
 
 </body>
 </html>

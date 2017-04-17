@@ -8,10 +8,12 @@
         "experimentalDecorators": true,
         "skipLibCheck": true,
         "noImplicitAny": true,
-        "suppressImplicitAnyIndexErrors": true
+        "suppressImplicitAnyIndexErrors": true,
+        "rootDir": "./.."
     },
     "exclude": [
-        "./../node_modules"
+        "./../node_modules",
+        "./node_modules"
     ]
 
 }

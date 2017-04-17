@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy,  NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { IAppState, authLoginRemoteCall } from './../../../services/store.service';
+import { loginFormSubmit } from './../../../services/store.service';
 import { NgRedux, select } from '@angular-redux/store';
 
-import { ILoginForm } from './../../../../common/interfaces';
+import { ILoginForm, IAppState } from './../../../../common/interfaces';
 
 @Component({
 	selector: 'c-login',
@@ -32,8 +32,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 	login() {
 		console.log('click login()');
-		authLoginRemoteCall(this.loginFormData).then((results) => {
+		loginFormSubmit(this.loginFormData).then((results: any) => {
 			console.log('login component', results);
+			if (results.status == 'ok') {
+				window.location.href = '/';
+			}
 		});
 	}
 

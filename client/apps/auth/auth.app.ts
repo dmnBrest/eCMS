@@ -2,7 +2,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { NgModule, NgZone, OnDestroy } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { RouterModule, Routes, Router, NavigationStart } from '@angular/router';
@@ -12,11 +11,10 @@ import { StoreModule, provideStore } from '@ngrx/store';
 
 import { LoginComponent } from './components/login.component';
 import { RegisterComponent } from './components/register.component';
-import { IAppState } from './../../services/store.service';
 
 import { NgReduxModule, NgRedux } from '@angular-redux/store';
 
-import { IUser } from './../../../common/interfaces';
+import { IUser, IAppState } from './../../../common/interfaces';
 
 /* APP COMPONENT */
 @Component({
@@ -51,7 +49,6 @@ class AppComponent implements OnDestroy {
 	}
 
 	ngOnDestroy() {
-		console.log('login.component destroy');
 		this.currentUserSubscription.unsubscribe();
 	}
 
@@ -68,7 +65,6 @@ const routes: Routes = [
 	imports: [
 		BrowserModule,
 		FormsModule,
-		HttpModule,
 		RouterModule.forRoot(routes, { useHash: true }),
 		NgReduxModule
 	],

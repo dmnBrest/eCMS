@@ -1,25 +1,15 @@
 import { Action, applyMiddleware, Store, createStore, Dispatch } from 'redux';
-import thunk from 'redux-thunk';
 let createLogger = require('redux-logger');
 
-import { IUser, ILoginForm, ISpinner } from './../../common/interfaces';
+import { IUser, ILoginForm, ISpinner, IAppState, IAppAction } from './../../common/interfaces';
 
-import { authLoginFetch } from './remote.service'
+import { loginFormFetch } from './remote.service'
 
 const loggerMiddleware = createLogger();
 
-export interface IAppState {
-	spinner: ISpinner;
-	currentUser: IUser;
-};
-
-export interface IAppAction extends Action {
-	form?: any;
-	response?: any;
-}
 
 // INITIAL STATE (TODO: mix with remote on load)
-const INITIAL_STATE: IAppState = {
+let initialState: IAppState = {
 	spinner: {
 		show: false,
 		counter: 0
@@ -28,35 +18,30 @@ const INITIAL_STATE: IAppState = {
 		id: null
 	}
 };
+if ((window as any).initialState) {
+	initialState = Object.assign({}, initialState, (window as any).initialState)
+}
 
-const AUTH_LOGIN = 'AUTH_LOGIN'
-const AUTH_LOGIN_RESPONSE = 'AUTH_LOGIN_RESPONSE'
-const AUTH_REGISTER = 'AUTH_REGISTER'
-const AUTH_REGISTER_RESPONSE = 'AUTH_REGISTER_RESPONSE'
+const AUTH_LOGIN__AJAX_START = 'AUTH_LOGIN__AJAX_START'
+const AUTH_LOGIN__AJAX_END = 'AUTH_LOGIN__AJAX_END'
+const AUTH_REGISTER__AJAX_START = 'AUTH_REGISTER__AJAX_START'
+const AUTH_REGISTER__AJAX_END = 'AUTH_REGISTER__AJAX_END'
 
 // https://github.com/github/fetch
 
 // ACTION CREATORS
-export function authLoginRemoteCall(data: ILoginForm) {
+export function loginFormSubmit(data: ILoginForm) {
 	return new Promise((resolve, reject) => {
 		console.log('authLoginRemoteCall', data);
-		store.dispatch((dispatch:Dispatch<IAppAction>) => {
-			let action:IAppAction = { type: AUTH_LOGIN, form: data };
-			dispatch(action);
-			return authLoginFetch(data).then((json) => {
-				authLoginResponseHandler(json);
-				resolve(json);
-			}).catch(function(ex) {
-				console.log('authLoginFetch ERROR', ex)
-				reject(ex);
-			});
+		store.dispatch({ type: AUTH_LOGIN__AJAX_START, form: data });
+		return loginFormFetch(data).then((json) => {
+			store.dispatch({ type: AUTH_LOGIN__AJAX_END, response: json });
+			resolve(json);
+		}).catch(function(ex) {
+			console.log('authLoginFetch ERROR', ex)
+			reject(ex);
 		});
 	});
-}
-
-export function authLoginResponseHandler(response: any) {
-	let action:IAppAction = { type: AUTH_LOGIN_RESPONSE, response: response };
-	store.dispatch(action);
 }
 
 // REDUCERS
@@ -64,24 +49,26 @@ function appReducer(lastState: IAppState, action: IAppAction): IAppState {
 	let nextState = {};
 	switch(action.type) {
 		// Auth Action Handlers
-		case AUTH_LOGIN:
-			console.log('AUTH_LOGIN');
+		case AUTH_LOGIN__AJAX_START:
+			console.log('AUTH_LOGIN__AJAX_START');
 			console.log(action.form);
 			//nextState[some] = lastState(some)
 
 			return Object.assign({}, lastState, nextState)
-		case AUTH_LOGIN_RESPONSE:
-			console.log('AUTH_LOGIN_RESPONSE', action.response);
+		case AUTH_LOGIN__AJAX_END:
+			console.log('AUTH_LOGIN__AJAX_END', action.response);
 
 			nextState = { currentUser: action.response.currentUser }
 
 			return Object.assign({}, lastState, nextState)
-		case AUTH_REGISTER:
-			console.log('AUTH_REGISTER');
+		case AUTH_REGISTER__AJAX_START:
+			console.log('AUTH_REGISTER__AJAX_START');
 
 			return Object.assign({}, lastState, nextState)
-		case AUTH_REGISTER_RESPONSE:
+		case AUTH_REGISTER__AJAX_END:
+			console.log('AUTH_REGISTER__AJAX_END');
 
+			return Object.assign({}, lastState, nextState)
 
 	}
 	return lastState;
@@ -90,9 +77,8 @@ function appReducer(lastState: IAppState, action: IAppAction): IAppState {
 // INIT STORE
 const store: Store<IAppState> = createStore(
 										appReducer,
-										INITIAL_STATE,
+										initialState,
 										applyMiddleware(
-											thunk,
 											loggerMiddleware
 										));
 (window as any).appStore = store;
