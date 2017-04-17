@@ -37,6 +37,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 			if (results.status == 'ok') {
 				window.location.href = '/';
 			}
+		}).catch(err => {
+			console.log(err);
 		});
 	}
 

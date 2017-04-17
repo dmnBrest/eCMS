@@ -16,6 +16,8 @@ import { NgReduxModule, NgRedux } from '@angular-redux/store';
 
 import { IUser, IAppState } from './../../../common/interfaces';
 
+import { appStore } from './../../services/store.service'
+
 /* APP COMPONENT */
 @Component({
 	selector: 'app-auth',
@@ -39,7 +41,7 @@ class AppComponent implements OnDestroy {
 				this.currentUrl = event.url;
 			}
 		});
-		this.ngRedux.provideStore((window as any).appStore);
+		this.ngRedux.provideStore(appStore);
 		this.currentUserSubscription = this.ngRedux.select<IUser>('currentUser').subscribe((c) => {
 			this.zone.run(() => {
 				console.log(c);

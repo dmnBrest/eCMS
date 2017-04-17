@@ -1,6 +1,5 @@
 node_modules
 dist
 config.json
-client/apps/heroes
 static/js
 sessions

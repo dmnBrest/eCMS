@@ -23,6 +23,9 @@
 
 	<link rel="stylesheet" href="/static/css/style.css"  />
 
+	<script src="/static/js/globals.js"></script>
+	<script src="/static/js/vendor.js"></script>
+
 </head>
 <body>
 	<header class="uk-container uk-container-expand">
@@ -40,6 +43,11 @@
 			</div>
 		</div>
 	</header>
+
+	<div>
+		<errors-panel />
+	</div>
+
 	<div class="uk-container uk-container-expand c-sub-header">
 		{% if user.id %}
 			<ul>
@@ -68,6 +76,8 @@
 			history.pushState('', document.title, window.location.pathname);
 		}
 	</script>
+
+	<script src="/static/js/errors-panel.js"></script>
 
 </body>
 </html>
