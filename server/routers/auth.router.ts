@@ -41,14 +41,14 @@ class Auth {
 			email: 'doom@doom.com'
 		}
 
-		// req.login(user, function(err){
-		// 	if(err) return next(err);
-		// 	console.log('Success login', req.user);
-		// 	req.session.user = req.user;
-		// 	res.json({ status: 'ok', currentUser: user });
-		// });
+		req.login(user, function(err){
+			if(err) return next(err);
+			console.log('Success login', req.user);
+			req.session.user = req.user;
+			res.json({ status: 'ok', currentUser: user });
+		});
 
-		res.json({ status: 'error', errors: ['Error #1', 'Error #2'] });
+		// res.status(400).json({ status: 'error', errors: ['Error #1', 'Error #2'] });
 
 	}
 

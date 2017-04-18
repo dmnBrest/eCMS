@@ -44,10 +44,6 @@
 		</div>
 	</header>
 
-	<div>
-		<errors-panel />
-	</div>
-
 	<div class="uk-container uk-container-expand c-sub-header">
 		{% if user.id %}
 			<ul>
@@ -63,6 +59,11 @@
 			</ul>
 		{% endif %}
 	</div>
+
+	<div>
+		<errors-panel />
+	</div>
+
 	<div class="c-body">
 {% block main %}{% endblock %}
 	</div>

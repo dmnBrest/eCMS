@@ -33,7 +33,5 @@ export interface IAppState {
 };
 
 export interface IAppAction extends Action {
-	form?: any;
-	response?: any;
-	user?: IUser;
+	payload?: any;
 }

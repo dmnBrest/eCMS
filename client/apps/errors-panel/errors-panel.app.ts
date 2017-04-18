@@ -11,13 +11,32 @@ import { IAppState } from './../../../common/interfaces';
 import { NgReduxModule, NgRedux } from '@angular-redux/store';
 import { select } from '@angular-redux/store';
 
-import { appStore } from './../../services/store.service'
+import { appStore, removeError } from './../../services/store.service'
 
 /* APP COMPONENT */
 @Component({
 	selector: 'errors-panel',
+	styles: [
+		'.c-notification {padding: 10px 20px; background-color: #e44d49; color: #fff; font-size: 14px; margin-bottom: 2px;}',
+		'.c-notifications-component table {width: 100%;}',
+		'.c-close-notification {text-align: right;}',
+		'.c-close-notification a {color: #fff;}',
+	],
 	template: `
-		<h1>Errors Panel</h1>
+		<div class="c-notifications-component">
+			<div *ngFor="let err of errors; let i = index" class="c-notification">
+				<table>
+					<tr>
+						<td>{{err}}</td>
+						<td class="c-close-notification">
+							<a href="javascript:void(0);"
+								(click)="removeErrorHandler(i)"
+								uk-icon="icon: close;"></a>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
 	`
 })
 class AppComponent {
@@ -29,15 +48,14 @@ class AppComponent {
 		this.ngRedux.provideStore(appStore);
 		this.errorsSubscription = this.ngRedux.select<string[]>('errors').subscribe((c) => {
 			this.zone.run(() => {
-				console.log(c);
 				this.errors = c;
 			});
 		})
 
 	}
 
-	clearErrors() {
-
+	removeErrorHandler(index:number) {
+		removeError(index);
 	}
 
 	ngOnDestroy() {

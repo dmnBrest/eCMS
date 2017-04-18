@@ -3,3 +3,4 @@ dist
 config.json
 static/js
 sessions
+.vscode
