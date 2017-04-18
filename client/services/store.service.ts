@@ -15,9 +15,12 @@ let initialState: IAppState = {
 	},
 	currentUser: null
 };
-// if ((window as any).initialState) {
-// 	initialState = Object.assign({}, initialState, (window as any).initialState)
-// }
+
+let initialStateFromServer = {};
+if (document.getElementById("initialStateFromServer") != null) {
+	initialStateFromServer = JSON.parse(document.getElementById("initialStateFromServer").innerHTML)
+}
+initialState = Object.assign({}, initialState, initialStateFromServer);
 
 const SHOW_SPINNER = 'SHOW_SPINNER'
 const HIDE_SPINNER = 'HIDE_SPINNER'

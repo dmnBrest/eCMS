@@ -31,8 +31,6 @@ class Home {
 
 		console.log('Counter: ' + req.session.counter);
 
-
-
 		res.render('home.index.html', {});
 	}
 

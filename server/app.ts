@@ -102,6 +102,11 @@ export class ExpressServer {
 			// Share Current User to Template
 			res.locals.user = req.user;
 
+			// initial State for Angular
+			res.locals.initialState = JSON.stringify({
+				currentUser: req.user
+			});
+
 			next();
 		});
 

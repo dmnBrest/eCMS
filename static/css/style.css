@@ -51,6 +51,10 @@ footer {
 	background-color: #fff;
 }
 
+.c-hidden {
+	display: none !important;
+}
+
 .c-sub-header {
 	background: #fff;
 	border-bottom: 1px solid #e7eaec;
@@ -87,7 +91,7 @@ footer {
 }
 
 .c-panel-body {
-	padding: 20px;	
+	padding: 20px;
 }
 
 .c-auth-app {

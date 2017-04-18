@@ -7,6 +7,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { RouterModule, Routes, Router, NavigationStart } from '@angular/router';
 import { Component } from '@angular/core';
 
+import * as jQuery from 'jquery';
+
 import { StoreModule, provideStore } from '@ngrx/store';
 
 import { LoginComponent } from './components/login.component';
@@ -83,5 +85,4 @@ const routes: Routes = [
 class AppModule { }
 
 /* APP BOOTSTRAP */
-
 platformBrowserDynamic().bootstrapModule(AppModule);
