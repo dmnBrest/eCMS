@@ -14,6 +14,10 @@ gulp.task('server:templates', function(cb) {
 	return gulp.src("./server/templates/**/*").pipe(gulp.dest('./dist/templates'));
 });
 
+gulp.task('server:static', function(cb) {
+	return gulp.src("./static/**/*").pipe(gulp.dest('./dist/static'));
+});
+
 gulp.task('server:build', function() {
 	var tsResult = gulp.src("./server/**/*.ts")
 		.pipe(sourcemaps.init())
@@ -28,11 +32,11 @@ gulp.task('client:build', function(cb) {
 	console.log('Watch client');
 	gulp.src('')
 		.pipe(webpackStream(require('./webpack.dev.js'), require('webpack')))
-		.pipe(gulp.dest('./static/js'));
+		.pipe(gulp.dest('./dist/static/js'));
 });
 
 /* SERVER:NODEMON */
-gulp.task('server:server', ['server:templates', 'server:build'], function (cb) {
+gulp.task('server:server', ['server:templates', 'server:static', 'server:build'], function (cb) {
 
 	//var express = require('./dist/app.js');
 	if (server) {
@@ -50,7 +54,7 @@ gulp.task('server:server', ['server:templates', 'server:build'], function (cb) {
 
 gulp.task('server:watch', function(cb){
 	console.log('Watch server');
-	gulp.watch(['./server/**/*.ts', './server/templates/**/*.html'], ['server:server']);
+	gulp.watch(['./server/**/*.ts', './server/templates/**/*.html', './static/css/*.*'], ['server:server']);
 	cb(null);
 })
 

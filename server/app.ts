@@ -110,7 +110,7 @@ export class ExpressServer {
 			next();
 		});
 
-		this.app.use('/static', express.static(path.join(__dirname, '../static')));
+		this.app.use('/static', express.static(path.join(__dirname, './static')));
 		//this.app.use('/dist', express.static(path.join(__dirname, '../dist/client')));
 		this.app.use('/auth', AuthRouter);
 		this.app.use('/forum', ForumRouter);

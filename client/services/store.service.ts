@@ -76,15 +76,15 @@ function appReducer(lastState: IAppState, action: IAppAction): IAppState {
 		// Auth Action Handlers
 		case SHOW_SPINNER:
 			nextState.spinner = {
-				show: false,
-				counter: lastState.spinner.counter ? lastState.spinner.counter + 1 : 0
+				show: true,
+				counter: (lastState.spinner.counter ? lastState.spinner.counter : 0) + 1
 			}
 			return Object.assign({}, lastState, nextState);
 
 		case HIDE_SPINNER:
 			nextState.spinner = {
 				show: false,
-				counter: lastState.spinner.counter ? lastState.spinner.counter - 1 : 0
+				counter: (lastState.spinner.counter ? lastState.spinner.counter : 0) - 1
 			}
 			return Object.assign({}, lastState, nextState);
 

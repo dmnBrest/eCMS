@@ -16,12 +16,11 @@ var entryFromConfig = {
     'globals': ['zone.js', 'reflect-metadata'],
 }
 
-console.log('Apps: ', config.apps);
+console.log('Modules: ', config.modules);
 
-for (var app of config.apps) {
-  var p = path.join(__dirname, 'client', 'apps', app, app+'.app.ts');
-  console.log(p);
-  entryFromConfig[app] = path.join(p)
+for (var app of config.modules) {
+  var p = path.join(__dirname, 'client', 'modules', app, app+'.module.ts');
+  entryFromConfig[app+'.module'] = path.join(p)
 }
 
 module.exports = {
