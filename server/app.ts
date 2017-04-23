@@ -17,6 +17,7 @@ import { HomeRouter } from './routers/home.router';
 import { AuthRouter } from './routers/auth.router';
 import { ForumRouter } from './routers/forum.router';
 import { ProfileRouter } from './routers/profile.router';
+import { serializeUser, deserializeUser } from './services/security.service'
 
 require('source-map-support').install();
 
@@ -32,6 +33,14 @@ export class ExpressServer {
 	public run(): Promise<any> {
 		this.app = express();
 
+		passport.serializeUser(serializeUser);
+		passport.deserializeUser(deserializeUser);
+
+		nunjucks.configure(path.join(__dirname, 'templates'), {
+			autoescape: true,
+			express: this.app
+		});
+
 		this.app.use(cookieParser())
 		// this.app.use(expressSession({
 		// 	secret: '02j32j9u329hu39hf29hf23h',
@@ -44,56 +53,16 @@ export class ExpressServer {
 			secret: 'keyboard cat',
 			resave: false,
 			saveUninitialized: true,
-			cookie: { secure: false, maxAge: 24 * 60 * 60000 }, // 60000 - 1 min
+			cookie: { secure: false, maxAge: null }, // 60000 - 1 min
 		}));
-
 
 		this.app.use(bodyParser.urlencoded({ extended: false }));
 		this.app.use(bodyParser.json());
 
 		this.app.use(morgan('tiny'));
 
-		passport.use(new LocalStrategy(
-			function(username: string, password: string, done: (error: any, user?: any, options?: IVerifyOptions) => void) {
-
-				console.log('AAAA');
-				console.log(username);
-				console.log(password);
-
-
-				let user:any = {
-					password: null
-				};
-				if (!user) {
-					return done(null, false, { message: 'Incorrect username.' });
-				}
-				if (!user.password) {
-					return done(null, false, { message: 'Incorrect password.' });
-				}
-				return done(null, user);
-			}
-		));
-
-		passport.serializeUser(function(user, done) {
-			let u = JSON.stringify(user);
-			console.log('serializeUser: ', u);
-			done(null, u);
-		});
-
-		passport.deserializeUser(function(user:string, done) {
-			let u = JSON.parse(user);
-			console.log('deserializeUser: ', u);
-			done(null, u);
-		});
-
-		let nuEnv = nunjucks.configure(path.join(__dirname, 'templates'), {
-			autoescape: true,
-			express: this.app
-		});
-
 		this.app.use(passport.initialize());
 		this.app.use(passport.session());
-
 
 		// CUSTOM MIDDLEWARE
 		this.app.use((req, res, next) => {

@@ -49,6 +49,24 @@ export function loginFormSubmit(data: ILoginForm) {
 	});
 }
 
+export function registerFormSubmit(data: ILoginForm) {
+	return new Promise((resolve, reject) => {
+		showSpinner();
+		return remoteAction('/auth/register', data).then((resp: any) => {
+			hideSpinner();
+			if (resp.status == 'ok') {
+				setCurrentUser(resp.currentUser);
+				resolve(resp);
+			} else {
+				reject(resp);
+			}
+		}).catch(function(ex) {
+			hideSpinner();
+			reject(ex);
+		});
+	});
+}
+
 export function setCurrentUser(user:IUser) {
 	appStore.dispatch({ type: SET_CURRENT_USER, payload: user });
 }

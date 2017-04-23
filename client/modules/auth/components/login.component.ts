@@ -31,9 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 	}
 
 	login() {
-		console.log('click login()');
 		loginFormSubmit(this.loginFormData).then((results: any) => {
-			console.log('login component', results);
 			if (results.status == 'ok') {
 				window.location.href = '/';
 			}

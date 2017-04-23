@@ -1,23 +1,46 @@
 <div>
-	<form class="uk-form-stacked">
+	<form #registerForm="ngForm" class="uk-form-stacked" novalidate>
 
 		<div class="uk-margin">
 			<label class="uk-form-label" for="email">Email</label>
-			<input id="email" type="email" name="email" class="uk-input" />
+			<input
+				[(ngModel)]="registerFormData.email"
+				id="email"
+				type="email"
+				name="email"
+				class="uk-input"
+				required="true" />
 		</div>
 
 		<div class="uk-margin">
 			<label class="uk-form-label" for="email">Username</label>
-			<input id="username" type="text" name="username" class="uk-input" />
+			<input
+				[(ngModel)]="registerFormData.username"
+				id="username"
+				type="text"
+				name="username"
+				class="uk-input"
+				required="true" />
 		</div>
 
 		<div class="uk-margin">
 			<label class="uk-form-label" for="email">Password</label>
-			<input id="password" type="password" name="password" class="uk-input" />
+			<input
+				[(ngModel)]="registerFormData.password"
+				id="password"
+				type="password"
+				name="password"
+				class="uk-input"
+				required="true" />
 		</div>
 
 		<div class="uk-text-right">
-			<button class="uk-button uk-button-primary">Sign up</button>
+			<button
+				(click)="register()"
+				[disabled]="registerForm.invalid"
+				class="uk-button uk-button-primary">
+				Sign up
+			</button>
 		</div>
 
 	</form>

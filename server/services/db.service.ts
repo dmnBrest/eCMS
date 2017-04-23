@@ -1,5 +1,5 @@
 import { IMain, IDatabase } from 'pg-promise';
-import { appConfig } from './config';
+import { appConfig } from './../config';
 import * as pgPromise from 'pg-promise';
 
 // https://github.com/vitaly-t/pg-promise/tree/master/typescript
@@ -7,6 +7,10 @@ import * as pgPromise from 'pg-promise';
 
 let pgp:IMain = pgPromise({
     // Initialization Options
+    query: (e) => {
+        console.log("Query:");
+        console.log(e);
+    }
 });
 
 console.log('Init DB');
