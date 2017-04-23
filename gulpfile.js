@@ -14,6 +14,10 @@ gulp.task('server:templates', function(cb) {
 	return gulp.src("./server/templates/**/*").pipe(gulp.dest('./dist/templates'));
 });
 
+gulp.task('server:emails', function(cb) {
+	return gulp.src("./server/emails/**/*").pipe(gulp.dest('./dist/emails'));
+});
+
 gulp.task('server:static', function(cb) {
 	return gulp.src("./static/**/*").pipe(gulp.dest('./dist/static'));
 });
@@ -36,7 +40,7 @@ gulp.task('client:build', function(cb) {
 });
 
 /* SERVER:NODEMON */
-gulp.task('server:server', ['server:templates', 'server:static', 'server:build'], function (cb) {
+gulp.task('server:server', ['server:templates', 'server:static', 'server:emails', 'server:build'], function (cb) {
 
 	//var express = require('./dist/app.js');
 	if (server) {
@@ -54,7 +58,7 @@ gulp.task('server:server', ['server:templates', 'server:static', 'server:build']
 
 gulp.task('server:watch', function(cb){
 	console.log('Watch server');
-	gulp.watch(['./server/**/*.ts', './server/templates/**/*.html', './static/css/*.*'], ['server:server']);
+	gulp.watch(['./server/**/*.ts', './server/templates/**/*.html', './static/css/*.*', './server/emails/**/*.*'], ['server:server']);
 	cb(null);
 })
 

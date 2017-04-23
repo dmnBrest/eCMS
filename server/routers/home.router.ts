@@ -3,11 +3,19 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as passport from 'passport'
 
+import * as EmailService from './../services/mail.service'
+
 class Home {
 
 	public index(req: Request, res: Response, next?: NextFunction) {
 		// res.cookie( 'ddddd', 'vvvvv', { maxAge: 1000 * 60 * 10, httpOnly: false });
 		// req.session['key-name'] = 'Hello, world!';
+
+		EmailService.sendNewUserEmail().then(res => {
+			console.log('email:');
+			console.log(res);
+
+		});
 
 		console.log( 'ddddd: ', req.cookies['ddddd'])
 		console.log('key-name: ', req.session['key-name']);
