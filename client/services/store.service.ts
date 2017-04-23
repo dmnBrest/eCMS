@@ -134,10 +134,12 @@ function appReducer(lastState: IAppState, action: IAppAction): IAppState {
 
 // REMOTE HANDLER
 export function remoteAction(action: string, payload: any) {
+
 	return fetch(action, {
 		method: 'POST',
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			'csrf-token': (window as any).csrfToken
 		},
 		credentials: 'include',
 		body: JSON.stringify(payload)
@@ -145,7 +147,11 @@ export function remoteAction(action: string, payload: any) {
 	.then(checkResponseStatus)
 	.then((response) => {
 		console.log(':: RemoteAction:', response);
-		return response.json()
+		if (response.json) {
+			return response.json();
+		} else {
+			return response;
+		}
 	});
 }
 
@@ -154,17 +160,24 @@ function checkResponseStatus(response:any) {
 	if (response.status >= 200 && response.status < 300) {
 		return response;
 	} else {
-		response.json().then((resp:any) => {
+		return response.json().then((resp:any) => {
 			if (resp.errors) {
 				addError(resp.errors);
 			} else {
 				addError(['Internal Server Error']);
 			}
+			return resp;
 		}).catch((err:any) => {
 			addError(['Bad response']);
 		});
 	}
 }
+
+// function getCookie(name:string) {
+// 	var value = "; " + document.cookie;
+// 	var parts = value.split("; " + name + "=");
+// 	if (parts.length == 2) return parts.pop().split(";").shift();
+// }
 
 // INIT STORE
 export const appStore: Store<IAppState> = createStore(
