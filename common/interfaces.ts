@@ -36,6 +36,7 @@ export interface ISpinner {
 
 export interface IAppState {
 	errors: string[];
+	info: string[];
 	spinner: ISpinner;
 	currentUser: IUser;
 };

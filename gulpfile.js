@@ -5,9 +5,16 @@ var webpack = require('webpack');
 var webpackStream = require('webpack-stream');
 var gutil = require('gulp-util');
 var gls = require('gulp-live-server');
+var del = require('del');
 
 var tsProject = ts.createProject('./server/tsconfig.json');
 var server;
+
+gulp.task('clean:dist', function () {
+	return del.sync([
+		'./dist/**/*'
+	]);
+});
 
 /* SERVER:BUILD */
 gulp.task('server:templates', function(cb) {
@@ -62,5 +69,5 @@ gulp.task('server:watch', function(cb){
 	cb(null);
 })
 
-gulp.task('start', ['server:server', 'server:watch', 'client:build']);
+gulp.task('start', ['clean:dist', 'server:server', 'client:build', 'server:watch']);
 

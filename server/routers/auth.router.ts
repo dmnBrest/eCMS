@@ -23,6 +23,7 @@ class Auth {
 		// });
 
 		if (req.user && req.user.id) {
+			req.flash('info', 'You have already logged in');
 			resp.redirect('/');
 			return;
 		}
@@ -57,6 +58,8 @@ class Auth {
 					if (form.rememberme === true) {
 						req.session.cookie.maxAge = 3600000 * 24 * 7; // 1 week
 					}
+
+					req.flash('info', 'You have successfully logged in!');
 
 					resp.json({ status: 'ok', currentUser: user });
 				});

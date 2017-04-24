@@ -4,7 +4,7 @@ import * as db from './db.service';
 import { IUser } from './../../common/interfaces';
 
 export function getUserByIdForLogin(id: string) {
-	return db.one('SELECT * FROM public.user WHERE id=$1 AND verification_code IS NULL AND is_blocked = false', [id]).then((data:any) => {
+	return db.one('SELECT id, username, is_admin, created_at, login_at, slug FROM public.user WHERE id=$1 AND verification_code IS NULL AND is_blocked = false', [id]).then((data:any) => {
 		console.log('UserService.getUserById:');
 		console.log(data);
 		return data;

@@ -9,6 +9,7 @@ const loggerMiddleware = createLogger();
 // INITIAL STATE (TODO: mix with remote on load)
 let initialState: IAppState = {
 	errors: [],
+	info: [],
 	spinner: {
 		show: false,
 		counter: 0
@@ -18,20 +19,20 @@ let initialState: IAppState = {
 
 let initialStateFromServer = {};
 if (document.getElementById("initialStateFromServer") != null) {
-
 	console.log(document.getElementById("initialStateFromServer").innerHTML);
-
 	initialStateFromServer = JSON.parse(document.getElementById("initialStateFromServer").innerHTML)
 }
 initialState = Object.assign({}, initialState, initialStateFromServer);
 
-const SHOW_SPINNER = 'SHOW_SPINNER'
-const HIDE_SPINNER = 'HIDE_SPINNER'
-const REMOVE_ERROR = 'REMOVE_ERROR'
-const ADD_ERRORS = 'ADD_ERRORS'
-const SET_CURRENT_USER = 'SET_CURRENT_USER'
-const AUTH_REGISTER__AJAX_START = 'AUTH_REGISTER__AJAX_START'
-const AUTH_REGISTER__AJAX_END = 'AUTH_REGISTER__AJAX_END'
+const SHOW_SPINNER = 'SHOW_SPINNER';
+const HIDE_SPINNER = 'HIDE_SPINNER';
+const ADD_ERRORS = 'ADD_ERRORS';
+const ADD_INFO = 'ADD_INFO';
+const REMOVE_ERROR = 'REMOVE_ERROR';
+const REMOVE_INFO = 'REMOVE_INFO';
+const SET_CURRENT_USER = 'SET_CURRENT_USER';
+const AUTH_REGISTER__AJAX_START = 'AUTH_REGISTER__AJAX_START';
+const AUTH_REGISTER__AJAX_END = 'AUTH_REGISTER__AJAX_END';
 
 // ACTION CREATORS
 export function loginFormSubmit(data: ILoginForm) {
@@ -82,12 +83,20 @@ export function hideSpinner() {
 	appStore.dispatch({ type: HIDE_SPINNER });
 }
 
-export function addError(errors: string[]) {
+export function addErrors(errors: string[]) {
 	appStore.dispatch({ type: ADD_ERRORS, payload: errors });
+}
+
+export function addInfo(errors: string[]) {
+	appStore.dispatch({ type: ADD_INFO, payload: errors });
 }
 
 export function removeError(index: number) {
 	appStore.dispatch({ type: REMOVE_ERROR, payload: index });
+}
+
+export function removeInfo(index: number) {
+	appStore.dispatch({ type: REMOVE_INFO, payload: index });
 }
 
 // REDUCERS
@@ -110,7 +119,11 @@ function appReducer(lastState: IAppState, action: IAppAction): IAppState {
 			return Object.assign({}, lastState, nextState);
 
 		case ADD_ERRORS:
-			nextState.errors = action.payload;
+			nextState.errors = lastState.errors.concat(action.payload);
+			return Object.assign({}, lastState, nextState);
+
+		case ADD_INFO:
+			nextState.info = lastState.info.concat(action.payload);
 			return Object.assign({}, lastState, nextState);
 
 		case REMOVE_ERROR:
@@ -121,15 +134,17 @@ function appReducer(lastState: IAppState, action: IAppAction): IAppState {
 			};
 			return Object.assign({}, lastState, nextState)
 
+		case REMOVE_INFO:
+			nextState = { info: [
+					...lastState.info.slice(0, action.payload),
+					...lastState.info.slice(action.payload + 1)
+				]
+			};
+			return Object.assign({}, lastState, nextState)
+
 		case SET_CURRENT_USER:
 			nextState = { currentUser: action.payload };
 			return Object.assign({}, lastState, nextState)
-
-		// case AUTH_REGISTER__AJAX_START:
-		// 	return Object.assign({}, lastState, nextState);
-
-		// case AUTH_REGISTER__AJAX_END:
-		// 	return Object.assign({}, lastState, nextState);
 
 	}
 	return lastState;
@@ -165,13 +180,13 @@ function checkResponseStatus(response:any) {
 	} else {
 		return response.json().then((resp:any) => {
 			if (resp.errors) {
-				addError(resp.errors);
+				addErrors(resp.errors);
 			} else {
-				addError(['Internal Server Error']);
+				addErrors(['Internal Server Error']);
 			}
 			return resp;
 		}).catch((err:any) => {
-			addError(['Bad response']);
+			addErrors(['Bad response']);
 		});
 	}
 }

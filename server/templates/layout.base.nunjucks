@@ -68,7 +68,7 @@
 	</div>
 
 	<div>
-		<errors-panel />
+		<messages-panel />
 	</div>
 
 	<div class="c-body">
@@ -91,7 +91,7 @@
 
 	{% block scripts %}{% endblock %}
 
-	<script src="/static/js/errors-panel.module.js"></script>
+	<script src="/static/js/messages.module.js"></script>
 
 </body>
 </html>

@@ -12,7 +12,8 @@ import * as errorhandler from 'errorhandler';
 import { Strategy as LocalStrategy, VerifyFunction, IVerifyOptions } from 'passport-local'
 
 var fileStore = require('session-file-store')(expressSession);
-var csrf = require('csurf')
+var csrf = require('csurf');
+var flash = require('connect-flash');
 
 import { appConfig } from './config';
 import { HomeRouter } from './routers/home.router';
@@ -88,6 +89,8 @@ export class ExpressServer {
 			// TODO Static files to NGINX
 		};
 
+		this.app.use(flash());
+
 		// Passport JS init
 		passport.serializeUser(serializeUser);
 		passport.deserializeUser(deserializeUser);
@@ -100,9 +103,12 @@ export class ExpressServer {
 			res.locals.user = req.user;
 			// initial State for Angular apps
 			res.locals.initialState = {
-				errors: ['Doom1'],
+				errors: [],
+				info: [],
 				currentUser: req.user
 			};
+			res.locals.initialState.errors = res.locals.initialState.errors.concat(req.flash('error'));
+			res.locals.initialState.info = res.locals.initialState.info.concat(req.flash('info'));
 			//
 			res.locals.csrfToken = req.csrfToken();
 			next();
