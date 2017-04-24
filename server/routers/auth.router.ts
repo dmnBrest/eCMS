@@ -95,6 +95,8 @@ class Auth {
 				(err) => {console.log(err);}
 			);
 
+			req.flash('info', 'You have successfully registered! Please confirm your email.');
+
 			resp.json({ status: 'ok', currentUser: user });
 
 		}).catch((err) => {
@@ -115,14 +117,22 @@ class Auth {
 
 	public verifyEmail(req: Request, resp: Response, next?: NextFunction) {
 
-		console.log(req.params);
-
 		// TODO Verify inputs
+		if (
+			!req.params['email'] ||
+			req.params['email'].length > 255 ||
+			!req.params['code'] ||
+			req.params['code'].length > 36
+		) {
+			resp.status(400).send('Bad request');
+			return;
+		}
 
 		UserService.verifyEmail(req.params['email'], req.params['code'])
 		.then((res) => {
-			console.log('email verified successfully');
-			resp.redirect('/auth');
+			console.log('email "'+req.params['email']+'" verified successfully');
+			req.flash('info', 'Your email verified. You can login now.');
+			resp.redirect('/auth#/login');
 		})
 		.catch((err) => {
 			console.log(err);

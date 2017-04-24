@@ -18,7 +18,9 @@ export function sendNewUserEmail(user: IUser): Promise<SentMessageInfo> {
 		let templateDir = path.join(__dirname, '..', 'emails', 'new-user-email');
 		let emailEngine = new EmailTemplate(templateDir)
 
-		emailEngine.render(user, function (err, result) {
+		let verifyUrl = appConfig.baseUrl+'/auth/verify/'+encodeURIComponent(user.email)+'/'+encodeURIComponent(user.verification_code);
+
+		emailEngine.render({user: user, verifyUrl: verifyUrl}, function (err, result) {
 
 			console.log('sendNewUserEmail:')
 			console.log(user);
@@ -32,7 +34,7 @@ export function sendNewUserEmail(user: IUser): Promise<SentMessageInfo> {
 			let mailOptions:SendMailOptions = {
 				from: appConfig.noreplyEmail, // sender address
 				to: user.email, // list of receivers
-				subject: 'Welcome to '+appConfig.siteTitle, // Subject line
+				subject: 'Welcome to '+appConfig.title, // Subject line
 				html: result.html // html body
 			};
 

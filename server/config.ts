@@ -4,8 +4,8 @@ import * as path from 'path';
 export interface IConfig {
     dbPath: string,
     modules: string[],
-    siteBaseUrl: string,
-    siteTitle: string,
+    baseUrl: string,
+    title: string,
     adminEmail: string,
     noreplyEmail: string
 

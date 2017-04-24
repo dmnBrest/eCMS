@@ -1,4 +1,4 @@
-<h2>Hello {{username}}!</h2>
+<h2>Hello {{user.username}}!</h2>
 <p>Welcome to our site</p>
 <p>Please verify your email to be able login to your account</p>
-<p>{{verification_code}}</p>
+<p><a href="{{verifyUrl}}">{{verifyUrl}}</a></p>
