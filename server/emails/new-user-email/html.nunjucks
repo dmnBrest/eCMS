@@ -1,1 +1,4 @@
-<h1>Welcome {{username}}</h1>
+<h2>Hello {{username}}!</h2>
+<p>Welcome to our site</p>
+<p>Please verify your email to be able login to your account</p>
+<p>{{verification_code}}</p>

@@ -1,6 +1,8 @@
 import {createTransport, SentMessageInfo, Transporter, SendMailOptions} from 'nodemailer';
 import { EmailTemplate } from 'email-templates';
 import * as path from 'path';
+import { IUser } from './../../common/interfaces';
+import { appConfig } from './../config';
 
 let mailTransport:Transporter = createTransport({
 	port: 1025,
@@ -8,30 +10,29 @@ let mailTransport:Transporter = createTransport({
 	// other settings...
 });
 
-// TODO https://github.com/crocodilejs/node-email-templates
+// TODO Email Base (Header, Footer) template
 
-export function sendNewUserEmail(): Promise<SentMessageInfo> {
+export function sendNewUserEmail(user: IUser): Promise<SentMessageInfo> {
 
 	return new Promise((resolve, reject) => {
 		let templateDir = path.join(__dirname, '..', 'emails', 'new-user-email');
 		let emailEngine = new EmailTemplate(templateDir)
 
-		var user = {username: 'Joe Doe'}
 		emailEngine.render(user, function (err, result) {
 
-			if (err) {
-				throw err;
-				//reject(err);
-			}
+			console.log('sendNewUserEmail:')
+			console.log(user);
 
-			console.log(result.html);
+			if (err) {
+				console.log(err);
+				reject(err);
+			}
 
 			// setup email data with unicode symbols
 			let mailOptions:SendMailOptions = {
-				from: '"eCMS admin" <admin@ecms.test>', // sender address
-				to: 'test1@test1.com', // list of receivers
-				subject: 'Welcome to site', // Subject line
-				//text: 'Hello world ?', // plain text body
+				from: appConfig.noreplyEmail, // sender address
+				to: user.email, // list of receivers
+				subject: 'Welcome to '+appConfig.siteTitle, // Subject line
 				html: result.html // html body
 			};
 

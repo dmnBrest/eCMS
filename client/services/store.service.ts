@@ -18,6 +18,9 @@ let initialState: IAppState = {
 
 let initialStateFromServer = {};
 if (document.getElementById("initialStateFromServer") != null) {
+
+	console.log(document.getElementById("initialStateFromServer").innerHTML);
+
 	initialStateFromServer = JSON.parse(document.getElementById("initialStateFromServer").innerHTML)
 }
 initialState = Object.assign({}, initialState, initialStateFromServer);

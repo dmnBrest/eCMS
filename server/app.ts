@@ -35,10 +35,16 @@ export class ExpressServer {
 	public run(): Promise<any> {
 		this.app = express();
 
-		nunjucks.configure(path.join(__dirname, 'templates'), {
+		let nEnv = nunjucks.configure(path.join(__dirname, 'templates'), {
 			autoescape: true,
 			express: this.app
 		});
+
+		nEnv.addFilter('json', function(obj) {
+			console.log('json filter:', obj);
+			return JSON.stringify(obj);
+		});
+
 
 		this.app.use(bodyParser.urlencoded({ extended: false }));
 		this.app.use(bodyParser.json());
@@ -65,7 +71,7 @@ export class ExpressServer {
 		} else if (process.env.NODE_ENV == 'production') {
 			console.log('= PRODUCTION MODE =');
 
-			console.log('... TODO');
+			console.error('... TODO');
 
 			// this.app.use(cookieParser()) // TODO SECURE
 
@@ -93,9 +99,10 @@ export class ExpressServer {
 			// Share Current User for Template
 			res.locals.user = req.user;
 			// initial State for Angular apps
-			res.locals.initialState = JSON.stringify({
+			res.locals.initialState = {
+				errors: ['Doom1'],
 				currentUser: req.user
-			});
+			};
 			//
 			res.locals.csrfToken = req.csrfToken();
 			next();

@@ -9,7 +9,7 @@ class Profile {
 	public index(req: Request, res: Response, next?: NextFunction) {
 
 
-		res.render('profile.index.html', {});
+		res.render('profile.index.nunjucks', {});
 	}
 
 }

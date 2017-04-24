@@ -8,8 +8,8 @@ import * as pgPromise from 'pg-promise';
 let pgp:IMain = pgPromise({
     // Initialization Options
     query: (e) => {
-        console.log("Query:");
-        console.log(e);
+        console.log('Query:');
+        console.log(e.query);
     }
 });
 

@@ -10,7 +10,7 @@ export interface IUser {
 	created_at: number;
 	login_at?: number;
 	slug: string;
-	is_confirmed: boolean;
+	verification_code: string;
 	is_blocked: boolean;
 	is_admin: boolean;
 };

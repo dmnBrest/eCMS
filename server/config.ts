@@ -2,7 +2,13 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 export interface IConfig {
-    dbPath: string
+    dbPath: string,
+    modules: string[],
+    siteBaseUrl: string,
+    siteTitle: string,
+    adminEmail: string,
+    noreplyEmail: string
+
 }
 
 console.log('Init config');

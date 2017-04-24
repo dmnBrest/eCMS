@@ -72,7 +72,9 @@
 	</div>
 
 	<div class="c-body">
-{% block main %}{% endblock %}
+
+		{% block main %}{% endblock %}
+
 	</div>
 	<footer>
 
@@ -85,9 +87,10 @@
 		}
 	</script>
 
-	<div id="initialStateFromServer" class="c-hidden">{{ initialState }}</div>
+	<div id="initialStateFromServer" class="c-hidden">{{ initialState|json }}</div>
 
 	{% block scripts %}{% endblock %}
+
 	<script src="/static/js/errors-panel.module.js"></script>
 
 </body>

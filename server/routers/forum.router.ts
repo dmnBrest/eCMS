@@ -6,7 +6,7 @@ class Forum {
 
 	public index(req: Request, res: Response, next?: NextFunction) {
 
-		res.render('forum.index.html', {});
+		res.render('forum.index.nunjucks', {});
 	}
 
 }
