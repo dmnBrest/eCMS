@@ -55,3 +55,14 @@ export function verifyEmail(email: string, code: string) {
 		return data;
 	})
 }
+
+export function resetPassword(email: string): Promise<string> {
+	let token = uuidV4();
+	console.log('token: '+token);
+
+	return db.one('UPDATE public.user SET reset_password_token=$1 WHERE email=$2 RETURNING id', [token, email]).then((data:any) => {
+		console.log('UserService.resetPassword:');
+		console.log(data);
+		return token;
+	})
+}

@@ -13,6 +13,7 @@ import { StoreModule, provideStore } from '@ngrx/store';
 
 import { LoginComponent } from './components/login.component';
 import { RegisterComponent } from './components/register.component';
+import { ResetComponent } from './components/reset.component';
 
 import { NgReduxModule, NgRedux } from '@angular-redux/store';
 
@@ -62,6 +63,8 @@ class AppComponent implements OnDestroy {
 const routes: Routes = [
 	{ path: 'login', component: LoginComponent },
 	{ path: 'register', component: RegisterComponent },
+	{ path: 'reset', component: ResetComponent },
+	{ path: 'reset/:email/:token', component: ResetComponent },
 	{ path: '**', redirectTo: '/login', pathMatch: 'full' },
 ];
 
@@ -75,10 +78,11 @@ const routes: Routes = [
 	declarations: [
 		AppComponent,
 		LoginComponent,
-		RegisterComponent
+		RegisterComponent,
+		ResetComponent
 	],
 	providers: [
-		//{provide: StoreService, useValue: (window as any).storeService}
+
 	],
 	bootstrap: [ AppComponent ]
 })

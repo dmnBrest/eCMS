@@ -22,6 +22,11 @@ export interface ILoginForm {
 	rememberme?: boolean
 };
 
+export interface IResetForm {
+	email: string;
+};
+
+
 export interface IRegisterForm {
 	username: string;
 	email: string;

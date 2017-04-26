@@ -1,10 +1,9 @@
 import { Action, applyMiddleware, Store, createStore, Dispatch } from 'redux';
 let createLogger = require('redux-logger');
 
-import { IUser, ILoginForm, ISpinner, IAppState, IAppAction } from './../../common/interfaces';
+import { IUser, ILoginForm, IResetForm, ISpinner, IAppState, IAppAction } from './../../common/interfaces';
 
 const loggerMiddleware = createLogger();
-
 
 // INITIAL STATE (TODO: mix with remote on load)
 let initialState: IAppState = {
@@ -59,7 +58,23 @@ export function registerFormSubmit(data: ILoginForm) {
 		return remoteAction('/auth/register', data).then((resp: any) => {
 			hideSpinner();
 			if (resp.status == 'ok') {
-				setCurrentUser(resp.currentUser);
+				resolve(resp);
+			} else {
+				reject(resp);
+			}
+		}).catch(function(ex) {
+			hideSpinner();
+			reject(ex);
+		});
+	});
+}
+
+export function resetFormSubmit(data: IResetForm) {
+	return new Promise((resolve, reject) => {
+		showSpinner();
+		return remoteAction('/auth/reset', data).then((resp: any) => {
+			hideSpinner();
+			if (resp.status == 'ok') {
 				resolve(resp);
 			} else {
 				reject(resp);
@@ -198,12 +213,12 @@ function checkResponseStatus(response:any) {
 // }
 
 // INIT STORE
-export const appStore: Store<IAppState> = createStore(
-										appReducer,
-										initialState,
-										applyMiddleware(
-											loggerMiddleware
-										));
+export const appStore: Store<IAppState> =
+	createStore(
+		appReducer,
+		initialState,
+		applyMiddleware(loggerMiddleware) // TODO Remove for Production
+	);
 
 
 

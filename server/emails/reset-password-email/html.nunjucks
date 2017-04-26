@@ -1,0 +1,2 @@
+<p>Your reset password token:</p>
+<p><a href="{{resetUrl}}">{{token}}</a></p>

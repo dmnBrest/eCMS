@@ -8,19 +8,11 @@ import * as UserService from './../services/user.service';
 import * as passport from 'passport'
 import * as EmailService from './../services/mail.service';
 
-import { ILoginForm, IRegisterForm, IUser } from './../../common/interfaces'
+import { ILoginForm, IRegisterForm, IResetForm, IUser } from './../../common/interfaces'
 
 class Auth {
 
 	public index(req: Request, resp: Response, next?: NextFunction) {
-
-		// db.any('select * from public.user where username=$1', ['doom1'])
-		// .then(data => {
-		// 	console.log(data);
-		// })
-		// .catch(error => {
-		// 	console.log(error);
-		// });
 
 		if (req.user && req.user.id) {
 			req.flash('info', 'You have already logged in');
@@ -37,9 +29,15 @@ class Auth {
 
 		let form = req.body as ILoginForm
 
-		console.log(form);
-
-		// TODO Verify inputs
+		if (
+			!form.email ||
+			form.email.length > 255 ||
+			!form.password ||
+			form.password.length > 1024
+		) {
+			resp.status(400).send({ status: 'error', errors: ['Bad Request'] });
+			return;
+		}
 
 		UserService.getUserByEmail(form.email).then((user:IUser) => {
 			if (user.verification_code) {
@@ -67,7 +65,6 @@ class Auth {
 				resp.status(400).json({ status: 'error', errors: ['Wrong credentials'] });
 			}
 		}).catch((err) => {
-			console.log(err);
 			if (err.constructor.name =='QueryResultError') {
 				resp.status(400).json({ status: 'error', errors: ['Wrong credentials'] });
 				return;
@@ -82,9 +79,18 @@ class Auth {
 		resp.setHeader('Content-Type', 'application/json');
 
 		let form = req.body as IRegisterForm
-		console.log(form);
 
-		// TODO Verify inputs
+		if (
+			!form.email ||
+			form.email.length > 255 ||
+			!form.username ||
+			form.username.length > 255 ||
+			!form.password ||
+			form.password.length > 1024
+		) {
+			resp.status(400).send({ status: 'error', errors: ['Bad Request'] });
+			return;
+		}
 
 		UserService.createUser(form.username, form.email, form.password, false).then((user) => {
 
@@ -101,7 +107,7 @@ class Auth {
 
 		}).catch((err) => {
 			console.log(err);
-			resp.status(500).json({});
+			resp.status(400).json({ status: 'error', errors: ['Bad Request'] });
 		});
 
 	}
@@ -115,9 +121,47 @@ class Auth {
 		});
 	}
 
+	public sendResetToken(req: Request, resp: Response, next?: NextFunction) {
+
+		resp.setHeader('Content-Type', 'application/json');
+
+		let form = req.body as IResetForm
+
+		if (
+			!form.email ||
+			form.email.length > 255
+		) {
+			resp.status(400).send({ status: 'error', errors: ['Bad Request'] });
+			return;
+		}
+
+		UserService.resetPassword(form.email)
+		.then((token) => {
+			console.log('email "'+form.email+'" reset password token: ', token);
+
+			// Send Email Notification for new user
+			EmailService.sendResetPasswordEmail(form.email, token).then(
+				(info) => {console.log(info);}
+			).catch(
+				(err) => {console.log(err);}
+			);
+
+			req.flash('info', 'Please check your email account for reset password link');
+			resp.json({ status: 'ok' });
+		})
+		.catch((err) => {
+			console.log(err)
+			if (err.constructor.name =='QueryResultError') {
+				resp.status(400).json({ status: 'error', errors: ['Email not found.'] });
+				return;
+			}
+			resp.status(500).json({});
+		});
+	}
+
+
 	public verifyEmail(req: Request, resp: Response, next?: NextFunction) {
 
-		// TODO Verify inputs
 		if (
 			!req.params['email'] ||
 			req.params['email'].length > 255 ||
@@ -141,13 +185,16 @@ class Auth {
 
 	}
 
+
 }
 
 const auth = new Auth();
 
 export const AuthRouter = Router();
 AuthRouter.get('/', auth.index);
-AuthRouter.post('/login', auth.login);
-AuthRouter.post('/register', auth.register);
 AuthRouter.get('/logout', auth.logout);
 AuthRouter.get('/verify/:email/:code', auth.verifyEmail);
+AuthRouter.post('/login', auth.login);
+AuthRouter.post('/register', auth.register);
+AuthRouter.post('/reset', auth.sendResetToken);
+
