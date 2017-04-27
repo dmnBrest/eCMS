@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { IRegisterForm } from './../../../../common/interfaces';
-import { registerFormSubmit } from './../../../services/store.service';
+import { IRegisterForm } from './../../../../server/interfaces';
+import * as StoreService from './../../../services/store.service';
 
 @Component({
 	selector: 'c-register',
@@ -20,7 +20,7 @@ export class RegisterComponent implements OnInit {
 	}
 
 	register() {
-		registerFormSubmit(this.registerFormData).then((results: any) => {
+		StoreService.registerFormSubmit(this.registerFormData).then((results: any) => {
 			if (results.status == 'ok') {
 				window.location.href = '/';
 			}

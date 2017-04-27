@@ -1,4 +1,4 @@
-import { IUser } from './../../common/interfaces';
+import { IUser } from './../../server/interfaces';
 import * as db from './db.service';
 import * as UserService from './user.service';
 

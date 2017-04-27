@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy,  NgZone } from '@angular/core';
 import * as StoreService from './../../../services/store.service';
 
-import { ILoginForm, IAppState } from './../../../../common/interfaces';
+import { ILoginForm, IAppState } from './../../../../server/interfaces';
 
 @Component({
 	selector: 'c-login',
@@ -10,12 +10,14 @@ import { ILoginForm, IAppState } from './../../../../common/interfaces';
 
 export class LoginComponent implements OnInit, OnDestroy {
 
-	loginFormData:ILoginForm = {
-		email: null,
-		password: null
-	};
+	loginFormData:ILoginForm;
 
-	constructor() {}
+	constructor() {
+		this.loginFormData = {
+			email: null,
+			password: null
+		};
+	}
 
 	ngOnInit(): void {}
 
@@ -23,9 +25,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 	login() {
 		StoreService.loginFormSubmit(this.loginFormData).then((results: any) => {
-			if (results.status == 'ok') {
-				window.location.href = '/';
-			}
+			window.location.href = '/';
 		}).catch(err => {
 			console.log('Login Error');
 		});

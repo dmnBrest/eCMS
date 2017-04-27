@@ -14,10 +14,11 @@ import { StoreModule, provideStore } from '@ngrx/store';
 import { LoginComponent } from './components/login.component';
 import { RegisterComponent } from './components/register.component';
 import { ResetComponent } from './components/reset.component';
+import { NewPasswordComponent } from './components/new-password.component';
 
 import { NgReduxModule, NgRedux } from '@angular-redux/store';
 
-import { IUser, IAppState } from './../../../common/interfaces';
+import { IUser, IAppState } from './../../../server/interfaces';
 
 import { appStore } from './../../services/store.service'
 
@@ -39,9 +40,8 @@ class AppComponent implements OnDestroy {
 	) {
 		this.router.events.subscribe(event => {
 			if(event instanceof NavigationStart) {
-				console.log(event);
-				console.log(event.url);
-				this.currentUrl = event.url;
+				this.currentUrl = event.url.split('/')[1];
+				console.log(this.currentUrl);
 			}
 		});
 		this.ngRedux.provideStore(appStore);
@@ -64,7 +64,7 @@ const routes: Routes = [
 	{ path: 'login', component: LoginComponent },
 	{ path: 'register', component: RegisterComponent },
 	{ path: 'reset', component: ResetComponent },
-	{ path: 'reset/:email/:token', component: ResetComponent },
+	{ path: 'change-password/:email/:token', component: NewPasswordComponent },
 	{ path: '**', redirectTo: '/login', pathMatch: 'full' },
 ];
 
@@ -79,7 +79,8 @@ const routes: Routes = [
 		AppComponent,
 		LoginComponent,
 		RegisterComponent,
-		ResetComponent
+		ResetComponent,
+		NewPasswordComponent
 	],
 	providers: [
 

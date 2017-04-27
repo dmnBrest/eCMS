@@ -1,7 +1,7 @@
 import {createTransport, SentMessageInfo, Transporter, SendMailOptions} from 'nodemailer';
 import { EmailTemplate } from 'email-templates';
 import * as path from 'path';
-import { IUser } from './../../common/interfaces';
+import { IUser } from './../../server/interfaces';
 import { appConfig } from './../config';
 
 let mailTransport:Transporter = createTransport({
@@ -52,7 +52,7 @@ export function sendResetPasswordEmail(email: string, token: string): Promise<Se
 		let templateDir = path.join(__dirname, '..', 'emails', 'reset-password-email');
 		let emailEngine = new EmailTemplate(templateDir);
 
-		let resetUrl = appConfig.baseUrl+'/auth#/reset/'+encodeURIComponent(email)+'/'+encodeURIComponent(token);
+		let resetUrl = appConfig.baseUrl+'/auth#/change-password/'+encodeURIComponent(email)+'/'+encodeURIComponent(token);
 
 		emailEngine.render({resetUrl: resetUrl, token: token}, function (err, result) {
 

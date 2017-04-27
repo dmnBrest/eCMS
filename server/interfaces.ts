@@ -1,5 +1,7 @@
 import { Action } from 'redux';
 
+// CONSTANTS
+export const INTERNAL_ERROR = 'Internal Error';
 
 // MODELS
 export interface IUser {
@@ -26,6 +28,23 @@ export interface IResetForm {
 	email: string;
 };
 
+export interface INewPasswordForm {
+	password: string;
+	confirmPassword: string;
+	email: string;
+	token: string;
+};
+
+export const enum ResultStatus {
+    SUCCESS,
+    ERROR
+}
+
+export interface IResults {
+	status: ResultStatus;
+	errors?: string[];
+	payload?: any;
+}
 
 export interface IRegisterForm {
 	username: string;

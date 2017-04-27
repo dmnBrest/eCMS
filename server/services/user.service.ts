@@ -1,22 +1,30 @@
 import * as bcrypt from 'bcrypt';
 import { v4 as uuidV4} from 'uuid';
 import * as db from './db.service';
-import { IUser } from './../../common/interfaces';
+import { IUser, INTERNAL_ERROR } from './../interfaces';
 
-export function getUserByIdForLogin(id: string) {
-	return db.one('SELECT id, username, is_admin, created_at, login_at, slug FROM public.user WHERE id=$1 AND verification_code IS NULL AND is_blocked = false', [id]).then((data:any) => {
+export function getUserById(id: string): Promise<IUser> {
+	return db.one('SELECT * FROM public.user WHERE id=$1', [id]).then((data:IUser) => {
 		console.log('UserService.getUserById:');
 		console.log(data);
 		return data;
-	})
+	});
 }
 
-export function getUserByEmail(email: string) {
-	return db.one('SELECT * FROM public.user WHERE email=$1', [email]).then((data:any) => {
+export function getUserByIdForLogin(id: string): Promise<IUser> {
+	return db.one('SELECT id, username, is_admin, created_at, login_at, slug FROM public.user WHERE id=$1 AND verification_code IS NULL AND is_blocked = false', [id]).then((data:IUser) => {
+		console.log('UserService.getUserByIdForLogin:');
+		console.log(data);
+		return data;
+	});
+}
+
+export function getUserByEmail(email: string): Promise<IUser> {
+	return db.one('SELECT * FROM public.user WHERE email=$1', [email]).then((data:IUser) => {
 		console.log('UserService.getUserByEmail:');
 		console.log(data);
 		return data;
-	})
+	});
 }
 
 export function createUser(username:string, email:string, password:string, isAdmin:boolean): Promise<IUser> {
@@ -45,6 +53,30 @@ export function createUser(username:string, email:string, password:string, isAdm
 		console.log('UserService.createUser:');
 		console.log(results);
 		return user;
+	});
+}
+
+export function changePassword(email:string, password:string, token: string): Promise<IUser> {
+	return new Promise((resolve, reject) => {
+		let hash = bcrypt.hashSync(password, 10);
+		db.one('UPDATE public.user SET password=$1, reset_password_token=NULL WHERE email=$2 AND reset_password_token=$3 RETURNING id', [hash, email, token]).then((data:any) => {
+			console.log('UserService.changePassword:');
+			console.log(data);
+			getUserByEmail(email).then((user) => {
+				resolve(user);
+			}).catch((err) => {
+				console.log(err);
+				reject(INTERNAL_ERROR);
+			})
+
+		}).catch((err) => {
+			console.log(err);
+			if (err.constructor.name =='QueryResultError') {
+				reject('User with token not found');
+			} else {
+				reject(INTERNAL_ERROR);
+			}
+		});
 	});
 }
 

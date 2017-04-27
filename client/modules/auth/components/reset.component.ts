@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as StoreService from './../../../services/store.service';
-import { IResetForm } from './../../../../common/interfaces';
+import { IResetForm } from './../../../../server/interfaces';
 
 
 @Component({
@@ -11,33 +11,21 @@ import { IResetForm } from './../../../../common/interfaces';
 
 export class ResetComponent implements OnInit, OnDestroy {
 
-	email: string;
-	token: string;
-	private sub: any;
+	resetFormData:IResetForm;
 
-	constructor(private route: ActivatedRoute) {}
-
-	ngOnInit() {
-		// this.sub = this.route.params.subscribe(params => {
-		// 	this.email = params['email'];
-		// 	this.token = params['token'];
-		// });
+	constructor(private route: ActivatedRoute) {
+		this.resetFormData = {
+			email: null
+		};
 	}
 
-	ngOnDestroy() {
-		this.sub.unsubscribe();
-	}
+	ngOnInit() {}
 
-	resetFormData:IResetForm = {
-		email: null
-	};
-
+	ngOnDestroy() {}
 
 	reset() {
 		StoreService.resetFormSubmit(this.resetFormData).then((results: any) => {
-			if (results.status == 'ok') {
-				window.location.href = '/';
-			}
+			window.location.href = '/';
 		}).catch(err => {
 			console.log('Reset Error');
 		});

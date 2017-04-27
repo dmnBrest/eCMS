@@ -1,7 +1,7 @@
 import { Action, applyMiddleware, Store, createStore, Dispatch } from 'redux';
 let createLogger = require('redux-logger');
 
-import { IUser, ILoginForm, IResetForm, ISpinner, IAppState, IAppAction } from './../../common/interfaces';
+import { IUser, ILoginForm, IResetForm, INewPasswordForm, ISpinner, IAppState, IAppAction, ResultStatus, IResults, INTERNAL_ERROR } from './../../server/interfaces';
 
 const loggerMiddleware = createLogger();
 
@@ -37,10 +37,10 @@ const AUTH_REGISTER__AJAX_END = 'AUTH_REGISTER__AJAX_END';
 export function loginFormSubmit(data: ILoginForm) {
 	return new Promise((resolve, reject) => {
 		showSpinner();
-		return remoteAction('/auth/login', data).then((resp: any) => {
+		return remoteAction('/auth/login', data).then((resp: IResults) => {
 			hideSpinner();
-			if (resp.status == 'ok') {
-				setCurrentUser(resp.currentUser);
+			if (resp.status == ResultStatus.SUCCESS) {
+				//setCurrentUser(resp.payload);
 				resolve(resp);
 			} else {
 				reject(resp);
@@ -55,9 +55,9 @@ export function loginFormSubmit(data: ILoginForm) {
 export function registerFormSubmit(data: ILoginForm) {
 	return new Promise((resolve, reject) => {
 		showSpinner();
-		return remoteAction('/auth/register', data).then((resp: any) => {
+		return remoteAction('/auth/register', data).then((resp: IResults) => {
 			hideSpinner();
-			if (resp.status == 'ok') {
+			if (resp.status == ResultStatus.SUCCESS) {
 				resolve(resp);
 			} else {
 				reject(resp);
@@ -74,7 +74,25 @@ export function resetFormSubmit(data: IResetForm) {
 		showSpinner();
 		return remoteAction('/auth/reset', data).then((resp: any) => {
 			hideSpinner();
-			if (resp.status == 'ok') {
+			if (resp.status == ResultStatus.SUCCESS) {
+				resolve(resp);
+			} else {
+				reject(resp);
+			}
+		}).catch(function(ex) {
+			hideSpinner();
+			reject(ex);
+		});
+	});
+}
+
+export function newPasswordFormSubmit(data: INewPasswordForm) {
+	return new Promise((resolve, reject) => {
+		showSpinner();
+		console.log(data);
+		return remoteAction('/auth/change-password', data).then((resp: any) => {
+			hideSpinner();
+			if (resp.status == ResultStatus.SUCCESS) {
 				resolve(resp);
 			} else {
 				reject(resp);
@@ -197,7 +215,7 @@ function checkResponseStatus(response:any) {
 			if (resp.errors) {
 				addErrors(resp.errors);
 			} else {
-				addErrors(['Internal Server Error']);
+				addErrors([INTERNAL_ERROR]);
 			}
 			return resp;
 		}).catch((err:any) => {

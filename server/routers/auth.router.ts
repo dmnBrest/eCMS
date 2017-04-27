@@ -8,7 +8,7 @@ import * as UserService from './../services/user.service';
 import * as passport from 'passport'
 import * as EmailService from './../services/mail.service';
 
-import { ILoginForm, IRegisterForm, IResetForm, IUser } from './../../common/interfaces'
+import { ILoginForm, IRegisterForm, IResetForm, INewPasswordForm, IResults, ResultStatus, IUser , INTERNAL_ERROR} from './../interfaces'
 
 class Auth {
 
@@ -59,14 +59,14 @@ class Auth {
 
 					req.flash('info', 'You have successfully logged in!');
 
-					resp.json({ status: 'ok', currentUser: user });
+					resp.json({ status: ResultStatus.SUCCESS } as IResults);
 				});
 			} else {
-				resp.status(400).json({ status: 'error', errors: ['Wrong credentials'] });
+				resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Wrong credentials'] } as IResults);
 			}
 		}).catch((err) => {
 			if (err.constructor.name =='QueryResultError') {
-				resp.status(400).json({ status: 'error', errors: ['Wrong credentials'] });
+				resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Wrong credentials'] } as IResults);
 				return;
 			}
 			resp.status(500).json({});
@@ -88,11 +88,11 @@ class Auth {
 			!form.password ||
 			form.password.length > 1024
 		) {
-			resp.status(400).send({ status: 'error', errors: ['Bad Request'] });
+			resp.status(400).send({ status: ResultStatus.ERROR, errors: ['Bad Request'] } as IResults);
 			return;
 		}
 
-		UserService.createUser(form.username, form.email, form.password, false).then((user) => {
+		UserService.createUser(form.username, form.email, form.password, false).then((user:IUser) => {
 
 			// Send Email Notification for new user
 			EmailService.sendNewUserEmail(user).then(
@@ -103,11 +103,50 @@ class Auth {
 
 			req.flash('info', 'You have successfully registered! Please confirm your email.');
 
-			resp.json({ status: 'ok', currentUser: user });
+			resp.json({ status: ResultStatus.SUCCESS } as IResults);
 
 		}).catch((err) => {
 			console.log(err);
-			resp.status(400).json({ status: 'error', errors: ['Bad Request'] });
+			resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Bad Request'] } as IResults);
+		});
+
+	}
+
+	public changePassword(req: Request, resp: Response, next?: NextFunction) {
+
+		resp.setHeader('Content-Type', 'application/json');
+
+		let form = req.body as INewPasswordForm;
+
+		if (
+			!form.email ||
+			form.email.length > 255 ||
+			!form.token ||
+			form.token.length > 36 ||
+			!form.password ||
+			form.password.length > 1024
+		) {
+			resp.status(400).send({ status: ResultStatus.ERROR, errors: ['Bad Request'] } as IResults);
+			return;
+		}
+
+		UserService.changePassword(form.email, form.password, form.token).then((user:IUser) => {
+
+			// TODO Password was changed notification
+
+			// Send Email Notification for new user
+			// EmailService.sendNewUserEmail(user).then(
+			// 	(info) => {console.log(info);}
+			// ).catch(
+			// 	(err) => {console.log(err);}
+			// );
+
+			req.flash('info', 'Password was changed. You can login with new password.');
+			resp.json({ status: ResultStatus.SUCCESS } as IResults);
+
+		}).catch((err) => {
+			console.log(err);
+			resp.status(400).json({ status: ResultStatus.ERROR, errors: [err] } as IResults);
 		});
 
 	}
@@ -131,7 +170,7 @@ class Auth {
 			!form.email ||
 			form.email.length > 255
 		) {
-			resp.status(400).send({ status: 'error', errors: ['Bad Request'] });
+			resp.status(400).send({ status: ResultStatus.ERROR, errors: ['Bad Request'] } as IResults);
 			return;
 		}
 
@@ -147,15 +186,15 @@ class Auth {
 			);
 
 			req.flash('info', 'Please check your email account for reset password link');
-			resp.json({ status: 'ok' });
+			resp.json({ status: ResultStatus.SUCCESS } as IResults);
 		})
 		.catch((err) => {
 			console.log(err)
 			if (err.constructor.name =='QueryResultError') {
-				resp.status(400).json({ status: 'error', errors: ['Email not found.'] });
+				resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Email not found.'] } as IResults);
 				return;
 			}
-			resp.status(500).json({});
+			resp.status(500).json({status: ResultStatus.ERROR, errors: [INTERNAL_ERROR]} as IResults);
 		});
 	}
 
@@ -182,7 +221,6 @@ class Auth {
 			console.log(err);
 			resp.status(400).send('Bad request');
 		});
-
 	}
 
 
@@ -197,4 +235,5 @@ AuthRouter.get('/verify/:email/:code', auth.verifyEmail);
 AuthRouter.post('/login', auth.login);
 AuthRouter.post('/register', auth.register);
 AuthRouter.post('/reset', auth.sendResetToken);
+AuthRouter.post('/change-password', auth.changePassword);
 

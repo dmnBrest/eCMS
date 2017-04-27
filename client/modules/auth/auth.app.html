@@ -3,8 +3,9 @@
 		<div class="c-panel uk-card uk-card-default">
 			<div class="c-panel-header">
 				<span [ngSwitch]="currentUrl">
-					<ng-container *ngSwitchCase="'/register'">Sign up</ng-container>
-					<ng-container *ngSwitchCase="'/reset'">Reset password</ng-container>
+					<ng-container *ngSwitchCase="'register'">Sign up</ng-container>
+					<ng-container *ngSwitchCase="'reset'">Reset password</ng-container>
+					<ng-container *ngSwitchCase="'change-password'">Reset password</ng-container>
 					<ng-container *ngSwitchDefault>Login</ng-container>
 				</span>
 			</div>
