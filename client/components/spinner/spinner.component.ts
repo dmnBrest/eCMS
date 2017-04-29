@@ -30,15 +30,12 @@ export class SpinnerComponent implements OnInit, OnDestroy {
 		this.ngRedux.provideStore(StoreService.appStore);
 		this.spinnerSubscription = this.ngRedux.select<string[]>('spinner').subscribe((val) => {
 			this.zone.run(() => {
-				console.log(val);
 				this.spinner = val;
 			});
 		});
 	}
 
 	ngOnInit() {
-
-		console.log('Spinner init');
 
 		// init Spin.js
 		var opts = {
@@ -64,11 +61,7 @@ export class SpinnerComponent implements OnInit, OnDestroy {
 			, position: 'absolute' // Element positioning
 		}
 
-		console.log('this.spinnerEl.nativeElement:');
-		console.log(this.spinnerEl.nativeElement);
-
 		var spinner = new Spinner(opts).spin(this.spinnerEl.nativeElement);
-
 	}
 
 	ngOnDestroy() {

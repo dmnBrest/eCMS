@@ -1,5 +1,5 @@
 import { Action, applyMiddleware, Store, createStore, Dispatch } from 'redux';
-let createLogger = require('redux-logger');
+import { createLogger } from 'redux-logger';
 
 import { IUser, ILoginForm, IResetForm, INewPasswordForm, ISpinner, IAppState, IAppAction, ResultStatus, IResults, INTERNAL_ERROR } from './../../server/interfaces';
 

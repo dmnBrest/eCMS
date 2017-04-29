@@ -81,11 +81,16 @@ module.exports = {
     //   compress: { warnings: true }
     // }),
 
+    // new webpack.ContextReplacementPlugin(
+    //   // The (\\|\/) piece accounts for path separators in *nix and Windows
+    //   /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+    //   path.join(__dirname, 'src'), // location of your src
+    //   { }
+    // ),
     new webpack.ContextReplacementPlugin(
-      // The (\\|\/) piece accounts for path separators in *nix and Windows
-      /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-      path.join(__dirname, 'src'), // location of your src
-      { }
+        /angular(\\|\/)core(\\|\/)@angular/,
+        path.resolve('./src'),
+        {}
     ),
 
     new webpack.optimize.CommonsChunkPlugin({

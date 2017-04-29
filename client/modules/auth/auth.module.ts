@@ -39,7 +39,6 @@ class ModuleComponent implements OnDestroy {
 		this.router.events.subscribe(event => {
 			if(event instanceof NavigationStart) {
 				this.currentUrl = event.url.split('/')[1];
-				console.log(this.currentUrl);
 			}
 		});
 	}
