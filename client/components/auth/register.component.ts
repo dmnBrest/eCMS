@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { IRegisterForm } from './../../../../server/interfaces';
-import * as StoreService from './../../../services/store.service';
+import { IRegisterForm } from './../../../server/interfaces';
+import * as StoreService from './../../services/store.service';
 
 @Component({
 	selector: 'c-register',

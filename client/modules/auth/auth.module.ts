@@ -22,44 +22,33 @@ import { IUser, IAppState } from './../../../server/interfaces';
 
 import { appStore } from './../../services/store.service'
 
-/* APP COMPONENT */
+/* MODULE COMPONENT */
 @Component({
-	selector: 'app-auth',
+	selector: 'auth-module',
 	templateUrl: './auth.module.html'
 })
-class AppComponent implements OnDestroy {
+class ModuleComponent implements OnDestroy {
 
 	currentUrl: string;
-	currentUser: IUser;
-	currentUserSubscription: Subscription;
 
 	constructor(
 		private router: Router,
 		private ngRedux: NgRedux<IAppState>,
-		private zone:NgZone
 	) {
+		this.ngRedux.provideStore(appStore);
 		this.router.events.subscribe(event => {
 			if(event instanceof NavigationStart) {
 				this.currentUrl = event.url.split('/')[1];
 				console.log(this.currentUrl);
 			}
 		});
-		this.ngRedux.provideStore(appStore);
-		this.currentUserSubscription = this.ngRedux.select<IUser>('currentUser').subscribe((c) => {
-			this.zone.run(() => {
-				console.log(c);
-				this.currentUser = c;
-			});
-		})
 	}
 
-	ngOnDestroy() {
-		this.currentUserSubscription.unsubscribe();
-	}
+	ngOnDestroy() {}
 
 }
 
-/* APP MODULE */
+/* MODULE */
 const routes: Routes = [
 	{ path: 'login', component: LoginComponent },
 	{ path: 'register', component: RegisterComponent },
@@ -76,7 +65,7 @@ const routes: Routes = [
 		NgReduxModule
 	],
 	declarations: [
-		AppComponent,
+		ModuleComponent,
 		LoginComponent,
 		RegisterComponent,
 		ResetComponent,
@@ -85,9 +74,9 @@ const routes: Routes = [
 	providers: [
 
 	],
-	bootstrap: [ AppComponent ]
+	bootstrap: [ ModuleComponent ]
 })
-class AppModule { }
+class MainModule { }
 
-/* APP BOOTSTRAP */
-platformBrowserDynamic().bootstrapModule(AppModule);
+/* BOOTSTRAP */
+platformBrowserDynamic().bootstrapModule(MainModule);

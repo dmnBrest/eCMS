@@ -1,0 +1,26 @@
+<div class="c-notifications-component">
+	<div *ngFor="let m of errors; let i = index" class="c-error">
+		<table>
+			<tr>
+				<td>{{m}}</td>
+				<td class="c-close-notification">
+					<a href="javascript:void(0);"
+						(click)="removeError(i)"
+						uk-icon="icon: close;"></a>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div *ngFor="let m of info; let i = index" class="c-info">
+		<table>
+			<tr>
+				<td>{{m}}</td>
+				<td class="c-close-notification">
+					<a href="javascript:void(0);"
+						(click)="removeInfo(i)"
+						uk-icon="icon: close;"></a>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

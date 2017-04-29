@@ -1,0 +1,23 @@
+.c-error {
+	padding: 10px 20px;
+	background-color: #e44d49;
+	color: #fff;
+	font-size: 14px;
+	margin-bottom: 2px;
+}
+.c-info {
+	padding: 10px 20px;
+	background-color: green;
+	color: #fff;
+	font-size: 14px;
+	margin-bottom: 2px;
+}
+.c-notifications-component table {
+	width: 100%;
+}
+.c-close-notification {
+	text-align: right;
+}
+.c-close-notification a {
+	color: #fff;
+}

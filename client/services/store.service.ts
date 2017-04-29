@@ -28,6 +28,7 @@ const HIDE_SPINNER = 'HIDE_SPINNER';
 const ADD_ERRORS = 'ADD_ERRORS';
 const ADD_INFO = 'ADD_INFO';
 const REMOVE_ERROR = 'REMOVE_ERROR';
+const REMOVE_ALL_NOTIFICATIONS = 'REMOVE_ALL_NOTIFICATIONS';
 const REMOVE_INFO = 'REMOVE_INFO';
 const SET_CURRENT_USER = 'SET_CURRENT_USER';
 const AUTH_REGISTER__AJAX_START = 'AUTH_REGISTER__AJAX_START';
@@ -36,6 +37,7 @@ const AUTH_REGISTER__AJAX_END = 'AUTH_REGISTER__AJAX_END';
 // ACTION CREATORS
 export function loginFormSubmit(data: ILoginForm) {
 	return new Promise((resolve, reject) => {
+		removeAllNotifications();
 		showSpinner();
 		return remoteAction('/auth/login', data).then((resp: IResults) => {
 			hideSpinner();
@@ -54,6 +56,7 @@ export function loginFormSubmit(data: ILoginForm) {
 
 export function registerFormSubmit(data: ILoginForm) {
 	return new Promise((resolve, reject) => {
+		removeAllNotifications();
 		showSpinner();
 		return remoteAction('/auth/register', data).then((resp: IResults) => {
 			hideSpinner();
@@ -71,6 +74,7 @@ export function registerFormSubmit(data: ILoginForm) {
 
 export function resetFormSubmit(data: IResetForm) {
 	return new Promise((resolve, reject) => {
+		removeAllNotifications();
 		showSpinner();
 		return remoteAction('/auth/reset', data).then((resp: any) => {
 			hideSpinner();
@@ -88,6 +92,7 @@ export function resetFormSubmit(data: IResetForm) {
 
 export function newPasswordFormSubmit(data: INewPasswordForm) {
 	return new Promise((resolve, reject) => {
+		removeAllNotifications();
 		showSpinner();
 		console.log(data);
 		return remoteAction('/auth/change-password', data).then((resp: any) => {
@@ -128,6 +133,10 @@ export function removeError(index: number) {
 	appStore.dispatch({ type: REMOVE_ERROR, payload: index });
 }
 
+export function removeAllNotifications() {
+	appStore.dispatch({ type: REMOVE_ALL_NOTIFICATIONS });
+}
+
 export function removeInfo(index: number) {
 	appStore.dispatch({ type: REMOVE_INFO, payload: index });
 }
@@ -165,7 +174,7 @@ function appReducer(lastState: IAppState, action: IAppAction): IAppState {
 					...lastState.errors.slice(action.payload + 1)
 				]
 			};
-			return Object.assign({}, lastState, nextState)
+			return Object.assign({}, lastState, nextState);
 
 		case REMOVE_INFO:
 			nextState = { info: [
@@ -173,11 +182,18 @@ function appReducer(lastState: IAppState, action: IAppAction): IAppState {
 					...lastState.info.slice(action.payload + 1)
 				]
 			};
-			return Object.assign({}, lastState, nextState)
+			return Object.assign({}, lastState, nextState);
+
+		case REMOVE_ALL_NOTIFICATIONS:
+			nextState = {
+				info: [],
+				errors: []
+			}
+			return Object.assign({}, lastState, nextState);
 
 		case SET_CURRENT_USER:
 			nextState = { currentUser: action.payload };
-			return Object.assign({}, lastState, nextState)
+			return Object.assign({}, lastState, nextState);
 
 	}
 	return lastState;

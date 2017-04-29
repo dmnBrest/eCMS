@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import * as StoreService from './../../../services/store.service';
-import { INewPasswordForm } from './../../../../server/interfaces';
+import * as StoreService from './../../services/store.service';
+import { INewPasswordForm } from './../../../server/interfaces';
 
 
 @Component({
