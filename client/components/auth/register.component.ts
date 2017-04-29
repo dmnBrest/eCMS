@@ -21,9 +21,7 @@ export class RegisterComponent implements OnInit {
 
 	register() {
 		StoreService.registerFormSubmit(this.registerFormData).then((results: any) => {
-			if (results.status == 'ok') {
-				window.location.href = '/';
-			}
+			window.location.href = '/';
 		}).catch(err => {
 			console.log('Login Error');
 			console.log(err);

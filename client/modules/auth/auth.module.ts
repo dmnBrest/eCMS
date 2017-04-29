@@ -11,10 +11,10 @@ import * as jQuery from 'jquery';
 
 import { StoreModule, provideStore } from '@ngrx/store';
 
-import { LoginComponent } from './components/login.component';
-import { RegisterComponent } from './components/register.component';
-import { ResetComponent } from './components/reset.component';
-import { NewPasswordComponent } from './components/new-password.component';
+import { LoginComponent } from './../../components/auth/login.component';
+import { RegisterComponent } from './../../components/auth/register.component';
+import { ResetComponent } from './../../components/auth/reset.component';
+import { NewPasswordComponent } from './../../components/auth/new-password.component';
 
 import { NgReduxModule, NgRedux } from '@angular-redux/store';
 
@@ -25,7 +25,7 @@ import { appStore } from './../../services/store.service'
 /* APP COMPONENT */
 @Component({
 	selector: 'app-auth',
-	templateUrl: './auth.app.html'
+	templateUrl: './auth.module.html'
 })
 class AppComponent implements OnDestroy {
 

@@ -1,0 +1,65 @@
+<div>
+	<form #registerForm="ngForm" class="uk-form-stacked" novalidate>
+
+		<div class="uk-margin">
+			<label class="uk-form-label" for="email">Email<span class="c-required-field-mark">*</span></label>
+			<input
+				[(ngModel)]="registerFormData.email"
+				id="email"
+				type="email"
+				name="email"
+				class="uk-input"
+				[ngClass]="{'uk-form-danger': registerFormEmail.errors && registerFormEmail.touched}"
+				required="true"
+				maxlength="255"
+				#registerFormEmail="ngModel" />
+			<div class="c-field-errors" [hidden]="registerFormEmail.valid || registerFormEmail.untouched">
+				<div *ngIf="registerFormEmail.errors?.required">Value is required</div>
+			</div>
+		</div>
+
+		<div class="uk-margin">
+			<label class="uk-form-label" for="email">Username<span class="c-required-field-mark">*</span></label>
+			<input
+				[(ngModel)]="registerFormData.username"
+				id="username"
+				type="text"
+				name="username"
+				class="uk-input"
+				[ngClass]="{'uk-form-danger': registerFormUsername.errors && registerFormUsername.touched}"
+				required="true"
+				maxlength="255"
+				#registerFormUsername="ngModel" />
+			<div class="c-field-errors" [hidden]="registerFormUsername.valid || registerFormUsername.untouched">
+				<div *ngIf="registerFormUsername.errors?.required">Value is required</div>
+			</div>
+		</div>
+
+		<div class="uk-margin">
+			<label class="uk-form-label" for="email">Password<span class="c-required-field-mark">*</span></label>
+			<input
+				[(ngModel)]="registerFormData.password"
+				id="password"
+				type="password"
+				name="password"
+				class="uk-input"
+				[ngClass]="{'uk-form-danger': registerFormPassword.errors && registerFormPassword.touched}"
+				required="true"
+				maxlength="1024"
+				#registerFormPassword="ngModel" />
+			<div class="c-field-errors" [hidden]="registerFormPassword.valid || registerFormPassword.untouched">
+				<div *ngIf="registerFormPassword.errors?.required">Value is required</div>
+			</div>
+		</div>
+
+		<div class="uk-text-right">
+			<button
+				(click)="register()"
+				[disabled]="registerForm.invalid"
+				class="uk-button uk-button-primary">
+				Sign up
+			</button>
+		</div>
+
+	</form>
+</div>

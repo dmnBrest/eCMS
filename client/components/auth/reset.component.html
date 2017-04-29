@@ -1,0 +1,31 @@
+<div>
+	<form #resetForm="ngForm" class="uk-form-stacked" novalidate>
+
+		<div class="uk-margin">
+			<label class="uk-form-label" for="email">Email<span class="c-required-field-mark">*</span></label>
+			<input
+				[(ngModel)]="resetFormData.email"
+				id="email"
+				type="email"
+				name="email"
+				class="uk-input"
+				[ngClass]="{'uk-form-danger': resetFormEmail.errors && resetFormEmail.touched}"
+				required="true"
+				maxlength="255"
+				#resetFormEmail="ngModel" />
+			<div class="c-field-errors" [hidden]="resetFormEmail.valid || resetFormEmail.untouched">
+				<div *ngIf="resetFormEmail.errors?.required">Value is required</div>
+			</div>
+		</div>
+
+		<div class="uk-text-right">
+			<button
+				(click)="reset()"
+				[disabled]="resetForm.invalid"
+				class="uk-button uk-button-primary">
+				Reset
+			</button>
+		</div>
+
+	</form>
+</div>

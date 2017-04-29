@@ -55,6 +55,15 @@ footer {
 	display: none !important;
 }
 
+.c-required-field-mark {
+	display: inline-block;
+	margin-left: 5px;
+}
+
+.c-field-errors {
+	color: red;
+}
+
 .c-sub-header {
 	background: #fff;
 	border-bottom: 1px solid #e7eaec;
