@@ -42,7 +42,6 @@ export class ExpressServer {
 		});
 
 		nEnv.addFilter('json', function(obj) {
-			console.log('json filter:', obj);
 			return JSON.stringify(obj);
 		});
 
@@ -68,6 +67,7 @@ export class ExpressServer {
 			this.app.use(morgan('tiny'));
 
 			this.app.use('/static', express.static(path.join(__dirname, './static')));
+			this.app.use('/slds', express.static(path.join(__dirname, './../node_modules/@salesforce-ux/design-system/assets')));
 
 		} else if (process.env.NODE_ENV == 'production') {
 			console.log('= PRODUCTION MODE =');

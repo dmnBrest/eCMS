@@ -65,7 +65,7 @@ gulp.task('server:server', ['server:templates', 'server:static', 'server:emails'
 
 gulp.task('server:watch', function(cb){
 	console.log('Watch server');
-	gulp.watch(['./server/**/*.ts', './server/templates/**/*.html', './static/css/*.*', './server/emails/**/*.*'], ['server:server']);
+	gulp.watch(['./server/**/*.ts', './server/templates/**/*.*', './static/css/*.*', './server/emails/**/*.*'], ['server:server']);
 	cb(null);
 })
 

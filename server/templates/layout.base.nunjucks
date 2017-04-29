@@ -11,11 +11,9 @@
 		integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
 		crossorigin="anonymous"></script>
 
-	<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,400i,500,700&amp;subset=cyrillic" rel="stylesheet">
+	<link href="/slds/styles/salesforce-lightning-design-system.css" rel="stylesheet">
 
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.18/css/uikit.min.css" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.18/js/uikit.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.18/js/uikit-icons.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,400i,500,700&amp;subset=cyrillic" rel="stylesheet">
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
 
@@ -30,14 +28,14 @@
 
 </head>
 <body>
-	<header class="uk-container uk-container-expand">
-		<div class="uk-grid">
-			<div>
+	<header>
+		<div class="slds-grid">
+			<div class="slds-col">
 				<div class="c-logo">
 					SuperSite.by
 				</div>
 			</div>
-			<div>
+			<div class="slds-col">
 				<ul class="c-top-menu">
 					<li><a href="/">Home</a></li>
 					<li><a href="/forum">Forum</a></li>
@@ -46,20 +44,22 @@
 		</div>
 	</header>
 
-	<div class="uk-container uk-container-expand c-sub-header">
-		{% if user.id %}
-			<ul>
-				<li><span>Welcome, {{user.username}}</span></li>
-				<li><span style="color: #c0c0c0">|</span></li>
-				<li><a href="/auth/logout">Logout</a></li>
-			</ul>
-		{% else %}
-			<ul>
-				<li><a href="/auth#/login">Login</a></li>
-				<li><span style="color: #c0c0c0">|</span></li>
-				<li><a href="/auth#/register">Sign up</a></li>
-			</ul>
-		{% endif %}
+	<div class="slds-grid c-sub-header">
+		<div class="slds-col slds-text-align--right">
+			{% if user.id %}
+				<ul>
+					<li><span>Welcome, <a href="/profile">{{user.username}}</a></span></li>
+					<li><span style="color: #c0c0c0">|</span></li>
+					<li><a href="/auth/logout">Logout</a></li>
+				</ul>
+			{% else %}
+				<ul>
+					<li><a href="/auth#/login">Login</a></li>
+					<li><span style="color: #c0c0c0">|</span></li>
+					<li><a href="/auth#/register">Sign up</a></li>
+				</ul>
+			{% endif %}
+		</div>
 	</div>
 
 	<div>
