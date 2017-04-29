@@ -4,7 +4,8 @@ import * as db from './db.service';
 import { IUser, INTERNAL_ERROR } from './../interfaces';
 
 export function getUserById(id: string): Promise<IUser> {
-	return db.one('SELECT * FROM public.user WHERE id=$1', [id]).then((data:IUser) => {
+	return db.one('SELECT * FROM public.user WHERE id=$1', [id])
+	.then((data:IUser) => {
 		console.log('UserService.getUserById:');
 		console.log(data);
 		return data;
@@ -12,15 +13,29 @@ export function getUserById(id: string): Promise<IUser> {
 }
 
 export function getUserByIdForLogin(id: string): Promise<IUser> {
-	return db.one('SELECT id, username, is_admin, created_at, login_at, slug FROM public.user WHERE id=$1 AND verification_code IS NULL AND is_blocked = false', [id]).then((data:IUser) => {
+	return db.one('SELECT id, username, is_admin, created_at, login_at, slug FROM public.user WHERE id=$1 AND verification_code IS NULL AND is_blocked = false', [id])
+	.then((data:IUser) => {
 		console.log('UserService.getUserByIdForLogin:');
 		console.log(data);
 		return data;
 	});
 }
 
+export function getTotalByEmailOrUsername(email:string, username:string): Promise<number> {
+	return db.one('SELECT COUNT (*) FROM public.user WHERE email=$1 OR username=$2', [email, username])
+	.then((res:any) => {
+		console.log('UserService.getTotalByEmailOrUsername:');
+		console.log(res.count);
+		return res.count;
+	}).catch((err) => {
+		console.log(err);
+		return null;
+	});
+}
+
 export function getUserByEmail(email: string): Promise<IUser> {
-	return db.one('SELECT * FROM public.user WHERE email=$1', [email]).then((data:IUser) => {
+	return db.one('SELECT * FROM public.user WHERE email=$1', [email])
+	.then((data:IUser) => {
 		console.log('UserService.getUserByEmail:');
 		console.log(data);
 		return data;

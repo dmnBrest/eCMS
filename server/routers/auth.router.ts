@@ -13,8 +13,10 @@ import { ILoginForm, IRegisterForm, IResetForm, INewPasswordForm, IResults, Resu
 
 class Auth {
 
+	// INDEX
 	public index(req: Request, resp: Response, next?: NextFunction) {
 
+		// If user is logged in redirect to Home page with message
 		if (req.user && req.user.id) {
 			req.flash('info', 'You have already logged in');
 			resp.redirect('/');
@@ -24,12 +26,14 @@ class Auth {
 		resp.render('auth.index.nunjucks', {});
 	}
 
+	// LOGIN
 	public login(req: Request, resp: Response, next?: NextFunction) {
 
 		resp.setHeader('Content-Type', 'application/json');
 
 		let form = req.body as ILoginForm
 
+		// Validate form
 		if (
 			!form.email ||
 			form.email.length > 255 ||
@@ -40,15 +44,19 @@ class Auth {
 			return;
 		}
 
+		// Get User by email
 		UserService.getUserByEmail(form.email).then((user:IUser) => {
+			// Check if user confirm email
 			if (user.verification_code) {
 				resp.status(400).json({ status: 'error', errors: ['Please confirm email.'] });
 				return;
 			}
+			// Check is user is not blocked
 			if (user.is_blocked == true) {
 				resp.status(400).json({ status: 'error', errors: ['You are blocked, please contact administrator.'] });
 				return;
 			}
+			// Compare password
 			if (bcrypt.compareSync(form.password, user.password)) {
 				req.login(user, function(err){
 					if(err) return next(err);
@@ -75,12 +83,14 @@ class Auth {
 
 	}
 
+	// REGISTER
 	public register(req: Request, resp: Response, next?: NextFunction) {
 
 		resp.setHeader('Content-Type', 'application/json');
 
 		let form = req.body as IRegisterForm
 
+		// Validate form
 		if (
 			!form.email ||
 			form.email.length > 255 ||
@@ -94,44 +104,51 @@ class Auth {
 			return;
 		}
 
-		// TODO Check for duplicates by Email and Username
+		// Check for duplicates by Email and Username
+		UserService.getTotalByEmailOrUsername(form.email, form.username)
+		.then((n:number) => {
 
-		// Check reCaptcha
-		RecaptchaService.validateCaptcha(form.token)
-		.then((res:any) => {
-			// Create new user
-			UserService.createUser(form.username, form.email, form.password, false).then((user:IUser) => {
+			if (n > 0) {
+				resp.status(400).json({ status: ResultStatus.ERROR, errors: ['User with email or username already exists.'] } as IResults);
+			} else if (n == 0) {
+				// Check reCaptcha
+				RecaptchaService.validateCaptcha(form.token)
+				.then((res:any) => {
+					// Create new user
+					UserService.createUser(form.username, form.email, form.password, false).then((user:IUser) => {
 
-				// Send Email Notification for new user
-				EmailService.sendNewUserEmail(user).then(
-					(info) => {console.log(info);}
-				).catch(
-					(err) => {console.log(err);}
-				);
+						// Send Email Notification for new user
+						EmailService.sendNewUserEmail(user).then(
+							(info) => {console.log(info);}
+						).catch(
+							(err) => {console.log(err);}
+						);
 
-				req.flash('info', 'You have successfully registered! Please confirm your email.');
+						req.flash('info', 'You have successfully registered! Please confirm your email.');
 
-				resp.json({ status: ResultStatus.SUCCESS } as IResults);
+						resp.json({ status: ResultStatus.SUCCESS } as IResults);
 
-			}).catch((err) => {
-				console.log(err);
-				resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Bad Request'] } as IResults);
-			});
-		}).catch((err) => {
-			resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Bad Captcha'] } as IResults);
+					}).catch((err) => {
+						console.log(err);
+						resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Bad Request'] } as IResults);
+					});
+				}).catch((err) => {
+					resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Bad Captcha'] } as IResults);
+				});
+			} else {
+				resp.status(400).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+			}
 		});
-
-
-
-
 	}
 
+	// CHANGE PASSWORD WITH TOKEN
 	public changePassword(req: Request, resp: Response, next?: NextFunction) {
 
 		resp.setHeader('Content-Type', 'application/json');
 
 		let form = req.body as INewPasswordForm;
 
+		// Validate form
 		if (
 			!form.email ||
 			form.email.length > 255 ||
@@ -144,10 +161,10 @@ class Auth {
 			return;
 		}
 
+		// Change password for user wit email and reset password token
 		UserService.changePassword(form.email, form.password, form.token).then((user:IUser) => {
 
 			// TODO Password was changed notification
-
 			// Send Email Notification for new user
 			// EmailService.sendNewUserEmail(user).then(
 			// 	(info) => {console.log(info);}
@@ -165,6 +182,7 @@ class Auth {
 
 	}
 
+	// LOGOUT
 	public logout(req: Request, resp: Response, next?: NextFunction) {
 		req.session.destroy(err => {
 			if (err) {
@@ -174,6 +192,7 @@ class Auth {
 		});
 	}
 
+	// SEND RESET PASSWORD TOKEN
 	public sendResetToken(req: Request, resp: Response, next?: NextFunction) {
 
 		resp.setHeader('Content-Type', 'application/json');
@@ -212,7 +231,7 @@ class Auth {
 		});
 	}
 
-
+	// VERIFY EMAIL
 	public verifyEmail(req: Request, resp: Response, next?: NextFunction) {
 
 		if (
