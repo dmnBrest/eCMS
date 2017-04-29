@@ -52,10 +52,14 @@
 			</div>
 		</div>
 
+		<div style="width: 304px; margin: auto;">
+ 			<re-captcha (captchaResponse)="handleCorrectCaptcha($event)" site_key="{{recaptchaKey}}"></re-captcha>
+		</div>
+
 		<div class="uk-text-right">
 			<button
 				(click)="register()"
-				[disabled]="registerForm.invalid"
+				[disabled]="registerForm.invalid || !registerFormData.token"
 				class="uk-button uk-button-primary">
 				Sign up
 			</button>

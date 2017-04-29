@@ -1,15 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-
-export interface IConfig {
-    dbPath: string,
-    modules: string[],
-    baseUrl: string,
-    title: string,
-    adminEmail: string,
-    noreplyEmail: string
-
-}
+import { IConfig } from './interfaces'
 
 console.log('Init config');
 

@@ -1,7 +1,7 @@
 import { Action, applyMiddleware, Store, createStore, Dispatch } from 'redux';
 import { createLogger } from 'redux-logger';
 
-import { IUser, ILoginForm, IResetForm, INewPasswordForm, ISpinner, IAppState, IAppAction, ResultStatus, IResults, INTERNAL_ERROR } from './../../server/interfaces';
+import { IUser, ILoginForm, IRegisterForm, IResetForm, INewPasswordForm, ISpinner, IAppState, IAppAction, ResultStatus, IResults, INTERNAL_ERROR } from './../../server/interfaces';
 
 const loggerMiddleware = createLogger();
 
@@ -54,7 +54,7 @@ export function loginFormSubmit(data: ILoginForm) {
 	});
 }
 
-export function registerFormSubmit(data: ILoginForm) {
+export function registerFormSubmit(data: IRegisterForm) {
 	return new Promise((resolve, reject) => {
 		removeAllNotifications();
 		showSpinner();

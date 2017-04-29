@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IRegisterForm } from './../../../server/interfaces';
 import * as StoreService from './../../services/store.service';
+import { ReCaptchaComponent } from 'angular2-recaptcha';
 
 @Component({
 	selector: 'c-register',
@@ -9,21 +10,30 @@ import * as StoreService from './../../services/store.service';
 
 export class RegisterComponent implements OnInit {
 
+	@ViewChild(ReCaptchaComponent) captcha: ReCaptchaComponent;
+	recaptchaKey = (window as any).recaptchaKey;
 	registerFormData:IRegisterForm;
 
 	constructor() {
 		this.registerFormData = {
 			username: null,
 			email: null,
-			password: null
+			password: null,
+			token: null
 		}
+	}
+
+	// https://github.com/xmaestro/angular2-recaptcha
+	handleCorrectCaptcha(token:string) {
+		console.log(token);
+		this.registerFormData.token = token;
 	}
 
 	register() {
 		StoreService.registerFormSubmit(this.registerFormData).then((results: any) => {
 			window.location.href = '/';
 		}).catch(err => {
-			console.log('Login Error');
+			console.log('Registration Error');
 			console.log(err);
 		});
 	}

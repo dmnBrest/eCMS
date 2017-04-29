@@ -15,11 +15,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 	constructor() {
 		this.loginFormData = {
 			email: null,
-			password: null
+			password: null,
+			rememberme: false
 		};
 	}
 
-	ngOnInit(): void {}
+	ngOnInit() {}
 
 	ngOnDestroy() {}
 

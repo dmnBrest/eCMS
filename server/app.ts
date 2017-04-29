@@ -109,8 +109,8 @@ export class ExpressServer {
 			};
 			res.locals.initialState.errors = res.locals.initialState.errors.concat(req.flash('error'));
 			res.locals.initialState.info = res.locals.initialState.info.concat(req.flash('info'));
-			//
 			res.locals.csrfToken = req.csrfToken();
+			res.locals.appConfig = appConfig;
 			next();
 		});
 

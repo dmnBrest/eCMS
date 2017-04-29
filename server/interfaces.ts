@@ -21,7 +21,7 @@ export interface IUser {
 export interface ILoginForm {
 	email: string;
 	password: string;
-	rememberme?: boolean
+	rememberme: boolean,
 };
 
 export interface IResetForm {
@@ -50,6 +50,7 @@ export interface IRegisterForm {
 	username: string;
 	email: string;
 	password: string;
+	token: string;
 };
 
 // MICS
@@ -67,4 +68,15 @@ export interface IAppState {
 
 export interface IAppAction extends Action {
 	payload?: any;
+}
+
+export interface IConfig {
+    dbPath: string,
+    modules: string[],
+    baseUrl: string,
+    title: string,
+    adminEmail: string,
+    noreplyEmail: string
+    recaptchaKey: string,
+    recaptchaSecret: string
 }

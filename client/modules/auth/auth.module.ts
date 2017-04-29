@@ -10,13 +10,15 @@ import { Component } from '@angular/core';
 import * as jQuery from 'jquery';
 
 import { StoreModule, provideStore } from '@ngrx/store';
+import { NgReduxModule, NgRedux } from '@angular-redux/store';
+
+import { ReCaptchaModule } from 'angular2-recaptcha';
 
 import { LoginComponent } from './../../components/auth/login.component';
 import { RegisterComponent } from './../../components/auth/register.component';
 import { ResetComponent } from './../../components/auth/reset.component';
 import { NewPasswordComponent } from './../../components/auth/new-password.component';
 
-import { NgReduxModule, NgRedux } from '@angular-redux/store';
 
 import { IUser, IAppState } from './../../../server/interfaces';
 
@@ -61,7 +63,8 @@ const routes: Routes = [
 		BrowserModule,
 		FormsModule,
 		RouterModule.forRoot(routes, { useHash: true }),
-		NgReduxModule
+		NgReduxModule,
+		ReCaptchaModule
 	],
 	declarations: [
 		ModuleComponent,

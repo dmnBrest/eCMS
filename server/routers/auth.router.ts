@@ -7,6 +7,7 @@ import * as db from './../services/db.service';
 import * as UserService from './../services/user.service';
 import * as passport from 'passport'
 import * as EmailService from './../services/mail.service';
+import * as RecaptchaService from './../services/recaptcha.service';
 
 import { ILoginForm, IRegisterForm, IResetForm, INewPasswordForm, IResults, ResultStatus, IUser , INTERNAL_ERROR} from './../interfaces'
 
@@ -86,29 +87,42 @@ class Auth {
 			!form.username ||
 			form.username.length > 255 ||
 			!form.password ||
-			form.password.length > 1024
+			form.password.length > 1024 ||
+			!form.token
 		) {
 			resp.status(400).send({ status: ResultStatus.ERROR, errors: ['Bad Request'] } as IResults);
 			return;
 		}
 
-		UserService.createUser(form.username, form.email, form.password, false).then((user:IUser) => {
+		// TODO Check for duplicates by Email and Username
 
-			// Send Email Notification for new user
-			EmailService.sendNewUserEmail(user).then(
-				(info) => {console.log(info);}
-			).catch(
-				(err) => {console.log(err);}
-			);
+		// Check reCaptcha
+		RecaptchaService.validateCaptcha(form.token)
+		.then((res:any) => {
+			// Create new user
+			UserService.createUser(form.username, form.email, form.password, false).then((user:IUser) => {
 
-			req.flash('info', 'You have successfully registered! Please confirm your email.');
+				// Send Email Notification for new user
+				EmailService.sendNewUserEmail(user).then(
+					(info) => {console.log(info);}
+				).catch(
+					(err) => {console.log(err);}
+				);
 
-			resp.json({ status: ResultStatus.SUCCESS } as IResults);
+				req.flash('info', 'You have successfully registered! Please confirm your email.');
 
+				resp.json({ status: ResultStatus.SUCCESS } as IResults);
+
+			}).catch((err) => {
+				console.log(err);
+				resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Bad Request'] } as IResults);
+			});
 		}).catch((err) => {
-			console.log(err);
-			resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Bad Request'] } as IResults);
+			resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Bad Captcha'] } as IResults);
 		});
+
+
+
 
 	}
 

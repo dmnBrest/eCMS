@@ -10,6 +10,12 @@
 
 {% block scripts %}
 
+	<script>
+		window.recaptchaKey = '{{appConfig.recaptchaKey}}';
+		console.log('recaptchaKey:');
+		console.log(window.recaptchaKey);
+	</script>
+
 	<script src="/static/js/auth.module.js"></script>
 
 {% endblock %}
