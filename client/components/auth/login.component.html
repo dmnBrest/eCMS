@@ -1,43 +1,53 @@
 <div>
-	<form #loginForm="ngForm" class="uk-form-stacked" novalidate>
+	<form #loginForm="ngForm" class="slds-form--stacked" novalidate>
 
-		<div class="uk-margin">
-			<label class="uk-form-label" for="email">Email</label>
-			<input
-				[(ngModel)]="loginFormData.email"
-				id="email"
-				type="email"
-				name="email"
-				class="uk-input"
-				required="true"
-				maxlength="255" />
+		<div class="slds-form-element">
+			<label class="slds-form-element__label" for="email">Email</label>
+			<div class="slds-form-element__control">
+				<input
+					[(ngModel)]="loginFormData.email"
+					id="email"
+					type="email"
+					name="email"
+					class="slds-input"
+					required="true"
+					maxlength="255" />
+			</div>
 		</div>
 
-		<div class="uk-margin">
-			<label class="uk-form-label" for="email">Password</label>
-			<input
-				[(ngModel)]="loginFormData.password"
-				id="password"
-				type="password"
-				name="password"
-				class="uk-input"
-				required="true"
-				maxlength="1024" />
-		</div>
-
-		<div>
-			<label>
-				<input [(ngModel)]="loginFormData.rememberme" class="uk-checkbox" type="checkbox" name="rememberme"> Remember me
-			</label>
+		<div class="slds-form-element">
+			<label class="slds-form-element__label" for="email">Password</label>
+			<div class="slds-form-element__control">
+				<input
+					[(ngModel)]="loginFormData.password"
+					id="password"
+					type="password"
+					name="password"
+					class="slds-input"
+					required="true"
+					maxlength="1024" />
+			</div>
 		</div>
 
 		<br />
 
-		<div class="uk-text-right">
+		<div class="slds-form-element">
+			<div class="slds-form-element__control">
+				<label class="slds-checkbox" for="rememberme">
+					<input [(ngModel)]="loginFormData.rememberme" type="checkbox" name="rememberme" id="rememberme">
+					<span class="slds-checkbox--faux"></span>
+					<span class="slds-form-element__label">Remember me</span>
+				</label>
+			</div>
+		</div>
+
+		<br />
+
+		<div class="slds-text-align--right">
 			<button
 				(click)="login()"
 				[disabled]="loginForm.invalid"
-				class="uk-button uk-button-primary">
+				class="slds-button slds-button--brand" >
 				Login
 			</button>
 		</div>

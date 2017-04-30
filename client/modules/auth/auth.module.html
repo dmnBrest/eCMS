@@ -1,25 +1,23 @@
 <div class="c-auth-app">
-	<div class="uk-width-1-2 uk-align-center">
-		<div class="c-panel uk-card uk-card-default">
-			<div class="c-panel-header">
-				<span [ngSwitch]="currentUrl">
-					<ng-container *ngSwitchCase="'register'">Sign up</ng-container>
-					<ng-container *ngSwitchCase="'reset'">Reset password</ng-container>
-					<ng-container *ngSwitchCase="'change-password'">Reset password</ng-container>
-					<ng-container *ngSwitchDefault>Login</ng-container>
-				</span>
-			</div>
-			<div class="c-panel-body">
+	<div class="c-panel">
+		<div class="c-panel-header">
+			<span [ngSwitch]="currentUrl">
+				<ng-container *ngSwitchCase="'register'">Sign up</ng-container>
+				<ng-container *ngSwitchCase="'reset'">Reset password</ng-container>
+				<ng-container *ngSwitchCase="'change-password'">Reset password</ng-container>
+				<ng-container *ngSwitchDefault>Login</ng-container>
+			</span>
+		</div>
+		<div class="c-panel-body">
 
-				<router-outlet></router-outlet>
+			<router-outlet></router-outlet>
 
-				<div class="c-auth-app-links uk-text-right">
-					<ul>
-						<li><a routerLink="/login" routerLinkActive="active-link">Login</a></li>
-						<li><a routerLink="/register" routerLinkActive="active-link">Sign up</a></li>
-						<li><a routerLink="/reset" routerLinkActive="active-link">Reset password</a></li>
-					</ul>
-				</div>
+			<div class="c-auth-app-links slds-text-align--right">
+				<ul>
+					<li><a routerLink="/login" routerLinkActive="active-link">Login</a></li>
+					<li><a routerLink="/register" routerLinkActive="active-link">Sign up</a></li>
+					<li><a routerLink="/reset" routerLinkActive="active-link">Reset password</a></li>
+				</ul>
 			</div>
 		</div>
 	</div>

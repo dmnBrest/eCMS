@@ -86,11 +86,12 @@ footer {
 }
 
 .c-panel {
-	/*background-color: #fff;
-	border: 1px solid #e7eaec;
-	border-radius: 4px;*/
+	background-color: #fff;
+	width: 50%;
+	margin: auto;
 	font-size: 14px;
 	color: #676a6c;
+	margin-bottom: 50px;
 }
 
 .c-panel-header {

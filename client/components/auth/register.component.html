@@ -1,66 +1,73 @@
 <div>
-	<form #registerForm="ngForm" class="uk-form-stacked" novalidate>
+	<form #registerForm="ngForm" class="slds-form--stacked" novalidate>
 
-		<div class="uk-margin">
-			<label class="uk-form-label" for="email">Email<span class="c-required-field-mark">*</span></label>
-			<input
-				[(ngModel)]="registerFormData.email"
-				id="email"
-				type="email"
-				name="email"
-				class="uk-input"
-				[ngClass]="{'uk-form-danger': registerFormEmail.errors && registerFormEmail.touched}"
-				required="true"
-				maxlength="255"
-				#registerFormEmail="ngModel" />
+		<div class="slds-form-element" [ngClass]="{'slds-has-error': registerFormEmail.errors && registerFormEmail.touched}">
+			<label class="slds-form-element__label" for="email">Email<span class="c-required-field-mark">*</span></label>
+			<div class="slds-form-element__control">
+				<input
+					[(ngModel)]="registerFormData.email"
+					id="email"
+					type="email"
+					name="email"
+					class="slds-input"
+					required="true"
+					maxlength="255"
+					#registerFormEmail="ngModel" />
+			</div>
 			<div class="c-field-errors" [hidden]="registerFormEmail.valid || registerFormEmail.untouched">
-				<div *ngIf="registerFormEmail.errors?.required">Value is required</div>
+				<div *ngIf="registerFormEmail.errors?.required" class="slds-form-element__help">Value is required</div>
 			</div>
 		</div>
 
-		<div class="uk-margin">
-			<label class="uk-form-label" for="email">Username<span class="c-required-field-mark">*</span></label>
-			<input
-				[(ngModel)]="registerFormData.username"
-				id="username"
-				type="text"
-				name="username"
-				class="uk-input"
-				[ngClass]="{'uk-form-danger': registerFormUsername.errors && registerFormUsername.touched}"
-				required="true"
-				maxlength="255"
-				#registerFormUsername="ngModel" />
+		<div class="slds-form-element" [ngClass]="{'slds-has-error': registerFormUsername.errors && registerFormUsername.touched}">
+			<label class="slds-form-element__label" for="email">Username<span class="c-required-field-mark">*</span></label>
+			<div class="slds-form-element__control">
+				<input
+					[(ngModel)]="registerFormData.username"
+					id="username"
+					type="text"
+					name="username"
+					class="slds-input"
+					required="true"
+					maxlength="255"
+					#registerFormUsername="ngModel" />
+			</div>
 			<div class="c-field-errors" [hidden]="registerFormUsername.valid || registerFormUsername.untouched">
-				<div *ngIf="registerFormUsername.errors?.required">Value is required</div>
+				<div *ngIf="registerFormUsername.errors?.required" class="slds-form-element__help">Value is required</div>
 			</div>
 		</div>
 
-		<div class="uk-margin">
-			<label class="uk-form-label" for="email">Password<span class="c-required-field-mark">*</span></label>
-			<input
-				[(ngModel)]="registerFormData.password"
-				id="password"
-				type="password"
-				name="password"
-				class="uk-input"
-				[ngClass]="{'uk-form-danger': registerFormPassword.errors && registerFormPassword.touched}"
-				required="true"
-				maxlength="1024"
-				#registerFormPassword="ngModel" />
+		<div class="slds-form-element" [ngClass]="{'slds-has-error': registerFormPassword.errors && registerFormPassword.touched}">
+			<label class="slds-form-element__label" for="email">Password<span class="c-required-field-mark">*</span></label>
+			<div class="slds-form-element__control">
+				<input
+					[(ngModel)]="registerFormData.password"
+					id="password"
+					type="password"
+					name="password"
+					class="slds-input"
+					required="true"
+					maxlength="1024"
+					#registerFormPassword="ngModel" />
+			</div>
 			<div class="c-field-errors" [hidden]="registerFormPassword.valid || registerFormPassword.untouched">
-				<div *ngIf="registerFormPassword.errors?.required">Value is required</div>
+				<div *ngIf="registerFormPassword.errors?.required" class="slds-form-element__help">Value is required</div>
 			</div>
 		</div>
+
+		<br />
 
 		<div style="width: 304px; margin: auto;">
  			<re-captcha (captchaResponse)="handleCorrectCaptcha($event)" site_key="{{recaptchaKey}}"></re-captcha>
 		</div>
 
-		<div class="uk-text-right">
+		<br />
+
+		<div class="slds-text-align--right">
 			<button
 				(click)="register()"
 				[disabled]="registerForm.invalid || !registerFormData.token"
-				class="uk-button uk-button-primary">
+				class="slds-button slds-button--brand">
 				Sign up
 			</button>
 		</div>
