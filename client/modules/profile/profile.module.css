@@ -1,0 +1,42 @@
+.c-profile-table-box {
+	min-height: 600px;
+}
+.c-profile-table-box td {
+	vertical-align: top;
+}
+td.c-profile-sidebar {
+	color: #fff;
+	width: 200px;
+	background-color: #243746;
+}
+.c-current-user-info {
+	padding: 30px 20px;
+}
+.c-current-user-username {
+	margin-top: 10px;
+	font-weight: 600;
+	color: #DFE4ED;
+}
+
+.c-profile-menu li a {
+	display: block;
+	padding: 10px 20px;
+	background-color: #2F4050;
+	font-weight: 400;
+	color: #a7b1c2;
+}
+
+.c-profile-menu li a:active,
+.c-profile-menu li a:focus {
+	text-decoration: none;
+}
+
+.c-profile-menu li a:hover,
+.c-profile-menu li a.active-link {
+	text-decoration: none;
+	background-color: #243746;
+	color: #fff;
+}
+.c-profile-menu .active-link {
+
+}

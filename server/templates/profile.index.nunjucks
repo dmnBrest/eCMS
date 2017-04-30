@@ -2,6 +2,14 @@
 
 {% block main %}
 <div class="container-fluid">
-	<h1>USER PRIVATE AREA ...</h1>
+
+	<profile-module></profile-module>
+
 </div>
+{% endblock %}
+
+{% block scripts %}
+
+	<script src="/static/js/profile.module.js"></script>
+
 {% endblock %}

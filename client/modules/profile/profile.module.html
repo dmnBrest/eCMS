@@ -1,0 +1,26 @@
+<table class="c-profile-table-box">
+	<tr>
+		<td class="c-profile-sidebar">
+			<div class="c-current-user-info">
+				<div class="c-current-user-avatar">
+					<div class="slds-avatar slds-avatar--circle slds-avatar--large">
+						<img src="/slds/images/avatar1.jpg" >
+					</div>
+				</div>
+				<div class="c-current-user-username">
+					{{user.username}}
+				</div>
+			</div>
+			<div class="c-profile-menu">
+				<ul>
+					<li><a routerLink="/dashboard" routerLinkActive="active-link">Dashboard</a></li>
+					<li><a routerLink="/personal-info" routerLinkActive="active-link">Personal Info</a></li>
+					<li><a routerLink="/topics" routerLinkActive="active-link">Topics</a></li>
+				</ul>
+			</div>
+		</td>
+		<td class="c-profile-content">
+			<router-outlet></router-outlet>
+		</td>
+	</tr>
+</table>

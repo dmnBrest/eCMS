@@ -27,7 +27,8 @@ import { appStore } from './../../services/store.service'
 /* MODULE COMPONENT */
 @Component({
 	selector: 'auth-module',
-	templateUrl: './auth.module.html'
+	templateUrl: './auth.module.html',
+	styleUrls: ['./auth.module.css']
 })
 class ModuleComponent implements OnDestroy {
 
