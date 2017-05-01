@@ -12,6 +12,9 @@
 	font-size: 14px;
 	margin-bottom: 2px;
 }
+.c-info:last-child {
+	margin-bottom: 0;
+}
 .c-notifications-component table {
 	width: 100%;
 }

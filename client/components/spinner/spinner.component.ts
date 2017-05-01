@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer, ElementRef, ViewChild } from '@angular/core';
-import { NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer, ElementRef, ViewChild, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';

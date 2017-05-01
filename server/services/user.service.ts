@@ -3,7 +3,7 @@ import { v4 as uuidV4} from 'uuid';
 import * as db from './db.service';
 import { IUser, INTERNAL_ERROR } from './../interfaces';
 
-export function getUserById(id: string): Promise<IUser> {
+export function getUserById(id: number): Promise<IUser> {
 	return db.one('SELECT * FROM public.user WHERE id=$1', [id])
 	.then((data:IUser) => {
 		console.log('UserService.getUserById:');
@@ -12,8 +12,8 @@ export function getUserById(id: string): Promise<IUser> {
 	});
 }
 
-export function getUserByIdForLogin(id: string): Promise<IUser> {
-	return db.one('SELECT id, username, is_admin, created_at, login_at, slug FROM public.user WHERE id=$1 AND verification_code IS NULL AND is_blocked = false', [id])
+export function getUserByIdForLogin(id: number): Promise<IUser> {
+	return db.one('SELECT id, username, email, is_admin, created_at, login_at, slug FROM public.user WHERE id=$1 AND verification_code IS NULL AND is_blocked = false', [id])
 	.then((data:IUser) => {
 		console.log('UserService.getUserByIdForLogin:');
 		console.log(data);

@@ -53,6 +53,16 @@ export interface IRegisterForm {
 	token: string;
 };
 
+export interface ISettingsForm {
+	username: string;
+	email: string;
+	changePassword: boolean;
+	oldPassword: string;
+	password: string;
+	confirmPassword: string;
+};
+
+
 // MICS
 export interface ISpinner {
 	counter: number;

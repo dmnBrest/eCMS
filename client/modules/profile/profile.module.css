@@ -37,6 +37,6 @@ td.c-profile-sidebar {
 	background-color: #243746;
 	color: #fff;
 }
-.c-profile-menu .active-link {
-
+.c-profile-content {
+	padding: 20px;
 }

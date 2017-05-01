@@ -1,7 +1,7 @@
 import { Action, applyMiddleware, Store, createStore, Dispatch } from 'redux';
 import { createLogger } from 'redux-logger';
 
-import { IUser, ILoginForm, IRegisterForm, IResetForm, INewPasswordForm, ISpinner, IAppState, IAppAction, ResultStatus, IResults, INTERNAL_ERROR } from './../../server/interfaces';
+import { IUser, ILoginForm, ISettingsForm, IRegisterForm, IResetForm, INewPasswordForm, ISpinner, IAppState, IAppAction, ResultStatus, IResults, INTERNAL_ERROR } from './../../server/interfaces';
 
 const loggerMiddleware = createLogger();
 
@@ -98,6 +98,26 @@ export function newPasswordFormSubmit(data: INewPasswordForm) {
 		return remoteAction('/auth/change-password', data).then((resp: any) => {
 			hideSpinner();
 			if (resp.status == ResultStatus.SUCCESS) {
+				resolve(resp);
+			} else {
+				reject(resp);
+			}
+		}).catch(function(ex) {
+			hideSpinner();
+			reject(ex);
+		});
+	});
+}
+
+export function profileSettingsFormSubmit(data: ISettingsForm) {
+	return new Promise((resolve, reject) => {
+		removeAllNotifications();
+		showSpinner();
+		console.log(data);
+		return remoteAction('/profile/save-settings', data).then((resp: any) => {
+			hideSpinner();
+			if (resp.status == ResultStatus.SUCCESS) {
+				setCurrentUser(resp.payload);
 				resolve(resp);
 			} else {
 				reject(resp);

@@ -136,7 +136,7 @@ class Auth {
 					resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Bad Captcha'] } as IResults);
 				});
 			} else {
-				resp.status(400).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+				resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
 			}
 		});
 	}

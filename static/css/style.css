@@ -88,3 +88,23 @@ footer {
 .c-body {
 	min-height: 500px;
 }
+
+.c-panel {
+	background-color: #fff;
+	margin: auto;
+	font-size: 14px;
+	color: #676a6c;
+	margin-bottom: 50px;
+}
+
+.c-panel-header {
+	padding: 15px 20px;
+	color: #1AB394;
+	border-bottom: 1px solid #e7eaec;
+	font-size: 25px;
+	font-weight: 100;
+}
+
+.c-panel-body {
+	padding: 20px;
+}

@@ -1,0 +1,132 @@
+<div class="slds-large-size--2-of-3">
+	<div class="c-panel">
+		<div class="c-panel-header">
+			Settings
+		</div>
+		<div class="c-panel-body">
+
+
+			<form #settingsForm="ngForm" class="slds-form--stacked" novalidate>
+
+				<div class="slds-form-element" [ngClass]="{'slds-has-error': settingsFormEmail.errors && settingsFormEmail.touched}">
+					<label class="slds-form-element__label" for="email">Email<span class="c-required-field-mark">*</span></label>
+					<div class="slds-form-element__control">
+						<input
+							[(ngModel)]="settingsFormData.email"
+							id="email"
+							type="email"
+							name="email"
+							class="slds-input"
+							required="true"
+							maxlength="255"
+							#settingsFormEmail="ngModel" />
+					</div>
+					<div class="c-field-errors" [hidden]="settingsFormEmail.valid || settingsFormEmail.untouched">
+						<div *ngIf="settingsFormEmail.errors?.required" class="slds-form-element__help">Value is required</div>
+					</div>
+				</div>
+
+				<div class="slds-form-element" [ngClass]="{'slds-has-error': settingsFormUsername.errors && settingsFormUsername.touched}">
+					<label class="slds-form-element__label" for="email">Username<span class="c-required-field-mark">*</span></label>
+					<div class="slds-form-element__control">
+						<input
+							[(ngModel)]="settingsFormData.username"
+							id="username"
+							type="text"
+							name="username"
+							class="slds-input"
+							required="true"
+							maxlength="255"
+							#settingsFormUsername="ngModel" />
+					</div>
+					<div class="c-field-errors" [hidden]="settingsFormUsername.valid || settingsFormUsername.untouched">
+						<div *ngIf="settingsFormUsername.errors?.required" class="slds-form-element__help">Value is required</div>
+					</div>
+				</div>
+
+				<br />
+				<div class="slds-form-element">
+					<div class="slds-form-element__control">
+						<label class="slds-checkbox" for="changePassword">
+							<input [(ngModel)]="settingsFormData.changePassword" type="checkbox" name="changePassword" id="changePassword">
+							<span class="slds-checkbox--faux"></span>
+							<span class="slds-form-element__label">Change Password</span>
+						</label>
+					</div>
+				</div>
+
+				<div *ngIf="settingsFormData.changePassword">
+					<br />
+
+					<div class="slds-form-element" [ngClass]="{'slds-has-error': settingsFormOldPassword.errors && settingsFormOldPassword.touched}">
+						<label class="slds-form-element__label" for="email">Old Password<span class="c-required-field-mark">*</span></label>
+						<div class="slds-form-element__control">
+							<input
+								[(ngModel)]="settingsFormData.oldPassword"
+								id="oldPassword"
+								type="oldPassword"
+								name="oldPassword"
+								class="slds-input"
+								required="true"
+								maxlength="1024"
+								#settingsFormOldPassword="ngModel" />
+						</div>
+						<div class="c-field-errors" [hidden]="settingsFormOldPassword.valid || settingsFormOldPassword.untouched">
+							<div *ngIf="settingsFormOldPassword.errors?.required" class="slds-form-element__help">Value is required</div>
+						</div>
+					</div>
+
+					<div class="slds-form-element" [ngClass]="{'slds-has-error': settingsFormPassword.errors && settingsFormPassword.touched}">
+						<label class="slds-form-element__label" for="email">Password<span class="c-required-field-mark">*</span></label>
+						<div class="slds-form-element__control">
+							<input
+								[(ngModel)]="settingsFormData.password"
+								id="password"
+								type="password"
+								name="password"
+								class="slds-input"
+								required="true"
+								maxlength="1024"
+								#settingsFormPassword="ngModel" />
+						</div>
+						<div class="c-field-errors" [hidden]="settingsFormPassword.valid || settingsFormPassword.untouched">
+							<div *ngIf="settingsFormPassword.errors?.required" class="slds-form-element__help">Value is required</div>
+						</div>
+					</div>
+
+					<div class="slds-form-element" [ngClass]="{'slds-has-error': (settingsFormConfirmPassword.touched && settingsFormData.changePassword &&  settingsFormData.password && settingsFormData.confirmPassword != settingsFormData.password)}">
+						<label class="slds-form-element__label" for="confirmPassword">Confirm Password<span class="c-required-field-mark">*</span></label>
+						<div class="slds-form-element__control">
+							<input
+								[(ngModel)]="settingsFormData.confirmPassword"
+								id="confirmPassword"
+								type="password"
+								name="confirmPassword"
+								class="slds-input"
+								required="true"
+								maxlength="255"
+								#settingsFormConfirmPassword="ngModel" />
+						</div>
+						<div class="c-field-errors" [hidden]="settingsFormConfirmPassword.untouched || !settingsFormData.password || settingsFormData.confirmPassword == settingsFormData.password">
+							<div class="slds-form-element__help">Both passwords not match</div>
+						</div>
+					</div>
+				</div>
+
+				<br />
+
+				<div class="slds-text-align--right">
+					<button
+						(click)="saveSettings()"
+						[disabled]="settingsForm.invalid || (settingsFormData.changePassword &&  settingsFormData.password && settingsFormData.confirmPassword != settingsFormData.password)"
+						class="slds-button slds-button--brand">
+						Save
+					</button>
+				</div>
+
+			</form>
+
+
+		</div>
+	</div>
+</div>
