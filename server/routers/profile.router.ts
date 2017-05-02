@@ -45,10 +45,8 @@ class Profile {
 		if (user.email != form.email || user.username != form.username) {
 			try {
 				let n = await UserService.getTotalByEmailOrUsernameAsync(form.email, form.username, user.id);
-				console.log('L1');
-				console.log(n);
 				if (n > 0) {
-					resp.status(400).json({ status: ResultStatus.ERROR, errors: ['email or username already in use'] } as IResults);
+					resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Email or username already in use'] } as IResults);
 					return;
 				}
 			} catch(err)  {

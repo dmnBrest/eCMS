@@ -83,8 +83,8 @@ class Auth {
 
 	}
 
-	// REGISTER
-	public register(req: Request, resp: Response, next?: NextFunction) {
+	// REGISTERATION
+	public async register(req: Request, resp: Response, next?: NextFunction) {
 
 		resp.setHeader('Content-Type', 'application/json');
 
@@ -105,40 +105,44 @@ class Auth {
 		}
 
 		// Check for duplicates by Email and Username
-		UserService.getTotalByEmailOrUsername(form.email, form.username, null)
-		.then((n:number) => {
-
+		try {
+			let n = await UserService.getTotalByEmailOrUsernameAsync(form.email, form.username, null);
 			if (n > 0) {
-				resp.status(400).json({ status: ResultStatus.ERROR, errors: ['User with email or username already exists.'] } as IResults);
-			} else if (n == 0) {
-				// Check reCaptcha
-				RecaptchaService.validateCaptcha(form.token)
-				.then((res:any) => {
-					// Create new user
-					UserService.createUser(form.username, form.email, form.password, false).then((user:IUser) => {
-
-						// Send Email Notification for new user
-						EmailService.sendNewUserEmail(user).then(
-							(info) => {console.log(info);}
-						).catch(
-							(err) => {console.log(err);}
-						);
-
-						req.flash('info', 'You have successfully registered! Please confirm your email.');
-
-						resp.json({ status: ResultStatus.SUCCESS } as IResults);
-
-					}).catch((err) => {
-						console.log(err);
-						resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Bad Request'] } as IResults);
-					});
-				}).catch((err) => {
-					resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Bad Captcha'] } as IResults);
-				});
-			} else {
-				resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+				resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Email or username already in use.'] } as IResults);
+				return;
 			}
-		});
+		} catch(err) {
+			resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+			return;
+		}
+
+		// Check reCaptcha
+		try {
+			await RecaptchaService.validateCaptcha(form.token);
+		} catch(err) {
+			resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Bad Captcha'] } as IResults);
+			return;
+		}
+
+		// Create new user
+		let user;
+		try {
+			user = await UserService.createUser(form.username, form.email, form.password, false);
+		} catch(err) {
+			resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+			return;
+		}
+
+		// Send Email Notification for new user
+		EmailService.sendNewUserEmail(user).then(
+			(info) => {console.log(info);}
+		).catch(
+			(err) => {console.log(err);}
+		);
+
+		req.flash('info', 'You have successfully registered! Please confirm your email.');
+		resp.json({ status: ResultStatus.SUCCESS } as IResults);
+
 	}
 
 	// CHANGE PASSWORD WITH TOKEN

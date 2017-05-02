@@ -21,27 +21,16 @@ export function getUserByIdForLogin(id: number): Promise<IUser> {
 	});
 }
 
-export function getTotalByEmailOrUsername(email:string, username:string, excludeUserId: number): Promise<number> {
-	return db.one('SELECT COUNT (*) FROM public.user WHERE (email=$1 OR username=$2) AND id!=$3', [email, username, excludeUserId])
-	.then((res:any) => {
-		console.log('UserService.getTotalByEmailOrUsername:');
-		console.log(res.count);
-		return res.count;
-	}).catch((err) => {
-		console.log(err);
-		return null;
-	});
-}
-
 export async function getTotalByEmailOrUsernameAsync(email:string, username:string, excludeUserId: number): Promise<number> {
 	try {
+		excludeUserId = excludeUserId ? excludeUserId : 0;
 		let res = await db.one('SELECT COUNT (*) FROM public.user WHERE (email=$1 OR username=$2) AND id!=$3', [email, username, excludeUserId]);
 		console.log('UserService.getTotalByEmailOrUsername:');
 		console.log(res.count);
 		return res.count;
 	} catch(err) {
 		console.log(err);
-		return null;
+		throw err;
 	};
 }
 
