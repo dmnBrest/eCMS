@@ -1,0 +1,10 @@
+<ul *ngIf="user">
+	<li><span>Welcome, <a href="/profile">{{user.username}}</a></span></li>
+	<li><span style="color: #c0c0c0">|</span></li>
+	<li><a href="/auth/logout">Logout</a></li>
+</ul>
+<ul *ngIf="!user">
+	<li><a href="/auth#/login">Login</a></li>
+	<li><span style="color: #c0c0c0">|</span></li>
+	<li><a href="/auth#/register">Sign up</a></li>
+</ul>

@@ -6,19 +6,21 @@ import { Component } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { IAppState } from './../../../server/interfaces';
+import { IAppState, IUser } from './../../../server/interfaces';
 
 import { NgReduxModule, NgRedux } from '@angular-redux/store';
 import { select } from '@angular-redux/store';
 
-/* APP COMPONENT */
+import { LoginComponent } from './../../components/login/login.component';
+
+/* MODULE COMPONENT */
 @Component({
-	selector: 'app-login',
-	template: `
-		<h1>X APP LOGIN X</h1>
-	`
+	selector: 'login-module',
+	template: '<login-component></login-component>'
 })
-class AppComponent {
+class ModuleComponent {
+
+	user: IUser;
 
 	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone) {
 		ngRedux.provideStore((window as any).appStore);
@@ -26,7 +28,7 @@ class AppComponent {
 
 }
 
-/* APP MODULE */
+/* MODULE */
 @NgModule({
 	imports: [
 		BrowserModule,
@@ -34,18 +36,19 @@ class AppComponent {
 		NgReduxModule
 	],
 	declarations: [
-		AppComponent
+		ModuleComponent,
+		LoginComponent
 	],
 	providers: [
 
 	],
-	bootstrap: [ AppComponent ]
+	bootstrap: [ ModuleComponent ]
 })
-class AppModule { }
+class MainModule { }
 
 
-/* APP BOOTSTRAP */
+/* MODULE BOOTSTRAP */
 platformBrowserDynamic().bootstrapModule(
-	AppModule
+	MainModule
 );
 

@@ -14,7 +14,7 @@ class Profile {
 		resp.render('profile.index.nunjucks', {});
 	}
 
-	public saveSettings(req: Request, resp: Response, next?: NextFunction) {
+	public async saveSettings(req: Request, resp: Response, next?: NextFunction) {
 
 		resp.setHeader('Content-Type', 'application/json');
 
@@ -34,16 +34,32 @@ class Profile {
 			return;
 		}
 
-		UserService.getUserById(req.user.id)
-		.then((user) => {
-
-			user.username = 'XXXXX';
-
-			resp.json({ status: ResultStatus.SUCCESS, payload: user } as IResults);
-		})
-		.catch((err) => {
+		let user;
+		try {
+			user = await UserService.getUserById(req.user.id);
+		} catch(err) {
 			resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
-		});
+			return;
+		}
+
+		if (user.email != form.email || user.username != form.username) {
+			try {
+				let n = await UserService.getTotalByEmailOrUsernameAsync(form.email, form.username, user.id);
+				console.log('L1');
+				console.log(n);
+				if (n > 0) {
+					resp.status(400).json({ status: ResultStatus.ERROR, errors: ['email or username already in use'] } as IResults);
+					return;
+				}
+			} catch(err)  {
+				console.log('err1');
+				console.log(err);
+			};
+		}
+
+		user.username = 'XXXXX';
+
+		resp.json({ status: ResultStatus.SUCCESS, payload: user } as IResults);
 
 	}
 

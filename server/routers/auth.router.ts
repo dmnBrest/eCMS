@@ -105,7 +105,7 @@ class Auth {
 		}
 
 		// Check for duplicates by Email and Username
-		UserService.getTotalByEmailOrUsername(form.email, form.username)
+		UserService.getTotalByEmailOrUsername(form.email, form.username, null)
 		.then((n:number) => {
 
 			if (n > 0) {

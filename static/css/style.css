@@ -108,3 +108,8 @@ footer {
 .c-panel-body {
 	padding: 20px;
 }
+
+.c-slds-icon--xsmall {
+	width: 1rem;
+	height: 1rem;
+}
