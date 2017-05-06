@@ -18,16 +18,16 @@ class Auth {
 
 		// If user is logged in redirect to Home page with message
 		if (req.user && req.user.id) {
-			req.flash('info', 'You have already logged in');
+			req.flash('info', 'You are already logged in');
 			resp.redirect('/');
-			return;
+		} else {
+			resp.render('auth.index.nunjucks', {});
 		}
 
-		resp.render('auth.index.nunjucks', {});
 	}
 
 	// LOGIN
-	public login(req: Request, resp: Response, next?: NextFunction) {
+	public async login(req: Request, resp: Response, next?: NextFunction) {
 
 		resp.setHeader('Content-Type', 'application/json');
 
@@ -45,42 +45,45 @@ class Auth {
 		}
 
 		// Get User by email
-		UserService.getUserByEmail(form.email).then((user:IUser) => {
-			// Check if user confirm email
-			if (user.verification_code) {
-				resp.status(400).json({ status: 'error', errors: ['Please confirm email.'] });
-				return;
-			}
-			// Check is user is not blocked
-			if (user.is_blocked == true) {
-				resp.status(400).json({ status: 'error', errors: ['You are blocked, please contact administrator.'] });
-				return;
-			}
-			// Compare password
-			if (bcrypt.compareSync(form.password, user.password)) {
-				req.login(user, function(err){
-					if(err) return next(err);
-					req.session.user = req.user;
-
-					if (form.rememberme === true) {
-						req.session.cookie.maxAge = 3600000 * 24 * 7; // 1 week
-					}
-
-					req.flash('info', 'You have successfully logged in!');
-
-					resp.json({ status: ResultStatus.SUCCESS } as IResults);
-				});
-			} else {
-				resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Wrong credentials'] } as IResults);
-			}
-		}).catch((err) => {
+		let user:IUser;
+		try {
+			user = await UserService.getUserByEmail(form.email)
+		} catch(err) {
 			if (err.constructor.name =='QueryResultError') {
 				resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Wrong credentials'] } as IResults);
 				return;
+			} else {
+				resp.status(500).json({});
+				return;
 			}
-			resp.status(500).json({});
-		});
+		}
+		// Check if user confirm email
+		if (user.verification_code) {
+			resp.status(400).json({ status: 'error', errors: ['Please confirm email.'] });
+			return;
+		}
+		// Check is user is not blocked
+		if (user.is_blocked == true) {
+			resp.status(400).json({ status: 'error', errors: ['You are blocked, please contact administrator.'] });
+			return;
+		}
+		// Compare password
+		if (bcrypt.compareSync(form.password, user.password)) {
+			req.login(user, function(err){
+				if(err) return next(err);
+				req.session.user = req.user;
 
+				if (form.rememberme === true) {
+					req.session.cookie.maxAge = 3600000 * 24 * 7; // 1 week
+				}
+
+				req.flash('info', 'You have successfully logged in!');
+
+				resp.json({ status: ResultStatus.SUCCESS } as IResults);
+			});
+		} else {
+			resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Wrong credentials'] } as IResults);
+		}
 	}
 
 	// REGISTERATION
@@ -146,7 +149,7 @@ class Auth {
 	}
 
 	// CHANGE PASSWORD WITH TOKEN
-	public changePassword(req: Request, resp: Response, next?: NextFunction) {
+	public async changePassword(req: Request, resp: Response, next?: NextFunction) {
 
 		resp.setHeader('Content-Type', 'application/json');
 
@@ -166,7 +169,8 @@ class Auth {
 		}
 
 		// Change password for user wit email and reset password token
-		UserService.changePassword(form.email, form.password, form.token).then((user:IUser) => {
+		try {
+			let user:IUser = await UserService.changePassword(form.email, form.password, form.token);
 
 			// TODO Password was changed notification
 			// Send Email Notification for new user
@@ -179,10 +183,10 @@ class Auth {
 			req.flash('info', 'Password was changed. You can login with new password.');
 			resp.json({ status: ResultStatus.SUCCESS } as IResults);
 
-		}).catch((err) => {
+		} catch(err) {
 			console.log(err);
 			resp.status(400).json({ status: ResultStatus.ERROR, errors: [err] } as IResults);
-		});
+		};
 
 	}
 
@@ -197,7 +201,7 @@ class Auth {
 	}
 
 	// SEND RESET PASSWORD TOKEN
-	public sendResetToken(req: Request, resp: Response, next?: NextFunction) {
+	public async sendResetToken(req: Request, resp: Response, next?: NextFunction) {
 
 		resp.setHeader('Content-Type', 'application/json');
 
@@ -211,32 +215,30 @@ class Auth {
 			return;
 		}
 
-		UserService.resetPassword(form.email)
-		.then((token) => {
-			console.log('email "'+form.email+'" reset password token: ', token);
-
-			// Send Email Notification for new user
-			EmailService.sendResetPasswordEmail(form.email, token).then(
-				(info) => {console.log(info);}
-			).catch(
-				(err) => {console.log(err);}
-			);
-
-			req.flash('info', 'Please check your email account for reset password link');
-			resp.json({ status: ResultStatus.SUCCESS } as IResults);
-		})
-		.catch((err) => {
+		let token:string;
+		try {
+			token = await UserService.resetPassword(form.email)
+		} catch(err) {
 			console.log(err)
-			if (err.constructor.name =='QueryResultError') {
-				resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Email not found.'] } as IResults);
-				return;
-			}
-			resp.status(500).json({status: ResultStatus.ERROR, errors: [INTERNAL_ERROR]} as IResults);
-		});
+			resp.status(400).json({status: ResultStatus.ERROR, errors: [err]} as IResults);
+			return;
+		};
+		console.log('email "'+form.email+'" reset password token: ', token);
+
+		req.flash('info', 'Please check your email account for reset password link');
+		resp.json({ status: ResultStatus.SUCCESS } as IResults);
+
+		// Send Email Notification for new user
+		EmailService.sendResetPasswordEmail(form.email, token).then(
+			(info) => {console.log(info);}
+		).catch(
+			(err) => {console.log(err);}
+		);
+
 	}
 
 	// VERIFY EMAIL
-	public verifyEmail(req: Request, resp: Response, next?: NextFunction) {
+	public async verifyEmail(req: Request, resp: Response, next?: NextFunction) {
 
 		if (
 			!req.params['email'] ||
@@ -248,16 +250,15 @@ class Auth {
 			return;
 		}
 
-		UserService.verifyEmail(req.params['email'], req.params['code'])
-		.then((res) => {
+		try {
+			let userId:number = await UserService.verifyEmail(req.params['email'], req.params['code']);
 			console.log('email "'+req.params['email']+'" verified successfully');
 			req.flash('info', 'Your email verified. You can login now.');
 			resp.redirect('/auth#/login');
-		})
-		.catch((err) => {
+		} catch(err) {
 			console.log(err);
 			resp.status(400).send('Bad request');
-		});
+		};
 	}
 
 

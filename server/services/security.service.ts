@@ -14,21 +14,18 @@ export function serializeUser(user: IUser, done: any) {
 	done(null, u);
 }
 
-export function deserializeUser(user:string, done:any) {
+export async function deserializeUser(user:string, done:any) {
 	let u = JSON.parse(user);
 	if (u && u.id) {
-		UserService.getUserByIdForLogin(u.id).then(
-			user => {
-				console.log('D1');
-				console.log(user);
-				done(null, user)
-			}
-		).catch(
-			err => {
-				console.log(err);
-				done(null, null)
-			}
-		);
+		try {
+			let user = await UserService.getUserByIdForLogin(u.id)
+			console.log('D1');
+			console.log(user);
+			done(null, user)
+		} catch(err) {
+			console.log(err);
+			done(null, null);
+		};
 	} else {
 		done(null, null);
 	}
