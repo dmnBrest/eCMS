@@ -7,6 +7,8 @@ import { IAppState } from './../../../server/interfaces';
 import { NgRedux, select } from '@angular-redux/store';
 import * as StoreService from './../../services/store.service'
 
+declare const toastr: any;
+
 @Component({
 	selector: 'messages-component',
 	templateUrl: './messages.component.html',
@@ -24,11 +26,17 @@ export class MessagesComponent implements OnInit, OnDestroy {
 		this.errorsSubscription = this.ngRedux.select<string[]>('errors').subscribe((val) => {
 			this.zone.run(() => {
 				this.errors = val;
+				for (let m of this.errors) {
+					toastr.error(m);
+				}
 			});
 		});
 		this.errorsSubscription = this.ngRedux.select<string[]>('info').subscribe((val) => {
 			this.zone.run(() => {
 				this.info = val;
+				for (let m of this.info) {
+					toastr.info(m);
+				}
 			});
 		});
 	}

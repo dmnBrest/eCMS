@@ -23,7 +23,6 @@ class Auth {
 		} else {
 			resp.render('auth.index.nunjucks', {});
 		}
-
 	}
 
 	// LOGIN
@@ -106,7 +105,7 @@ class Auth {
 
 		// Check for duplicates by Email and Username
 		try {
-			let n = await UserService.getTotalByEmailOrUsernameAsync(form.email, form.username, null);
+			let n = await UserService.getTotalByEmailOrUsername(form.email, form.username, null);
 			if (n > 0) {
 				resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Email or username already in use.'] } as IResults);
 				return;
@@ -125,16 +124,16 @@ class Auth {
 		}
 
 		// Create new user
-		let user;
+		let userId:number;
 		try {
-			user = await UserService.createUser(form.username, form.email, form.password, false);
+			userId = await UserService.createUser(form.username, form.email, form.password, false);
 		} catch(err) {
 			resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
 			return;
 		}
 
 		// Send Email Notification for new user
-		EmailService.sendNewUserEmail(user).then(
+		EmailService.sendNewUserEmail(userId).then(
 			(info) => {console.log(info);}
 		).catch(
 			(err) => {console.log(err);}
@@ -167,7 +166,7 @@ class Auth {
 
 		// Change password for user wit email and reset password token
 		try {
-			let user:IUser = await UserService.changePassword(form.email, form.password, form.token);
+			let userId = await UserService.changePassword(form.email, form.password, form.token);
 
 			// TODO Password was changed notification
 			// Send Email Notification for new user

@@ -119,10 +119,6 @@ export class ExpressServer {
 			let m1 = req.flash('error');
 			let m2 = req.flash('info');
 
-			console.log('M!');
-			console.log(m1);
-			console.log(m2);
-
 			res.locals.initialState.errors = res.locals.initialState.errors.concat(m1);
 			res.locals.initialState.info = res.locals.initialState.info.concat(m2);
 			res.locals.csrfToken = req.csrfToken();

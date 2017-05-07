@@ -4,11 +4,11 @@ import * as StoreService from './../../services/store.service';
 import { IAppState } from './../../../server/interfaces';
 
 @Component({
-	selector: 'c-topics',
-	templateUrl: './topics.component.html'
+	selector: 'c-posts',
+	templateUrl: './posts.component.html'
 })
 
-export class TopicsComponent implements OnInit, OnDestroy {
+export class PostsComponent implements OnInit, OnDestroy {
 
 	constructor() {}
 

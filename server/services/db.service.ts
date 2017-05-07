@@ -6,15 +6,12 @@ import * as pgPromise from 'pg-promise';
 // https://github.com/vitaly-t/pg-promise-demo/blob/master/TypeScript/db/index.ts
 
 let pgp:IMain = pgPromise({
-    // Initialization Options
-    query: (e) => {
-        console.log('Query:');
-        console.log(e.query);
-    }
+	// Initialization Options
+	query: (e) => {
+		console.log('Query:');
+		console.log(e.query);
+	}
 });
-
-console.log('Init DB');
-console.log(appConfig.dbPath);
 
 let cn:string = appConfig.dbPath;
 let db:IDatabase<any> = pgp(cn);

@@ -10,15 +10,19 @@ import { ISettingsForm, IResults, ResultStatus, IUser , INTERNAL_ERROR} from './
 
 class Profile {
 
+	// INDEX
 	public index(req: Request, resp: Response, next?: NextFunction) {
 		resp.render('profile.index.nunjucks', {});
 	}
 
+
+	// SAVE SETTINGS
 	public async saveSettings(req: Request, resp: Response, next?: NextFunction) {
 
 		resp.setHeader('Content-Type', 'application/json');
 
-		let form = req.body as ISettingsForm
+		let form = req.body as ISettingsForm;
+		console.log(form)
 
 		// Validate form
 		if (
@@ -42,20 +46,43 @@ class Profile {
 			return;
 		}
 
-		if (user.email != form.email || user.username != form.username) {
+		if (user.username != form.username) {
 			try {
-				let n = await UserService.getTotalByEmailOrUsernameAsync(form.email, form.username, user.id);
+				let n = await UserService.getTotalByEmailOrUsername(form.email, form.username, user.id);
 				if (n > 0) {
-					resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Email or username already in use'] } as IResults);
+					resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Username already in use'] } as IResults);
 					return;
 				}
-			} catch(err)  {
-				console.log('err1');
+			} catch(err) {
 				console.log(err);
+				resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+					return;
 			};
+			try {
+				let userId = await UserService.updateUsername(user.id, form.username);
+			} catch(err) {
+				console.log(err);
+				resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+				return;
+			}
 		}
 
-		user.username = 'XXXXX';
+
+
+		if (form.changePassword) {
+
+		}
+
+
+
+
+
+		try {
+			user = await UserService.getUserById(req.user.id);
+		} catch(err) {
+			resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+			return;
+		}
 
 		resp.json({ status: ResultStatus.SUCCESS, payload: user } as IResults);
 

@@ -113,3 +113,7 @@ footer {
 	width: 1rem;
 	height: 1rem;
 }
+
+.toast.toast-info {
+	background-color: green;
+}

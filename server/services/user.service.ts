@@ -26,10 +26,10 @@ export async function getUserByIdForLogin(id: number): Promise<IUser> {
 	};
 }
 
-export async function getTotalByEmailOrUsernameAsync(email:string, username:string, excludeUserId: number): Promise<number> {
+export async function getTotalByEmailOrUsername(email:string, username:string, excludeUserId: number): Promise<number> {
 	try {
 		excludeUserId = excludeUserId ? excludeUserId : 0;
-		let res = await db.one('SELECT COUNT (*) FROM public.user WHERE (email=$1 OR username=$2) AND id!=$3', [email, username, excludeUserId]);
+		let res = await db.one('SELECT COUNT(*) FROM public.user WHERE (email=$1 OR username=$2) AND id!=$3', [email, username, excludeUserId]);
 		console.log('UserService.getTotalByEmailOrUsername:');
 		console.log(res.count);
 		return res.count;
@@ -51,7 +51,7 @@ export async function getUserByEmail(email: string): Promise<IUser> {
 	};
 }
 
-export function createUser(username:string, email:string, password:string, isAdmin:boolean): Promise<IUser> {
+export async function createUser(username:string, email:string, password:string, isAdmin:boolean): Promise<number> {
 
 	let hash = bcrypt.hashSync(password, 10);
 
@@ -72,20 +72,24 @@ export function createUser(username:string, email:string, password:string, isAdm
 		is_blocked: false
 	};
 
-	return db.query('INSERT INTO public.user (email, username, password, created_at, slug, verification_code, is_admin, is_blocked) VALUES(${email}, ${username}, ${password}, ${created_at}, ${slug}, ${verification_code}, ${is_admin}, ${is_blocked})', user)
-	.then((results:any) => {
+	try {
+		let res = await db.one('INSERT INTO public.user (email, username, password, created_at, slug, verification_code, is_admin, is_blocked) VALUES(${email}, ${username}, ${password}, ${created_at}, ${slug}, ${verification_code}, ${is_admin}, ${is_blocked}) RETURNING id', user)
 		console.log('UserService.createUser:');
-		console.log(results);
-		return user;
-	});
+		console.log(res);
+		return res.id;
+	} catch(err) {
+		console.log(err);
+		throw INTERNAL_ERROR;
+	}
 }
 
-export async function changePassword(email:string, password:string, token: string): Promise<IUser> {
+export async function changePassword(email:string, password:string, token: string): Promise<number> {
 	let hash = bcrypt.hashSync(password, 10);
 	try {
-		let userId:number = await db.one('UPDATE public.user SET password=$1, reset_password_token=NULL WHERE email=$2 AND reset_password_token=$3 RETURNING id', [hash, email, token]);
+		let res = await db.one('UPDATE public.user SET password=$1, reset_password_token=NULL WHERE email=$2 AND reset_password_token=$3 RETURNING id', [hash, email, token]);
 		console.log('UserService.changePassword:');
-		console.log(userId);
+		console.log(res);
+		return res.id;
 	} catch(err) {
 		console.log(err);
 		if (err.constructor.name =='QueryResultError') {
@@ -94,21 +98,21 @@ export async function changePassword(email:string, password:string, token: strin
 			throw INTERNAL_ERROR;
 		}
 	}
-	try {
-		let user:IUser = await getUserByEmail(email);
-		return user;
-	} catch(err) {
-		console.log(err);
-		throw INTERNAL_ERROR;
-	}
+	// try {
+	// 	let user:IUser = await getUserByEmail(email);
+	// 	return user;
+	// } catch(err) {
+	// 	console.log(err);
+	// 	throw INTERNAL_ERROR;
+	// }
 }
 
 export async function verifyEmail(email: string, code: string) {
 	try {
-		let userId:number = await db.one('UPDATE public.user SET verification_code=NULL WHERE email=$1 AND verification_code=$2 RETURNING id', [email, code]);
+		let res = await db.one('UPDATE public.user SET verification_code=NULL WHERE email=$1 AND verification_code=$2 RETURNING id', [email, code]);
 		console.log('UserService.verifyEmail:');
-		console.log(userId);
-		return userId;
+		console.log(res);
+		return res.id;
 	} catch(err) {
 		console.log(err);
 		if (err.constructor.name =='QueryResultError') {
@@ -123,10 +127,27 @@ export async function resetPassword(email: string): Promise<string> {
 	let token:string = uuidV4();
 	console.log('token: '+token);
 	try {
-		let userId = await db.one('UPDATE public.user SET reset_password_token=$1 WHERE email=$2 RETURNING id', [token, email]);
+		let res = await db.one('UPDATE public.user SET reset_password_token=$1 WHERE email=$2 RETURNING id', [token, email]);
 		console.log('UserService.resetPassword:');
-		console.log(userId);
+		console.log(res);
 		return token;
+	} catch(err) {
+		console.log(err);
+		if (err.constructor.name =='QueryResultError') {
+			throw 'User with email not found';
+		} else {
+			throw INTERNAL_ERROR;
+		}
+	}
+}
+
+
+export async function updateUsername(userId: number, username: string): Promise<number> {
+	try {
+		let res = await db.one('UPDATE public.user SET username=$1 WHERE id=$2 RETURNING id', [username, userId]);
+		console.log('UserService.resetPassword:');
+		console.log(res);
+		return res.id;
 	} catch(err) {
 		console.log(err);
 		if (err.constructor.name =='QueryResultError') {

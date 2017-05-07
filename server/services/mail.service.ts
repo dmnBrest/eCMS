@@ -3,6 +3,7 @@ import { EmailTemplate } from 'email-templates';
 import * as path from 'path';
 import { IUser } from './../../server/interfaces';
 import { appConfig } from './../config';
+import * as UserService from './user.service';
 
 let mailTransport:Transporter = createTransport({
 	port: 1025,
@@ -12,19 +13,27 @@ let mailTransport:Transporter = createTransport({
 
 // TODO Email Base (Header, Footer) template
 
-export function sendNewUserEmail(user: IUser): Promise<SentMessageInfo> {
+export async function sendNewUserEmail(userId: number): Promise<SentMessageInfo> {
 
-	return new Promise((resolve, reject) => {
-		let templateDir = path.join(__dirname, '..', 'emails', 'new-user-email');
-		let emailEngine = new EmailTemplate(templateDir)
+	let user:IUser;
+	try {
+		user = await UserService.getUserById(userId);
+	} catch(err) {
+		console.log(err);
+		throw err;
+	}
 
-		let verifyUrl = appConfig.baseUrl+'/auth/verify/'+encodeURIComponent(user.email)+'/'+encodeURIComponent(user.verification_code);
+	let templateDir = path.join(__dirname, '..', 'emails', 'new-user-email');
+	let emailEngine = new EmailTemplate(templateDir)
+	let verifyUrl = appConfig.baseUrl+'/auth/verify/'+encodeURIComponent(user.email)+'/'+encodeURIComponent(user.verification_code);
+
+	return new Promise<SentMessageInfo>((resolve, reject) => {
 
 		emailEngine.render({user: user, verifyUrl: verifyUrl}, function (err, result) {
 
 			if (err) {
 				console.log(err);
-				reject(err);
+				throw err;
 			}
 
 			// setup email data with unicode symbols
@@ -38,12 +47,11 @@ export function sendNewUserEmail(user: IUser): Promise<SentMessageInfo> {
 			mailTransport.sendMail(mailOptions).then(
 				(info: SentMessageInfo) => {resolve(info);}
 			).catch(
-				(err) => reject(err)
+				(err) => {reject(err);}
 			);
 
 		});
 	});
-
 }
 
 export function sendResetPasswordEmail(email: string, token: string): Promise<SentMessageInfo> {
