@@ -9,9 +9,11 @@ import * as morgan from 'morgan';
 import * as http from 'http';
 import * as passport from 'passport';
 import * as errorhandler from 'errorhandler';
+import { v4 as uuidV4} from 'uuid';
 import { Strategy as LocalStrategy, VerifyFunction, IVerifyOptions } from 'passport-local'
 
-var fileStore = require('session-file-store')(expressSession);
+var RedisStore = require('connect-redis')(expressSession);
+
 var csrf = require('csurf');
 var flash = require('connect-flash');
 
@@ -57,11 +59,17 @@ export class ExpressServer {
 			this.app.use(csrf({ cookie: true }))
 
 			this.app.use(expressSession({
-				store: new fileStore({}),
 				secret: 'keyboard cat',
 				resave: false,
 				saveUninitialized: true,
 				cookie: { secure: false, maxAge: null }, // 60000 - 1 min
+				genid: function(req) {
+					return uuidV4();
+				},
+				store: new RedisStore({
+					host : 'localhost',
+					port : '6380' // default is 6379
+				}),
 			}));
 
 			this.app.use(morgan('tiny'));

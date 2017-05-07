@@ -72,13 +72,10 @@ class Auth {
 			req.login(user, function(err){
 				if(err) return next(err);
 				req.session.user = req.user;
-
 				if (form.rememberme === true) {
 					req.session.cookie.maxAge = 3600000 * 24 * 7; // 1 week
 				}
-
 				req.flash('info', 'You have successfully logged in!');
-
 				resp.json({ status: ResultStatus.SUCCESS } as IResults);
 			});
 		} else {

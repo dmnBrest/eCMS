@@ -9,6 +9,7 @@ export function isLoggedIn(req:any, res:any, next:any) {
 }
 
 export function serializeUser(user: IUser, done: any) {
+	delete user.password;
 	let u = JSON.stringify(user);
 	console.log('serializeUser: ', u);
 	done(null, u);
