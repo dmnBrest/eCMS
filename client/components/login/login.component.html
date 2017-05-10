@@ -1,6 +1,8 @@
 <ul *ngIf="user">
 	<li><span>Welcome, <a href="/profile">{{user.username}}</a></span></li>
 	<li><span style="color: #c0c0c0">|</span></li>
+	<li *ngIf="user.is_admin"><span style="color: red;"><a href="/admin" style="color: red;">Admin</a></span></li>
+	<li *ngIf="user.is_admin"><span style="color: #c0c0c0">|</span></li>
 	<li><a href="/auth/logout">Logout</a></li>
 </ul>
 <ul *ngIf="!user">

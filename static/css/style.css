@@ -70,6 +70,7 @@ footer {
 	background: #fff;
 	border-bottom: 1px solid #e7eaec;
 	padding: 0 20px;
+	min-height: 38px;
 }
 
 .c-sub-header ul {

@@ -7,7 +7,6 @@ import { isAdmin } from './../services/security.service';
 class Admin {
 
 	public index(req: Request, res: Response, next?: NextFunction) {
-
 		res.render('admin.index.nunjucks', {});
 	}
 
