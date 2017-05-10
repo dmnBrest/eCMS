@@ -58,7 +58,28 @@ export async function createUser(username:string, email:string, password:string,
 	let verification_code = uuidV4();
 	console.log(verification_code);
 
-	let slug = username; // TODO generate unique
+	let slug = username;
+	let counter = 1;
+	try {
+		let availableSlugs = await db.query('SELECT slug FROM public.user WHERE slug LIKE \'$1#%\'', [slug]);
+		console.log('availableSlugs');
+		console.log(availableSlugs)
+		let slugSet = new Set();
+		for (let s of availableSlugs) {
+			slugSet.add(s.slug);
+		}
+		console.log(slugSet);
+		let originalSlug = slug;
+		console.log(slugSet.has(slug));
+		while(slugSet.has(slug)) {
+			slug = originalSlug + '-' + counter;
+			counter++;
+		}
+		console.log(slug);
+	} catch(err) {
+		console.log(err);
+		throw INTERNAL_ERROR;
+	}
 
 	let user:IUser = {
 		id: null,
@@ -83,11 +104,11 @@ export async function createUser(username:string, email:string, password:string,
 	}
 }
 
-export async function changePassword(email:string, password:string, token: string): Promise<number> {
+export async function changePasswordWithToken(email:string, password:string, token: string): Promise<number> {
 	let hash = bcrypt.hashSync(password, 10);
 	try {
 		let res = await db.one('UPDATE public.user SET password=$1, reset_password_token=NULL WHERE email=$2 AND reset_password_token=$3 RETURNING id', [hash, email, token]);
-		console.log('UserService.changePassword:');
+		console.log('UserService.changePasswordWithToken:');
 		console.log(res);
 		return res.id;
 	} catch(err) {
@@ -98,13 +119,23 @@ export async function changePassword(email:string, password:string, token: strin
 			throw INTERNAL_ERROR;
 		}
 	}
-	// try {
-	// 	let user:IUser = await getUserByEmail(email);
-	// 	return user;
-	// } catch(err) {
-	// 	console.log(err);
-	// 	throw INTERNAL_ERROR;
-	// }
+}
+
+export async function updatePassword(userId: number, password:string): Promise<number> {
+	let hash = bcrypt.hashSync(password, 10);
+	try {
+		let res = await db.one('UPDATE public.user SET password=$1, reset_password_token=NULL WHERE id=$2 RETURNING id', [hash, userId]);
+		console.log('UserService.updatePassword:');
+		console.log(res);
+		return res.id;
+	} catch(err) {
+		console.log(err);
+		if (err.constructor.name =='QueryResultError') {
+			throw 'User not found';
+		} else {
+			throw INTERNAL_ERROR;
+		}
+	}
 }
 
 export async function verifyEmail(email: string, code: string) {

@@ -40,3 +40,6 @@ td.c-profile-sidebar {
 .c-profile-content {
 	padding: 20px;
 }
+.c-admin-link {
+	color: #F8AC59 !important;
+}

@@ -166,7 +166,7 @@ class Auth {
 
 		// Change password for user wit email and reset password token
 		try {
-			let userId = await UserService.changePassword(form.email, form.password, form.token);
+			let userId = await UserService.changePasswordWithToken(form.email, form.password, form.token);
 
 			// TODO Password was changed notification
 			// Send Email Notification for new user

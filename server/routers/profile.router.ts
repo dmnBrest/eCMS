@@ -1,5 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import * as path from 'path';
+import * as bcrypt from 'bcrypt';
 import * as fs from 'fs';
 import * as passport from 'passport';
 import { isLoggedIn } from './../services/security.service';
@@ -29,10 +30,12 @@ class Profile {
 			!form.email ||
 			form.email.length > 255 ||
 			!form.username ||
-			form.username.length > 255
-
-			// TODO add other fields to validation
-
+			form.username.length > 255 ||
+			(form.changePassword && (
+				!form.password ||
+				form.password.length > 255 ||
+				form.confirmPassword != form.password
+			))
 		) {
 			resp.status(400).send({ status: ResultStatus.ERROR, errors: ['Bad Request'] } as IResults);
 			return;
@@ -46,6 +49,13 @@ class Profile {
 			return;
 		}
 
+		// check old password
+		if (form.changePassword && !bcrypt.compareSync(form.oldPassword, user.password)) {
+			resp.status(400).send({ status: ResultStatus.ERROR, errors: ['Old password is wrong'] } as IResults);
+			return;
+		}
+
+		// Only Username can be changed. Email change is restricted (TODO make it updatable)
 		if (user.username != form.username) {
 			try {
 				let n = await UserService.getTotalByEmailOrUsername(form.email, form.username, user.id);
@@ -67,15 +77,15 @@ class Profile {
 			}
 		}
 
-
-
 		if (form.changePassword) {
-
+			try {
+				let userId = await UserService.updatePassword(user.id, form.password);
+			} catch(err) {
+				console.log(err);
+				resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+				return;
+			}
 		}
-
-
-
-
 
 		try {
 			user = await UserService.getUserById(req.user.id);

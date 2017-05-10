@@ -21,6 +21,9 @@ if (document.getElementById("initialStateFromServer") != null) {
 	console.log(document.getElementById("initialStateFromServer").innerHTML);
 	initialStateFromServer = JSON.parse(document.getElementById("initialStateFromServer").innerHTML)
 }
+
+(window as any).initialState = initialStateFromServer;
+
 initialState = Object.assign({}, initialState, initialStateFromServer);
 
 const SHOW_SPINNER = 'SHOW_SPINNER';

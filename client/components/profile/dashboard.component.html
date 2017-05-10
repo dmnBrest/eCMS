@@ -1,1 +1,45 @@
-<h1>DASHBOARD</h1>
+<div *ngIf="user" class="slds-large-size--2-of-3">
+	<div class="c-panel c-permissions-box">
+		<div class="c-panel-header">
+			Permissions
+		</div>
+		<div class="c-panel-body">
+
+			<table>
+				<tr>
+					<td style="width: 26px;">
+						<span class="">
+							<svg class="slds-icon slds-icon-text-default c-slds-icon--xsmall" aria-hidden="true" style="fill: #18A689;">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/slds/icons/utility-sprite/svg/symbols.svg#check"></use>
+							</svg>
+						</span>
+					</td>
+					<td>Regular User</td>
+				</tr>
+				<tr *ngIf="user.is_writer">
+					<td>
+						<span class="">
+							<svg class="slds-icon slds-icon-text-default c-slds-icon--xsmall" aria-hidden="true" style="fill: #18A689;">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/slds/icons/utility-sprite/svg/symbols.svg#check"></use>
+							</svg>
+						</span>
+					</td>
+					<td>Writer</td>
+				</tr>
+				<tr *ngIf="user.is_admin">
+					<td>
+						<span class="">
+							<svg class="slds-icon slds-icon-text-default c-slds-icon--xsmall" aria-hidden="true" style="fill: #18A689;">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/slds/icons/utility-sprite/svg/symbols.svg#check"></use>
+							</svg>
+						</span>
+					</td>
+					<td>
+						Administrator
+					</td>
+				</tr>
+			</table>
+
+		</div>
+	</div>
+</div>

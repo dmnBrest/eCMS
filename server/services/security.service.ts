@@ -8,6 +8,12 @@ export function isLoggedIn(req:any, res:any, next:any) {
 	res.redirect('/auth');
 }
 
+export function isAdmin(req:any, res:any, next:any) {
+	if (req.isAuthenticated() && req.user.is_admin)
+		return next();
+	res.redirect('/');
+}
+
 export function serializeUser(user: IUser, done: any) {
 	delete user.password;
 	let u = JSON.stringify(user);

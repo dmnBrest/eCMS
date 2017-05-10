@@ -1,0 +1,17 @@
+.c-top-menu ul {
+	display: block;
+	padding: 0 10px;
+}
+
+.c-top-menu li {
+	display: inline-block;
+}
+
+.c-top-menu li a {
+	display: inline-block;
+	padding: 10px 10px
+}
+
+.c-admin-content {
+	padding: 20px;
+}

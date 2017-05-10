@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 import * as StoreService from './../../services/store.service';
 
-import { IAppState, ISettingsForm, IUser } from './../../../server/interfaces';
+import { IAppState, ISettingsForm, IUser, IResetForm } from './../../../server/interfaces';
 
 @Component({
 	selector: 'c-settings',
@@ -40,12 +40,22 @@ export class SettingsComponent implements OnInit, OnDestroy {
 		this.currentUserSubscription.unsubscribe();
 	}
 
+	resetPassword() {
+		let resetData:IResetForm = {
+			email: this.settingsFormData.email
+		}
+		StoreService.resetFormSubmit(resetData).then((results: any) => {
+			StoreService.addInfo(['Password Reset Token was sent to your email.']);
+		}).catch(err => {
+			console.log('Reset Error');
+		});
+	}
+
 	saveSettings() {
 		StoreService.profileSettingsFormSubmit(this.settingsFormData).then((results: any) => {
 			StoreService.addInfo(['Settings updated successfully.']);
 		}).catch(err => {
 			console.log('Registration Error');
-			console.log(err);
 		});
 	}
 

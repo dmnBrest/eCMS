@@ -12,10 +12,8 @@ import * as jQuery from 'jquery';
 import { StoreModule, provideStore } from '@ngrx/store';
 import { NgReduxModule, NgRedux } from '@angular-redux/store';
 
-import { DashboardComponent } from './../../components/profile/dashboard.component';
-import { PersonalInfoComponent } from './../../components/profile/personal-info.component';
-import { PostsComponent } from './../../components/profile/posts.component';
-import { SettingsComponent } from './../../components/profile/settings.component';
+import { DashboardComponent } from './../../components/admin/dashboard.component';
+import { UsersComponent } from './../../components/admin/users.component';
 
 import { IAppState, IUser } from './../../../server/interfaces';
 
@@ -23,9 +21,9 @@ import { appStore } from './../../services/store.service'
 
 /* MODULE COMPONENT */
 @Component({
-	selector: 'profile-module',
-	templateUrl: './profile.module.html',
-	styleUrls: ['./profile.module.css']
+	selector: 'admin-module',
+	templateUrl: './admin.module.html',
+	styleUrls: ['./admin.module.css']
 })
 class ModuleComponent {
 
@@ -40,14 +38,11 @@ class ModuleComponent {
 			});
 		});
 	}
-
 }
 
 let routes: Routes = [
 	{ path: 'dashboard', component: DashboardComponent },
-	{ path: 'personal-info', component: PersonalInfoComponent },
-	{ path: 'posts', component: PostsComponent },
-	{ path: 'settings', component: SettingsComponent },
+	{ path: 'users', component: UsersComponent },
 	{ path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
 
@@ -62,9 +57,7 @@ let routes: Routes = [
 	declarations: [
 		ModuleComponent,
 		DashboardComponent,
-		PersonalInfoComponent,
-		PostsComponent,
-		SettingsComponent
+		UsersComponent
 	],
 	providers: [
 

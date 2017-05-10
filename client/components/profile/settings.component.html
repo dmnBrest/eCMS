@@ -5,7 +5,6 @@
 		</div>
 		<div class="c-panel-body">
 
-
 			<form #settingsForm="ngForm" class="slds-form--stacked" novalidate>
 
 				<div class="slds-form-element" [ngClass]="{'slds-has-error': settingsFormEmail.errors && settingsFormEmail.touched}">
@@ -122,6 +121,12 @@
 						[disabled]="settingsForm.invalid || (settingsFormData.changePassword &&  settingsFormData.password && settingsFormData.confirmPassword != settingsFormData.password)"
 						class="slds-button slds-button--brand">
 						Save
+					</button>
+					<button
+						(click)="resetPassword()"
+						class="slds-button slds-button--neutral"
+						*ngIf="settingsFormData.changePassword">
+						Reset Password
 					</button>
 				</div>
 

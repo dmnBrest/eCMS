@@ -8,7 +8,7 @@
 					</div>
 				</div>
 				<div class="c-current-user-username">
-					{{user.username}}
+					{{user.username}}<span style="color:#F8AC59;" *ngIf="user.is_admin">&nbsp;(!)</span>
 				</div>
 			</div>
 			<div class="c-profile-menu">

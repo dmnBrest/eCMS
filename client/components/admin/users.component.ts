@@ -7,26 +7,19 @@ import * as StoreService from './../../services/store.service';
 import { IAppState, IUser } from './../../../server/interfaces';
 
 @Component({
-	selector: 'c-dashboard',
-	templateUrl: './dashboard.component.html'
+	selector: 'c-admin-users',
+	templateUrl: './users.component.html'
 })
 
-export class DashboardComponent implements OnInit, OnDestroy {
-
-	user: IUser;
-	currentUserSubscription: Subscription;
+export class UsersComponent implements OnInit, OnDestroy {
 
 	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone) {
-		this.currentUserSubscription = this.ngRedux.select<IUser>('currentUser').subscribe((user) => {
-			this.zone.run(() => {
-				this.user = user;
-			});
-		});
+
 	}
 	ngOnInit() {}
 
 	ngOnDestroy() {
-		this.currentUserSubscription.unsubscribe();
+
 	}
 
 	getDashboarData() {

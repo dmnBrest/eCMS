@@ -13,20 +13,13 @@ import { IAppState, IUser } from './../../../server/interfaces';
 
 export class DashboardComponent implements OnInit, OnDestroy {
 
-	user: IUser;
-	currentUserSubscription: Subscription;
-
 	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone) {
-		this.currentUserSubscription = this.ngRedux.select<IUser>('currentUser').subscribe((user) => {
-			this.zone.run(() => {
-				this.user = user;
-			});
-		});
+
 	}
 	ngOnInit() {}
 
 	ngOnDestroy() {
-		this.currentUserSubscription.unsubscribe();
+
 	}
 
 	getDashboarData() {

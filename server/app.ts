@@ -22,6 +22,7 @@ import { HomeRouter } from './routers/home.router';
 import { AuthRouter } from './routers/auth.router';
 import { ForumRouter } from './routers/forum.router';
 import { ProfileRouter } from './routers/profile.router';
+import { AdminRouter } from './routers/admin.router';
 import { serializeUser, deserializeUser } from './services/security.service'
 
 require('source-map-support').install();
@@ -129,6 +130,7 @@ export class ExpressServer {
 		this.app.use('/auth', AuthRouter);
 		this.app.use('/forum', ForumRouter);
 		this.app.use('/profile', ProfileRouter);
+		this.app.use('/admin', AdminRouter);
 		this.app.get('/', HomeRouter);
 
 		// Handle 404
