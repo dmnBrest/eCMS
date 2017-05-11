@@ -27,14 +27,17 @@ export class UsersComponent implements OnInit, OnDestroy {
 		// STATE SUBSCRIPTION
 		this.stateSubscription = this.ngRedux.select<any>(['admin','users']).subscribe((val) => {
 			this.zone.run(() => {
-				console.log('state', this.state);
 				this.state = val;
+				console.log('state', this.state);
+				if (!this.state.list) {
+					this.getUsers();
+				}
 			});
 		});
 
 	}
 	ngOnInit() {
-		this.getUsers();
+		//this.getUsers();
 	}
 
 	getUsers() {
@@ -46,11 +49,11 @@ export class UsersComponent implements OnInit, OnDestroy {
 	}
 
 	prevPage() {
-		//
+		AdminStoreService.usersPrevPage();
 	}
 
 	nextPage() {
-		//
+		AdminStoreService.usersNextPage();
 	}
 
 	ngOnDestroy() {

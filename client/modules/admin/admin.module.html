@@ -1,16 +1,14 @@
 <div class="c-top-menu">
 	<ul>
-		<li><a href="#/dashboard" >Dashboard</a></li>
-		<li><a href="#/users" >Users</a></li>
+		<li><a [ngClass]="{'c-active': mode == 'dashboard'}" href="#/dashboard" >Dashboard</a></li>
+		<li><a [ngClass]="{'c-active': mode == 'users'}" href="#/users" >Users</a></li>
 	</ul>
 </div>
 
 <div class="c-admin-content">
 
-	R:{{route}}
+	<c-dashboard *ngIf="mode == 'dashboard'"></c-dashboard>
 
-	<c-dashboard *ngIf="route == '#/dashboard'"></c-dashboard>
-
-	<c-users *ngIf="route == '#/users'"></c-users>
+	<c-users *ngIf="mode == 'users'"></c-users>
 
 </div>

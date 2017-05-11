@@ -15,3 +15,6 @@
 .c-admin-content {
 	padding: 20px;
 }
+a.c-active {
+	font-weight: bold;
+}

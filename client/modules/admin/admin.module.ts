@@ -28,16 +28,25 @@ import { appStore } from './../../services/store.service';
 class ModuleComponent implements OnInit, OnDestroy {
 
 	route: string;
+	mode: string;
 	routeSubscription: Subscription;
 
 	constructor(private ngRedux: NgRedux<IAppState>,  private zone:NgZone) {
 		this.ngRedux.provideStore(appStore);
 
-		// ROUTER
+		// ROUTING
 		this.routeSubscription = this.ngRedux.select<string>(['app', 'hash']).subscribe((val) => {
 			this.zone.run(() => {
-				console.log(val);
 				this.route = val;
+				if (this.route == '#/dashboard') {
+					this.mode = 'dashboard';
+				} else if (this.route == '#/users') {
+					this.mode = 'users';
+				} else {
+					this.mode = null;
+					location.hash = '#/dashboard';
+				}
+
 			});
 		});
 	}

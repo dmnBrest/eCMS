@@ -25,3 +25,13 @@ export function getUsers() {
 		});
 	});
 }
+
+export function usersPrevPage() {
+	appStore.dispatch({ type: AdminReducers.USERS_PREV_PAGE });
+	getUsers();
+}
+
+export function usersNextPage() {
+	appStore.dispatch({ type: AdminReducers.USERS_NEXT_PAGE });
+	getUsers();
+}

@@ -14,7 +14,14 @@ export function adminReducer(lastState: IAdminState = {}, action: IAppAction): I
 			nextState.users.list = action.payload.users;
 			nextState.users.total = Math.ceil(action.payload.totalUsers / nextState.users.perPage);
 			return Object.assign({}, lastState, nextState);
-
+		case USERS_PREV_PAGE:
+			nextState.users = Object.assign({}, lastState.users);
+			nextState.users.page--;
+			return Object.assign({}, lastState, nextState);
+		case USERS_NEXT_PAGE:
+			nextState.users = Object.assign({}, lastState.users);
+			nextState.users.page++;
+			return Object.assign({}, lastState, nextState);
 	}
 	return lastState;
 }

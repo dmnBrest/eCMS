@@ -28,8 +28,6 @@ export class MessagesComponent implements OnInit, OnDestroy {
 		this.errorsSubscription = this.ngRedux.select<string[]>(['app', 'errors']).subscribe((val) => {
 			this.zone.run(() => {
 				this.errors = val;
-				console.log('ZZZZZ');
-				console.log(val);
 				for (let m of this.errors) {
 					toastr.error(m);
 				}
