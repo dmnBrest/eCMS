@@ -76,6 +76,15 @@ export interface IAppState {
 	currentUser: IUser;
 };
 
+export interface IAdminState {
+	users: {
+		page: number,
+		list: IUser[],
+		perPage: number,
+		total: number
+	}
+}
+
 export interface IAppAction extends Action {
 	payload?: any;
 }
@@ -89,4 +98,20 @@ export interface IConfig {
     noreplyEmail: string
     recaptchaKey: string,
     recaptchaSecret: string
+}
+
+
+export const enum ColumnTypes {
+    STRING,
+    DATE,
+	DATETIME,
+	BOOLEAN,
+	NUMBER,
+	CURRENCY
+}
+
+export interface IColumn {
+	name: string,
+	label: string,
+	type: ColumnTypes
 }

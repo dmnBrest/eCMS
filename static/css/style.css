@@ -118,3 +118,8 @@ footer {
 .toast.toast-info {
 	background-color: green;
 }
+
+.slds-button.c-small {
+	padding: 4px 10px;
+	line-height: 1rem;
+}

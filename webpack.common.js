@@ -36,6 +36,11 @@ module.exports = {
     modules: [modulesPath]
   },
 
+  externals: {
+      "jquery": "jQuery",
+      "moment": "moment"
+  },
+
   module: {
     loaders: [
       {

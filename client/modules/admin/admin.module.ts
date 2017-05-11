@@ -15,6 +15,7 @@ import { NgReduxModule, NgRedux } from '@angular-redux/store';
 import { DashboardComponent } from './../../components/admin/dashboard.component';
 import { UsersComponent } from './../../components/admin/users.component';
 import { ListViewComponent } from './../../components/list-view/list-view.component';
+import { OutputComponent } from './../../components/output/output.component';
 
 import { IAppState, IUser } from './../../../server/interfaces';
 
@@ -59,7 +60,8 @@ let routes: Routes = [
 		ModuleComponent,
 		DashboardComponent,
 		UsersComponent,
-		ListViewComponent
+		ListViewComponent,
+		OutputComponent
 	],
 	providers: [
 

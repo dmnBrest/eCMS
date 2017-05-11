@@ -15,6 +15,29 @@ export async function getUserById(id: number): Promise<IUser> {
 	};
 }
 
+export async function getUsers(page: number, perPage: number):Promise<IUser[]> {
+	try {
+		let users:IUser[] = await db.query('SELECT * FROM public.user ORDER BY created_at DESC LIMIT $1 OFFSET $2', [perPage, (page-1)*perPage]);
+		console.log('UserService.getUsers:');
+		return users;
+	} catch(err) {
+		console.log(err);
+		throw err;
+	};
+}
+
+export async function getTotalUsers():Promise<number> {
+	try {
+		let res = await db.one('SELECT COUNT(id) FROM public.user');
+		console.log('UserService.getTotalUsers:');
+		console.log(res);
+		return res.count;
+	} catch(err) {
+		console.log(err);
+		throw err;
+	};
+}
+
 export async function getUserByIdForLogin(id: number): Promise<IUser> {
 	try {
 		let user:IUser = await db.one('SELECT id, username, email, is_admin, created_at, login_at, slug FROM public.user WHERE id=$1 AND verification_code IS NULL AND is_blocked = false', [id]);

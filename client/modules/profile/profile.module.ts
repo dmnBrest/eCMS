@@ -14,7 +14,6 @@ import { NgReduxModule, NgRedux } from '@angular-redux/store';
 
 import { DashboardComponent } from './../../components/profile/dashboard.component';
 import { PersonalInfoComponent } from './../../components/profile/personal-info.component';
-import { PostsComponent } from './../../components/profile/posts.component';
 import { SettingsComponent } from './../../components/profile/settings.component';
 
 import { IAppState, IUser } from './../../../server/interfaces';
@@ -46,7 +45,6 @@ class ModuleComponent {
 let routes: Routes = [
 	{ path: 'dashboard', component: DashboardComponent },
 	{ path: 'personal-info', component: PersonalInfoComponent },
-	{ path: 'posts', component: PostsComponent },
 	{ path: 'settings', component: SettingsComponent },
 	{ path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
@@ -63,7 +61,6 @@ let routes: Routes = [
 		ModuleComponent,
 		DashboardComponent,
 		PersonalInfoComponent,
-		PostsComponent,
 		SettingsComponent
 	],
 	providers: [

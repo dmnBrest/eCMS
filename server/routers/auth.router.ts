@@ -4,11 +4,10 @@ import * as fs from 'fs';
 import * as bcrypt from 'bcrypt';
 import { IQueryResultError } from 'pg-promise';
 import * as db from './../services/db.service';
-import * as UserService from './../services/user.service';
 import * as passport from 'passport'
+import * as UserService from './../services/user.service';
 import * as EmailService from './../services/mail.service';
 import * as RecaptchaService from './../services/recaptcha.service';
-
 import { ILoginForm, IRegisterForm, IResetForm, INewPasswordForm, IResults, ResultStatus, IUser , INTERNAL_ERROR} from './../interfaces'
 
 class Auth {
@@ -52,7 +51,7 @@ class Auth {
 				resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Wrong credentials'] } as IResults);
 				return;
 			} else {
-				resp.status(500).json({});
+				resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
 				return;
 			}
 		}

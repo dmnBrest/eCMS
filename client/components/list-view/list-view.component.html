@@ -1,6 +1,30 @@
-<h2>List view component</h2>
-<div>list: {{list}}</div>
-<div>page: {{page}}</div>
-<div>perPage: {{perPage}}</div>
-<div>total: {{total}}</div>
-<div>columns: {{columns}}</div>
+<table *ngIf="list" class="slds-table slds-table--bordered slds-table--cell-buffer">
+	<thead>
+		<tr class="slds-text-title--caps">
+			<th scope="col" *ngFor="let column of columns" >
+				<div class="slds-truncate" title="{{column.label}}">{{column.label}}</div>
+			</th>
+			<th scope="col" class="c-actions">
+				<div class="slds-truncate" title="Actions">Actions</div>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let item of list">
+			<td *ngFor="let column of columns">
+				<div class="slds-truncate" [title]="item[column.name]">
+					<c-output
+						[value]="item[column.name]"
+						[type]="column.type"
+					></c-output>
+				</div>
+			</td>
+			<td data-label="Actions" class="c-actions">
+				<ng-template
+					[ngTemplateOutlet]="actionsTemplate"
+					[ngOutletContext]="{item: item}">
+				</ng-template>
+			</td>
+		</tr>
+	</tbody>
+</table>
