@@ -3,7 +3,7 @@ import { NgRedux, select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
-import * as AdminStoreService from './../../services/admin-store.service';
+import * as AdminStoreService from './../../services/admin.service';
 import { IAppState, IUser, IColumn, ColumnTypes } from './../../../server/interfaces';
 
 @Component({
@@ -13,11 +13,9 @@ import { IAppState, IUser, IColumn, ColumnTypes } from './../../../server/interf
 
 export class UsersComponent implements OnInit, OnDestroy {
 
-	users:any[]; // IUser
-	page:number;
-	usersPerPage:number;
-	totalPages: number;
-	totalUsers:number;
+	state: any;
+	stateSubscription: Subscription;
+
 	columns:IColumn[] = [
 		{name: 'id', label: 'Id', type: ColumnTypes.STRING},
 		{name: 'username', label: 'Username', type: ColumnTypes.STRING},
@@ -26,27 +24,21 @@ export class UsersComponent implements OnInit, OnDestroy {
 	]
 
 	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone) {
-		this.users = null;
-		this.page = 1;
-		this.usersPerPage = 2;
-		this.totalUsers = 0;
+		// STATE SUBSCRIPTION
+		this.stateSubscription = this.ngRedux.select<any>(['admin','users']).subscribe((val) => {
+			this.zone.run(() => {
+				console.log('state', this.state);
+				this.state = val;
+			});
+		});
+
 	}
 	ngOnInit() {
 		this.getUsers();
 	}
 
 	getUsers() {
-		AdminStoreService.getUsers(this.page, this.usersPerPage)
-		.then((resp:any) => {
-			console.log('getUsersForAdmin');
-			console.log(resp);
-			this.users = resp.users;
-			this.totalUsers = resp.totalUsers;
-			this.totalPages = Math.ceil(this.totalUsers / this.usersPerPage);
-		})
-		.catch((err) => {
-			console.log('Get Users ERROR')
-		})
+		AdminStoreService.getUsers();
 	}
 
 	editUser(user:IUser) {
@@ -54,23 +46,15 @@ export class UsersComponent implements OnInit, OnDestroy {
 	}
 
 	prevPage() {
-		if (this.page < 1) {
-			return;
-		}
-		this.page--;
-		this.getUsers();
+		//
 	}
 
 	nextPage() {
-		if (this.page >= this.totalPages) {
-			return;
-		}
-		this.page++;
-		this.getUsers();
+		//
 	}
 
 	ngOnDestroy() {
-
+		this.stateSubscription.unsubscribe();
 	}
 
 	getDashboarData() {

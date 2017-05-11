@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IRegisterForm } from './../../../server/interfaces';
-import * as StoreService from './../../services/store.service';
+import * as StoreService from './../../services/app.service';
 import { ReCaptchaComponent } from 'angular2-recaptcha';
 
 @Component({

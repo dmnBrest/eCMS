@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import * as StoreService from './../../services/store.service';
+import * as StoreService from './../../services/app.service';
 import { IResetForm } from './../../../server/interfaces';
 
 

@@ -3,7 +3,7 @@ import { NgRedux, select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
-import * as StoreService from './../../services/store.service';
+import * as StoreService from './../../services/app.service';
 import { IAppState, IUser } from './../../../server/interfaces';
 
 @Component({
@@ -17,7 +17,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 	currentUserSubscription: Subscription;
 
 	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone) {
-		this.currentUserSubscription = this.ngRedux.select<IUser>('currentUser').subscribe((user) => {
+		this.currentUserSubscription = this.ngRedux.select<IUser>(['app', 'currentUser']).subscribe((user) => {
 			this.zone.run(() => {
 				this.user = user;
 			});

@@ -4,7 +4,9 @@ import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 import { IAppState, IUser } from './../../../server/interfaces';
 import { NgRedux, select } from '@angular-redux/store';
-import * as StoreService from './../../services/store.service'
+import * as StoreService from './../../services/app.service'
+
+import { appStore } from './../../services/store.service'
 
 @Component({
 	selector: 'login-component',
@@ -16,8 +18,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 	userSubscription: Subscription;
 
 	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone, private rd: Renderer) {
-		this.ngRedux.provideStore(StoreService.appStore);
-		this.userSubscription = this.ngRedux.select<IUser>('currentUser').subscribe((user) => {
+		this.userSubscription = this.ngRedux.select<IUser>(['app', 'currentUser']).subscribe((user) => {
 			this.zone.run(() => {
 				this.user = user;
 			});

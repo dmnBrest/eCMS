@@ -1,11 +1,12 @@
 <h1>USERS</h1>
 
-<div *ngIf="users" class="slds-text-align--right">
-	<button *ngIf="page > 1" (click)="prevPage()" class="slds-button">&lt; prev</button>&nbsp;{{page}}/{{totalPages}}&nbsp;<button *ngIf="page < totalPages" (click)="nextPage()" class="slds-button">next &gt;</button>
+<div *ngIf="state" class="slds-text-align--right">
+	<button *ngIf="state.page > 1" (click)="prevPage()" class="slds-button">&lt; prev</button>&nbsp;{{state.page}}/{{state.totalPages}}&nbsp;<button *ngIf="state.page < state.totalPages" (click)="nextPage()" class="slds-button">next &gt;</button>
 </div>
 
 <c-list-view
-	[list]="users"
+	*ngIf="state"
+	[list]="state.list"
 	[columns]="columns">
 	<ng-template #actions let-item="item">
 		<button class="slds-button slds-button--neutral c-small" (click)="editUser(item)">Edit</button>

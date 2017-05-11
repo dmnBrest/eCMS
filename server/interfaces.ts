@@ -64,26 +64,30 @@ export interface ISettingsForm {
 
 
 // MICS
-export interface ISpinner {
-	counter: number;
-	show: boolean
+export interface IState {
+	app: IAppState,
+	admin: IAdminState
 }
 
 export interface IAppState {
-	errors: string[];
-	info: string[];
-	spinner: ISpinner;
-	currentUser: IUser;
+	hash?: string;
+	errors?: string[];
+	info?: string[];
+	spinner?: {
+		counter: number;
+		show: boolean;
+	};
+	currentUser?: IUser;
 };
 
 export interface IAdminState {
-	users: {
-		page: number,
-		list: IUser[],
-		perPage: number,
-		total: number
+	users?: {
+		page: number;
+		list: IUser[];
+		perPage: number;
+		total: number;
 	}
-}
+};
 
 export interface IAppAction extends Action {
 	payload?: any;

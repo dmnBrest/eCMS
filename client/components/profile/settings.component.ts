@@ -3,7 +3,7 @@ import { NgRedux, select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
-import * as StoreService from './../../services/store.service';
+import * as StoreService from './../../services/app.service';
 
 import { IAppState, ISettingsForm, IUser, IResetForm } from './../../../server/interfaces';
 
@@ -26,7 +26,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 			confirmPassword: null,
 			oldPassword: null
 		};
-		this.currentUserSubscription = this.ngRedux.select<IUser>('currentUser').subscribe((user) => {
+		this.currentUserSubscription = this.ngRedux.select<IUser>(['app', 'currentUser']).subscribe((user) => {
 			this.zone.run(() => {
 				this.settingsFormData.username = user.username;
 				this.settingsFormData.email = user.email;

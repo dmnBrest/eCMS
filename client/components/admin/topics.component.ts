@@ -3,7 +3,7 @@ import { NgRedux, select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
-import * as StoreService from './../../services/store.service';
+import * as StoreService from './../../services/app.service';
 import { IAppState, IUser } from './../../../server/interfaces';
 
 @Component({

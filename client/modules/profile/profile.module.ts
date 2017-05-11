@@ -33,7 +33,7 @@ class ModuleComponent {
 
 	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone) {
 		this.ngRedux.provideStore(appStore);
-		this.userSubscription = this.ngRedux.select<IUser>('currentUser').subscribe((val) => {
+		this.userSubscription = this.ngRedux.select<IUser>(['app', 'currentUser']).subscribe((val) => {
 			this.zone.run(() => {
 				this.user = val;
 			});

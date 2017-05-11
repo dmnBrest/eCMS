@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy,  NgZone } from '@angular/core';
-import * as StoreService from './../../services/store.service';
+import * as StoreService from './../../services/app.service';
 
 import { IAppState } from './../../../server/interfaces';
 

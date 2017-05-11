@@ -4,7 +4,9 @@ import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 import { IAppState } from './../../../server/interfaces';
 import { NgRedux, select } from '@angular-redux/store';
-import * as StoreService from './../../services/store.service'
+import * as StoreService from './../../services/app.service'
+
+import { appStore } from './../../services/store.service'
 
 declare const Spinner: any;
 
@@ -26,8 +28,8 @@ export class SpinnerComponent implements OnInit, OnDestroy {
 	spinnerSubscription: Subscription;
 
 	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone, private rd: Renderer) {
-		this.ngRedux.provideStore(StoreService.appStore);
-		this.spinnerSubscription = this.ngRedux.select<string[]>('spinner').subscribe((val) => {
+		this.ngRedux.provideStore(appStore);
+		this.spinnerSubscription = this.ngRedux.select<string[]>(['app','spinner']).subscribe((val) => {
 			this.zone.run(() => {
 				this.spinner = val;
 			});

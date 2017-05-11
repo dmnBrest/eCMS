@@ -1,15 +1,13 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { NgModule, NgZone } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
-import { IAppState, IUser } from './../../../server/interfaces';
+import { IAppState } from './../../../server/interfaces';
 
 import { NgReduxModule, NgRedux } from '@angular-redux/store';
-import { select } from '@angular-redux/store';
+
+import { appStore } from './../../services/store.service'
 
 import { LoginComponent } from './../../components/login/login.component';
 
@@ -20,10 +18,8 @@ import { LoginComponent } from './../../components/login/login.component';
 })
 class ModuleComponent {
 
-	user: IUser;
-
-	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone) {
-		ngRedux.provideStore((window as any).appStore);
+	constructor(private ngRedux: NgRedux<IAppState>) {
+		ngRedux.provideStore(appStore);
 	}
 
 }
@@ -32,7 +28,6 @@ class ModuleComponent {
 @NgModule({
 	imports: [
 		BrowserModule,
-		FormsModule,
 		NgReduxModule
 	],
 	declarations: [

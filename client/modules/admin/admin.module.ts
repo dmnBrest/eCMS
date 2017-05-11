@@ -1,11 +1,9 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { NgModule, NgZone, OnDestroy } from '@angular/core';
+import { Component, NgModule, NgZone, OnInit, OnDestroy } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { RouterModule, Routes, Router, NavigationStart } from '@angular/router';
-import { Component } from '@angular/core';
 
 import * as jQuery from 'jquery';
 
@@ -19,7 +17,7 @@ import { OutputComponent } from './../../components/output/output.component';
 
 import { IAppState, IUser } from './../../../server/interfaces';
 
-import { appStore } from './../../services/store.service'
+import { appStore } from './../../services/store.service';
 
 /* MODULE COMPONENT */
 @Component({
@@ -27,33 +25,35 @@ import { appStore } from './../../services/store.service'
 	templateUrl: './admin.module.html',
 	styleUrls: ['./admin.module.css']
 })
-class ModuleComponent {
+class ModuleComponent implements OnInit, OnDestroy {
 
-	user: IUser;
-	userSubscription: Subscription;
+	route: string;
+	routeSubscription: Subscription;
 
-	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone) {
+	constructor(private ngRedux: NgRedux<IAppState>,  private zone:NgZone) {
 		this.ngRedux.provideStore(appStore);
-		this.userSubscription = this.ngRedux.select<IUser>('currentUser').subscribe((val) => {
+
+		// ROUTER
+		this.routeSubscription = this.ngRedux.select<string>(['app', 'hash']).subscribe((val) => {
 			this.zone.run(() => {
-				this.user = val;
+				console.log(val);
+				this.route = val;
 			});
 		});
 	}
+
+	ngOnInit() {}
+
+	ngOnDestroy() {}
+
 }
 
-let routes: Routes = [
-	{ path: 'dashboard', component: DashboardComponent },
-	{ path: 'users', component: UsersComponent },
-	{ path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
-];
 
 /* MODULE */
 @NgModule({
 	imports: [
 		BrowserModule,
 		FormsModule,
-		RouterModule.forRoot(routes, { useHash: true }),
 		NgReduxModule
 	],
 	declarations: [

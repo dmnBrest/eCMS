@@ -1,4 +1,4 @@
-import * as StoreService from './store.service';
+import * as AppService from './app.service';
 import { INTERNAL_ERROR } from './../../server/interfaces';
 
 export function remoteAction(action: string, payload: any) {
@@ -29,13 +29,13 @@ function checkResponseStatus(response:any) {
 	} else {
 		return response.json().then((resp:any) => {
 			if (resp.errors) {
-				StoreService.addErrors(resp.errors);
+				AppService.addErrors(resp.errors);
 			} else {
-				StoreService.addErrors([INTERNAL_ERROR]);
+				AppService.addErrors([INTERNAL_ERROR]);
 			}
 			return resp;
 		}).catch((err:any) => {
-			StoreService.addErrors(['Bad response']);
+			AppService.addErrors(['Bad response']);
 		});
 	}
 }
