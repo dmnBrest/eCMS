@@ -1,26 +1,24 @@
 import { createLogger } from 'redux-logger';
-import { IAdminState, IAppAction } from './../../server/interfaces';
+import * as I from './../../server/interfaces';
 
-export const USERS_SET = 'USERS_SET';
-export const USERS_NEXT_PAGE = 'USERS_NEXT_PAGE';
-export const USERS_PREV_PAGE = 'USERS_PREV_PAGE';
+export const SET_OBJECTS_LIST = 'OBJECTS_LIST_SET';
+export const OBJECTS_LIST_NEXT_PAGE = 'OBJECTS_LIST_NEXT_PAGE';
+export const OBJECTS_LIST_PREV_PAGE = 'OBJECTS_LIST_PREV_PAGE';
 
 // REDUCERS
-export function adminReducer(lastState: IAdminState = {}, action: IAppAction): IAdminState {
+export function adminReducer(lastState: I.IAdminState = {}, action: I.IAppAction): I.IAdminState {
 	let nextState:any = {};
 	switch(action.type) {
-		case USERS_SET:
-			nextState.users = Object.assign({}, lastState.users);
-			nextState.users.list = action.payload.users;
-			nextState.users.total = Math.ceil(action.payload.totalUsers / nextState.users.perPage);
+		case SET_OBJECTS_LIST:
+			nextState[action.payload.object] = action.payload;
 			return Object.assign({}, lastState, nextState);
-		case USERS_PREV_PAGE:
-			nextState.users = Object.assign({}, lastState.users);
-			nextState.users.page--;
+		case OBJECTS_LIST_NEXT_PAGE:
+			nextState[action.payload.objName] = Object.assign({}, lastState[action.payload.objName]);
+			nextState[action.payload.objName].page++;
 			return Object.assign({}, lastState, nextState);
-		case USERS_NEXT_PAGE:
-			nextState.users = Object.assign({}, lastState.users);
-			nextState.users.page++;
+		case OBJECTS_LIST_PREV_PAGE:
+			nextState[action.payload.objName] = Object.assign({}, lastState[action.payload.objName]);
+			nextState[action.payload.objName].page--;
 			return Object.assign({}, lastState, nextState);
 	}
 	return lastState;

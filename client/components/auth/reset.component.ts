@@ -24,11 +24,7 @@ export class ResetComponent implements OnInit, OnDestroy {
 	ngOnDestroy() {}
 
 	reset() {
-		StoreService.resetFormSubmit(this.resetFormData).then((results: any) => {
-			window.location.href = '/';
-		}).catch(err => {
-			console.log('Reset Error');
-		});
+		StoreService.resetFormSubmit(this.resetFormData);
 	}
 
 }

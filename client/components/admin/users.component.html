@@ -1,7 +1,7 @@
-<h1>USERS</h1>
+<h1>Users</h1>
 
 <div *ngIf="state" class="slds-text-align--right">
-	<button *ngIf="state.page > 1" (click)="prevPage()" class="slds-button">&lt; prev</button>&nbsp;{{state.page}}/{{state.total}}&nbsp;<button *ngIf="state.page < state.total" (click)="nextPage()" class="slds-button">next &gt;</button>
+	<button *ngIf="state.page > 1" (click)="prevPage()" class="slds-button">&lt; prev</button>&nbsp;{{state.page}}/{{state.totalPages}}&nbsp;<button *ngIf="state.page < state.totalPages" (click)="nextPage()" class="slds-button">next &gt;</button>
 </div>
 
 <c-list-view

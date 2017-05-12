@@ -1,1 +1,18 @@
 <h1>Topics</h1>
+
+<div>
+	<button (click)="addTopic()" class="slds-button slds-button--brand">Add Topic</button>
+</div>
+
+<div *ngIf="state" class="slds-text-align--right">
+	<button *ngIf="state.page > 1" (click)="prevPage()" class="slds-button">&lt; prev</button>&nbsp;{{state.page}}/{{state.totalPages}}&nbsp;<button *ngIf="state.page < state.totalPages" (click)="nextPage()" class="slds-button">next &gt;</button>
+</div>
+
+<c-list-view
+	*ngIf="state"
+	[list]="state.list"
+	[columns]="columns">
+	<ng-template #actions let-item="item">
+		<button class="slds-button slds-button--neutral c-small" (click)="editTopic(item)">Edit</button>
+	</ng-template>
+</c-list-view>

@@ -25,23 +25,21 @@ export class UsersComponent implements OnInit, OnDestroy {
 
 	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone) {
 		// STATE SUBSCRIPTION
-		this.stateSubscription = this.ngRedux.select<any>(['admin','users']).subscribe((val) => {
+		this.stateSubscription = this.ngRedux.select<any>(['admin', 'users']).subscribe((val) => {
 			this.zone.run(() => {
 				this.state = val;
 				console.log('state', this.state);
-				if (!this.state.list) {
+				if (!this.state) {
 					this.getUsers();
 				}
 			});
 		});
 
 	}
-	ngOnInit() {
-		//this.getUsers();
-	}
+	ngOnInit() {}
 
 	getUsers() {
-		AdminStoreService.getUsers();
+		AdminStoreService.getObjects('users');
 	}
 
 	editUser(user:IUser) {
@@ -49,19 +47,15 @@ export class UsersComponent implements OnInit, OnDestroy {
 	}
 
 	prevPage() {
-		AdminStoreService.usersPrevPage();
+		AdminStoreService.prevPage('users');
 	}
 
 	nextPage() {
-		AdminStoreService.usersNextPage();
+		AdminStoreService.nextPage('users');
 	}
 
 	ngOnDestroy() {
 		this.stateSubscription.unsubscribe();
-	}
-
-	getDashboarData() {
-		// TODO ...
 	}
 
 }

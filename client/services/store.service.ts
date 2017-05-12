@@ -18,24 +18,15 @@ let initialAppState: IAppState = {
 	},
 	currentUser: null,
 };
-let initialAdminState: IAdminState = {
-	users: {
-		page: 1,
-		perPage: 3,
-		list: null,
-		total: 0
-	}
-};
+let initialAdminState: IAdminState = {};
 let initialAppStateFromServer = {};
 if (document.getElementById("initialStateFromServer") != null) {
 	console.log(document.getElementById("initialStateFromServer").innerHTML);
 	initialAppStateFromServer = JSON.parse(document.getElementById("initialStateFromServer").innerHTML)
 }
-
 initialAppState = Object.assign({}, initialAppState, initialAppStateFromServer);
 
 // INIT STORE
-
 let reducers = combineReducers<IState>({
 	app: appReducer,
 	admin: adminReducer

@@ -12,6 +12,7 @@ import { NgReduxModule, NgRedux } from '@angular-redux/store';
 
 import { DashboardComponent } from './../../components/admin/dashboard.component';
 import { UsersComponent } from './../../components/admin/users.component';
+import { TopicsComponent } from './../../components/admin/topics.component';
 import { ListViewComponent } from './../../components/list-view/list-view.component';
 import { OutputComponent } from './../../components/output/output.component';
 
@@ -42,6 +43,8 @@ class ModuleComponent implements OnInit, OnDestroy {
 					this.mode = 'dashboard';
 				} else if (this.route == '#/users') {
 					this.mode = 'users';
+				} else if (this.route == '#/topics') {
+					this.mode = 'topics';
 				} else {
 					this.mode = null;
 					location.hash = '#/dashboard';
@@ -69,6 +72,7 @@ class ModuleComponent implements OnInit, OnDestroy {
 		ModuleComponent,
 		DashboardComponent,
 		UsersComponent,
+		TopicsComponent,
 		ListViewComponent,
 		OutputComponent
 	],

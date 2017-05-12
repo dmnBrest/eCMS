@@ -25,17 +25,11 @@ export class RegisterComponent implements OnInit {
 
 	// https://github.com/xmaestro/angular2-recaptcha
 	handleCorrectCaptcha(token:string) {
-		console.log(token);
 		this.registerFormData.token = token;
 	}
 
 	register() {
-		StoreService.registerFormSubmit(this.registerFormData).then((results: any) => {
-			window.location.href = '/';
-		}).catch(err => {
-			console.log('Registration Error');
-			console.log(err);
-		});
+		StoreService.registerFormSubmit(this.registerFormData);
 	}
 
 	ngOnInit(): void {

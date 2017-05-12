@@ -12,8 +12,8 @@ export function loginFormSubmit(data: ILoginForm) {
 		.then((resp: IResults) => {
 			hideSpinner();
 			if (resp.status == ResultStatus.SUCCESS) {
-				//setCurrentUser(resp.payload);
 				resolve(resp);
+				window.location.href = '/';
 			} else {
 				reject(resp);
 			}
@@ -32,6 +32,7 @@ export function registerFormSubmit(data: IRegisterForm) {
 		.then((resp: IResults) => {
 			hideSpinner();
 			if (resp.status == ResultStatus.SUCCESS) {
+				window.location.href = '/';
 				resolve(resp);
 			} else {
 				reject(resp);
@@ -51,6 +52,7 @@ export function resetFormSubmit(data: IResetForm) {
 		.then((resp: IResults) => {
 			hideSpinner();
 			if (resp.status == ResultStatus.SUCCESS) {
+				window.location.href = '/';
 				resolve(resp);
 			} else {
 				reject(resp);
@@ -71,7 +73,8 @@ export function newPasswordFormSubmit(data: INewPasswordForm) {
 		.then((resp: IResults) => {
 			hideSpinner();
 			if (resp.status == ResultStatus.SUCCESS) {
-				resolve(resp);
+				window.location.href = '/auth#/login';
+				window.location.reload(true);
 			} else {
 				reject(resp);
 			}

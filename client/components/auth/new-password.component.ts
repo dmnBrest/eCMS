@@ -37,12 +37,7 @@ export class NewPasswordComponent implements OnInit, OnDestroy {
 	}
 
 	changePassword() {
-		StoreService.newPasswordFormSubmit(this.newPasswordFormData).then((results: any) => {
-			window.location.href = '/auth#/login';
-			window.location.reload(true);
-		}).catch(err => {
-			console.log('ChangePassword Error');
-		});
+		StoreService.newPasswordFormSubmit(this.newPasswordFormData);
 	}
 
 }

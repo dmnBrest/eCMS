@@ -2,6 +2,7 @@
 	<ul>
 		<li><a [ngClass]="{'c-active': mode == 'dashboard'}" href="#/dashboard" >Dashboard</a></li>
 		<li><a [ngClass]="{'c-active': mode == 'users'}" href="#/users" >Users</a></li>
+		<li><a [ngClass]="{'c-active': mode == 'topics'}" href="#/topics" >Topics</a></li>
 	</ul>
 </div>
 
@@ -10,5 +11,7 @@
 	<c-dashboard *ngIf="mode == 'dashboard'"></c-dashboard>
 
 	<c-users *ngIf="mode == 'users'"></c-users>
+
+	<c-topics *ngIf="mode == 'topics'"></c-topics>
 
 </div>

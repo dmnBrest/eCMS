@@ -17,6 +17,14 @@ export interface IUser {
 	is_admin: boolean;
 };
 
+export interface ITopic {
+	id: number;
+	title: string,
+	order: number,
+	total_posts: number,
+	last_post_id: number
+}
+
 // FORMS
 export interface ILoginForm {
 	email: string;
@@ -81,13 +89,17 @@ export interface IAppState {
 };
 
 export interface IAdminState {
-	users?: {
-		page: number;
-		list: IUser[];
-		perPage: number;
-		total: number;
-	}
+	users?: IListViewState
+	topics?: IListViewState
 };
+
+export interface IListViewState {
+	object: string,
+	page: number;
+	list: any;
+	perPage: number;
+	totalPages: number;
+}
 
 export interface IAppAction extends Action {
 	payload?: any;

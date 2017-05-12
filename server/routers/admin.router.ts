@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as UserService from './../services/user.service';
 import { isAdmin } from './../services/security.service';
-import { IResults, ResultStatus, IUser, INTERNAL_ERROR} from './../interfaces'
+import * as I from './../interfaces';
 
 class Admin {
 
@@ -11,35 +11,39 @@ class Admin {
 		resp.render('admin.index.nunjucks', {});
 	}
 
-	public async getUsers(req: Request, resp: Response, next?: NextFunction) {
+	public async getObjects(req: Request, resp: Response, next?: NextFunction) {
 		resp.setHeader('Content-Type', 'application/json');
 
-		let input = req.body
-		console.log(input);
+		let state = req.body as I.IListViewState
+		console.log(state);
 
-		let users;
+		let objects:any[];
 		try {
-			users = await UserService.getUsers(input.page, input.usersPerPage);
+			if (state.object == 'users') {
+				objects = await UserService.getUsers(state.page, state.perPage);
+			} else {
+				objects = [];
+			}
 		} catch(err) {
-			resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 			return;
 		}
+		state.list = objects;
 
 		let totalUsers;
 		try {
 			totalUsers = await UserService.getTotalUsers();
 			console.log(totalUsers);
 		} catch(err) {
-			resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 			return;
 		}
 
-		let payload = {
-			users: users,
-			totalUsers: totalUsers
-		}
+		state.totalPages = Math.ceil(totalUsers / state.perPage);
 
-		resp.json({ status: ResultStatus.SUCCESS, payload: payload } as IResults);
+		console.log(state);
+
+		resp.json({ status: I.ResultStatus.SUCCESS, payload: state } as I.IResults);
 	}
 
 }
@@ -48,4 +52,4 @@ const admin = new Admin();
 
 export const AdminRouter = Router();
 AdminRouter.get('/', isAdmin, admin.index);
-AdminRouter.post('/get-users', isAdmin, admin.getUsers);
+AdminRouter.post('/get-objects', isAdmin, admin.getObjects);

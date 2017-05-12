@@ -25,11 +25,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 	ngOnDestroy() {}
 
 	login() {
-		StoreService.loginFormSubmit(this.loginFormData).then((results: any) => {
-			window.location.href = '/';
-		}).catch(err => {
-			console.log('Login Error');
-		});
+		StoreService.loginFormSubmit(this.loginFormData);
 	}
 
 }

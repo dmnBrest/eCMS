@@ -2,19 +2,28 @@ import { appStore } from './store.service';
 import * as AppService from './app.service';
 import * as AdminReducers from './admin.reducer';
 import * as RemoteService from './remote.service';
-import { IUser, ILoginForm, ISettingsForm, IRegisterForm, IResetForm, INewPasswordForm, IAppState, IAppAction, ResultStatus, IResults, INTERNAL_ERROR } from './../../server/interfaces';
+import * as I from './../../server/interfaces';
 
 // ACTION CREATORS
-export function getUsers() {
+export function getObjects(objName:string) {
 	return new Promise((resolve, reject) => {
 		AppService.removeAllNotifications();
 		AppService.showSpinner();
-		let state = appStore.getState();
-		return RemoteService.remoteAction('/admin/get-users', {page: state.admin.users.page, usersPerPage: state.admin.users.perPage})
-		.then((resp: IResults) => {
+		let state:I.IListViewState = appStore.getState().admin[objName];
+		if (!state) {
+			// INIT LISTVIEW STATE FOR OBJECT
+			state = {
+				object: objName,
+				page: 1,
+				perPage: 3,
+				totalPages: 0,
+				list: null
+			}
+		}
+		return RemoteService.remoteAction('/admin/get-objects', state).then((resp: I.IResults) => {
 			AppService.hideSpinner();
-			if (resp.status == ResultStatus.SUCCESS) {
-				appStore.dispatch({ type: AdminReducers.USERS_SET, payload: resp.payload });
+			if (resp.status == I.ResultStatus.SUCCESS) {
+				appStore.dispatch({type: AdminReducers.SET_OBJECTS_LIST, payload: resp.payload});
 				resolve(resp.payload);
 			} else {
 				reject(resp);
@@ -26,12 +35,12 @@ export function getUsers() {
 	});
 }
 
-export function usersPrevPage() {
-	appStore.dispatch({ type: AdminReducers.USERS_PREV_PAGE });
-	getUsers();
+export function prevPage(objName:string) {
+	appStore.dispatch({ type: AdminReducers.OBJECTS_LIST_PREV_PAGE, payload: {objName: objName} });
+	getObjects(objName);
 }
 
-export function usersNextPage() {
-	appStore.dispatch({ type: AdminReducers.USERS_NEXT_PAGE });
-	getUsers();
+export function nextPage(objName:string) {
+	appStore.dispatch({ type: AdminReducers.OBJECTS_LIST_NEXT_PAGE, payload: {objName: objName} });
+	getObjects(objName);
 }
