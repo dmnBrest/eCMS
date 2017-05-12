@@ -2,6 +2,8 @@ import { Router, Request, Response, NextFunction } from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as UserService from './../services/user.service';
+import * as ObjectService from './../services/object.service';
+import * as TopicService from './../services/topic.service';
 import { isAdmin } from './../services/security.service';
 import * as I from './../interfaces';
 
@@ -19,37 +21,75 @@ class Admin {
 
 		let objects:any[];
 		try {
-			if (state.object == 'users') {
-				objects = await UserService.getUsers(state.page, state.perPage);
-			} else {
-				objects = [];
-			}
+			objects = await ObjectService.getObjects(state.object, state.page, state.perPage);
 		} catch(err) {
+			console.log(err);
 			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 			return;
 		}
 		state.list = objects;
 
-		let totalUsers;
+		let totalObjects;
 		try {
-			totalUsers = await UserService.getTotalUsers();
-			console.log(totalUsers);
+			totalObjects = await ObjectService.getTotalObjects(state.object);
 		} catch(err) {
+			console.log(err);
+			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
+			return;
+		}
+		state.totalPages = Math.ceil(totalObjects / state.perPage);
+		resp.json({ status: I.ResultStatus.SUCCESS, payload: state } as I.IResults);
+	}
+
+	public async getObjectById(req: Request, resp: Response, next?: NextFunction) {
+		resp.setHeader('Content-Type', 'application/json');
+
+		let input = req.body
+		console.log(input);
+
+		let object:any;
+		try {
+			object = await ObjectService.getObjectById(input.objType, input.id);
+		} catch(err) {
+			console.log(err);
 			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 			return;
 		}
 
-		state.totalPages = Math.ceil(totalUsers / state.perPage);
-
-		console.log(state);
-
-		resp.json({ status: I.ResultStatus.SUCCESS, payload: state } as I.IResults);
+		resp.json({ status: I.ResultStatus.SUCCESS, payload: object } as I.IResults);
 	}
 
+	public async saveTopic(req: Request, resp: Response, next?: NextFunction) {
+		resp.setHeader('Content-Type', 'application/json');
+
+		let topic = req.body as I.ITopic
+		console.log(topic);
+
+		let topicId;
+		try {
+			 topicId = await TopicService.saveTopic(topic);
+		} catch(err) {
+			console.log(err);
+			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
+			return;
+		}
+
+		try {
+			 topic = await ObjectService.getObjectById('topic', topicId);
+		} catch(err) {
+			console.log(err);
+			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
+			return;
+		}
+
+		resp.json({ status: I.ResultStatus.SUCCESS, payload: topic } as I.IResults);
+	}
 }
 
-const admin = new Admin();
 
+const admin = new Admin();
 export const AdminRouter = Router();
 AdminRouter.get('/', isAdmin, admin.index);
 AdminRouter.post('/get-objects', isAdmin, admin.getObjects);
+AdminRouter.post('/get-object-by-id', isAdmin, admin.getObjectById);
+AdminRouter.post('/save-topic', isAdmin, admin.saveTopic);

@@ -18,7 +18,9 @@ let initialAppState: IAppState = {
 	},
 	currentUser: null,
 };
-let initialAdminState: IAdminState = {};
+let initialAdminState: IAdminState = {
+	listViews: {}
+};
 let initialAppStateFromServer = {};
 if (document.getElementById("initialStateFromServer") != null) {
 	console.log(document.getElementById("initialStateFromServer").innerHTML);

@@ -21,6 +21,7 @@ export interface ITopic {
 	id: number;
 	title: string,
 	order: number,
+	slug: string,
 	total_posts: number,
 	last_post_id: number
 }
@@ -89,8 +90,11 @@ export interface IAppState {
 };
 
 export interface IAdminState {
-	users?: IListViewState
-	topics?: IListViewState
+	selectedTopic?: ITopic;
+	listViews?: {
+		users?: IListViewState;
+		topics?: IListViewState;
+	}
 };
 
 export interface IListViewState {
@@ -106,18 +110,18 @@ export interface IAppAction extends Action {
 }
 
 export interface IConfig {
-    dbPath: string,
-    modules: string[],
-    baseUrl: string,
-    title: string,
-    adminEmail: string,
+    dbPath: string;
+    modules: string[];
+    baseUrl: string;
+    title: string;
+    adminEmail: string;
     noreplyEmail: string
-    recaptchaKey: string,
-    recaptchaSecret: string
+    recaptchaKey: string;
+    recaptchaSecret: string;
 }
 
 
-export const enum ColumnTypes {
+export enum FieldTypes {
     STRING,
     DATE,
 	DATETIME,
@@ -126,8 +130,9 @@ export const enum ColumnTypes {
 	CURRENCY
 }
 
-export interface IColumn {
-	name: string,
-	label: string,
-	type: ColumnTypes
+export interface IField {
+	name: string;
+	label: string;
+	type: FieldTypes;
+	editable?: boolean;
 }

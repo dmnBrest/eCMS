@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 import * as AdminStoreService from './../../services/admin.service';
-import { IAppState, IUser, IColumn, ColumnTypes } from './../../../server/interfaces';
+import * as I from './../../../server/interfaces';
 
 @Component({
 	selector: 'c-users',
@@ -16,16 +16,16 @@ export class UsersComponent implements OnInit, OnDestroy {
 	state: any;
 	stateSubscription: Subscription;
 
-	columns:IColumn[] = [
-		{name: 'id', label: 'Id', type: ColumnTypes.STRING},
-		{name: 'username', label: 'Username', type: ColumnTypes.STRING},
-		{name: 'email', label: 'Email', type: ColumnTypes.STRING},
-		{name: 'created_at', label: 'Created Date', type: ColumnTypes.DATE},
+	columns:I.IField[] = [
+		{name: 'id', label: 'Id', type: I.FieldTypes.STRING},
+		{name: 'username', label: 'Username', type: I.FieldTypes.STRING},
+		{name: 'email', label: 'Email', type: I.FieldTypes.STRING},
+		{name: 'created_at', label: 'Created Date', type: I.FieldTypes.DATE},
 	]
 
-	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone) {
+	constructor(private ngRedux: NgRedux<I.IAppState>, private zone:NgZone) {
 		// STATE SUBSCRIPTION
-		this.stateSubscription = this.ngRedux.select<any>(['admin', 'users']).subscribe((val) => {
+		this.stateSubscription = this.ngRedux.select<any>(['admin', 'listViews', 'user']).subscribe((val) => {
 			this.zone.run(() => {
 				this.state = val;
 				console.log('state', this.state);
@@ -39,19 +39,19 @@ export class UsersComponent implements OnInit, OnDestroy {
 	ngOnInit() {}
 
 	getUsers() {
-		AdminStoreService.getObjects('users');
+		AdminStoreService.getObjects('user');
 	}
 
-	editUser(user:IUser) {
+	editUser(user:I.IUser) {
 		console.log(user);
 	}
 
 	prevPage() {
-		AdminStoreService.prevPage('users');
+		AdminStoreService.prevPage('user');
 	}
 
 	nextPage() {
-		AdminStoreService.nextPage('users');
+		AdminStoreService.nextPage('user');
 	}
 
 	ngOnDestroy() {

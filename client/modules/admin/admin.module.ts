@@ -13,10 +13,14 @@ import { NgReduxModule, NgRedux } from '@angular-redux/store';
 import { DashboardComponent } from './../../components/admin/dashboard.component';
 import { UsersComponent } from './../../components/admin/users.component';
 import { TopicsComponent } from './../../components/admin/topics.component';
+import { TopicEditComponent } from './../../components/admin/topic-edit.component';
 import { ListViewComponent } from './../../components/list-view/list-view.component';
+import { EditViewComponent } from './../../components/edit-view/edit-view.component';
 import { OutputComponent } from './../../components/output/output.component';
 
-import { IAppState, IUser } from './../../../server/interfaces';
+import * as AdminStoreService from './../../services/admin.service';
+
+import * as I from './../../../server/interfaces';
 
 import { appStore } from './../../services/store.service';
 
@@ -32,7 +36,7 @@ class ModuleComponent implements OnInit, OnDestroy {
 	mode: string;
 	routeSubscription: Subscription;
 
-	constructor(private ngRedux: NgRedux<IAppState>,  private zone:NgZone) {
+	constructor(private ngRedux: NgRedux<I.IAppState>,  private zone:NgZone) {
 		this.ngRedux.provideStore(appStore);
 
 		// ROUTING
@@ -45,6 +49,13 @@ class ModuleComponent implements OnInit, OnDestroy {
 					this.mode = 'users';
 				} else if (this.route == '#/topics') {
 					this.mode = 'topics';
+				} else if (this.route == '#/topic/new') {
+					AdminStoreService.newSelectedTopic();
+					this.mode = 'topicEdit';
+				} else if (this.route.match(/#\/topic\/(\d+)/)) {
+					let m = this.route.match(/#\/topic\/(\d+)/);
+					AdminStoreService.selectedTopic(+m[1]);
+					this.mode = 'topicEdit';
 				} else {
 					this.mode = null;
 					location.hash = '#/dashboard';
@@ -74,6 +85,8 @@ class ModuleComponent implements OnInit, OnDestroy {
 		UsersComponent,
 		TopicsComponent,
 		ListViewComponent,
+		EditViewComponent,
+		TopicEditComponent,
 		OutputComponent
 	],
 	providers: [

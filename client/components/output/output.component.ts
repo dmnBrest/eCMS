@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, SimpleChange } from '@angular/core';
-import { IColumn, ColumnTypes } from './../../../server/interfaces';
+import * as I from './../../../server/interfaces';
 import * as moment from 'moment';
 
 @Component({
@@ -9,12 +9,12 @@ import * as moment from 'moment';
 
 export class OutputComponent implements OnInit, OnDestroy {
 
-	@Input() type: ColumnTypes;
+	@Input() type: I.FieldTypes;
 
 	private _value = '';
 	@Input()
 	set value(value: any) {
-		if (this.type == ColumnTypes.DATE) {
+		if (this.type == I.FieldTypes.DATE) {
 			if (!value) {
 				this._value = '';
 			}

@@ -1,0 +1,11 @@
+<c-edit-view
+	*ngIf="topic"
+	[objType]="'Topic'"
+	[object]="topic"
+	[fields]="fields"
+></c-edit-view>
+<br />
+<div class="">
+	<button (click)="saveTopic()" class="slds-button slds-button--brand">Save</button>
+	<button (click)="cancel()" class="slds-button slds-button--neutral">Cancel</button>
+</div>

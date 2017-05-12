@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 import * as AdminStoreService from './../../services/admin.service';
-import { IAppState, IUser, IColumn, ITopic, ColumnTypes } from './../../../server/interfaces';
+import * as I from './../../../server/interfaces';
 
 @Component({
 	selector: 'c-topics',
@@ -16,16 +16,16 @@ export class TopicsComponent implements OnInit, OnDestroy {
 	state: any;
 	stateSubscription: Subscription;
 
-	columns:IColumn[] = [
-		{name: 'id', label: 'Id', type: ColumnTypes.STRING},
-		{name: 'title', label: 'Title', type: ColumnTypes.STRING},
-		{name: 'order', label: 'Order', type: ColumnTypes.NUMBER},
-		{name: 'total_posts', label: 'Order', type: ColumnTypes.NUMBER}
+	columns:I.IField[] = [
+		{name: 'id', label: 'Id', type: I.FieldTypes.STRING},
+		{name: 'title', label: 'Title', type: I.FieldTypes.STRING},
+		{name: 'order', label: 'Order', type: I.FieldTypes.NUMBER},
+		{name: 'total_posts', label: 'Total Posts', type: I.FieldTypes.NUMBER}
 	]
 
-	constructor(private ngRedux: NgRedux<IAppState>, private zone:NgZone) {
+	constructor(private ngRedux: NgRedux<I.IAppState>, private zone:NgZone) {
 		// STATE SUBSCRIPTION
-		this.stateSubscription = this.ngRedux.select<any>(['admin', 'topics']).subscribe((val) => {
+		this.stateSubscription = this.ngRedux.select<any>(['admin', 'listViews', 'topic']).subscribe((val) => {
 			this.zone.run(() => {
 				this.state = val;
 				console.log('state', this.state);
@@ -41,19 +41,23 @@ export class TopicsComponent implements OnInit, OnDestroy {
 	}
 
 	getTopics() {
-		AdminStoreService.getObjects('topics');
+		AdminStoreService.getObjects('topic');
 	}
 
-	editTopic(topic:ITopic) {
-		alert('Todo: editTopic');
+	editTopic(topic:I.ITopic) {
+		location.hash = '#/topic/'+topic.id;
+	}
+
+	prevPage() {
+		AdminStoreService.prevPage('topic');
+	}
+
+	nextPage() {
+		AdminStoreService.nextPage('topic');
 	}
 
 	addTopic() {
-		AdminStoreService.getObjects('topics');
-	}
-
-	saveTopic() {
-		AdminStoreService.getObjects('topics');
+		location.hash = '#/topic/new';
 	}
 
 	ngOnDestroy() {

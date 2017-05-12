@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, SimpleChange, ContentChild, TemplateRef } from '@angular/core';
-import { IColumn, ColumnTypes } from './../../../server/interfaces';
+import * as I from './../../../server/interfaces';
 
 @Component({
 	selector: 'c-list-view',
@@ -10,7 +10,7 @@ import { IColumn, ColumnTypes } from './../../../server/interfaces';
 export class ListViewComponent implements OnInit, OnDestroy {
 
 	@Input() list: any[];
-	@Input() columns: IColumn[];
+	@Input() columns: I.IField[];
 	totalPages: number;
 
 	@ContentChild('actions') actionsTemplate: TemplateRef<any>;

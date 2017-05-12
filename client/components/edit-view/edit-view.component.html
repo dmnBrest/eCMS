@@ -1,0 +1,30 @@
+<h1>{{object.id ? 'Edit' : 'New'}} {{objType}}</h1>
+
+<div class="slds-form--stacked">
+	<div class="c-field" *ngFor="let f of fields; let i = index;" >
+
+		<div class="slds-form-element" *ngIf="f.type == FieldTypes.STRING">
+			<label class="slds-form-element__label" [attr.for]="f.name">{{f.label}}</label>
+			<div class="slds-form-element__control">
+				<input
+					type="text"
+					[attr.id]="f.name"
+					[(ngModel)]="object[f.name]"
+					class="slds-input" />
+			</div>
+		</div>
+
+		<div class="slds-form-element" *ngIf="f.type == FieldTypes.NUMBER">
+			<label class="slds-form-element__label" [attr.for]="f.name">{{f.label}}</label>
+			<div class="slds-form-element__control">
+				<input
+					type="number"
+					[attr.id]="f.name"
+					[(ngModel)]="object[f.name]"
+					class="slds-input" />
+			</div>
+		</div>
+
+	</div>
+</div>
+

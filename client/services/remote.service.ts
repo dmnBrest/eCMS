@@ -36,6 +36,7 @@ function checkResponseStatus(response:any) {
 			return resp;
 		}).catch((err:any) => {
 			AppService.addErrors(['Bad response']);
+			throw err;
 		});
 	}
 }
