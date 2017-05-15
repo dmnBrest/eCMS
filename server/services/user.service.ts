@@ -1,11 +1,11 @@
 import * as bcrypt from 'bcrypt';
 import { v4 as uuidV4} from 'uuid';
 import * as db from './db.service';
-import { IUser, INTERNAL_ERROR } from './../interfaces';
+import * as I from './../interfaces';
 
-export async function getUserById(id: number): Promise<IUser> {
+export async function getUserById(id: number): Promise<I.IUser> {
 	try {
-		let user:IUser = await db.one('SELECT * FROM public.user WHERE id=$1', [id])
+		let user:I.IUser = await db.one('SELECT * FROM public.user WHERE id=$1', [id])
 		console.log('UserService.getUserById:');
 		console.log(user);
 		return user;
@@ -15,9 +15,9 @@ export async function getUserById(id: number): Promise<IUser> {
 	};
 }
 
-export async function getUsers(page: number, perPage: number):Promise<IUser[]> {
+export async function getUsers(page: number, perPage: number):Promise<I.IUser[]> {
 	try {
-		let users:IUser[] = await db.query('SELECT * FROM public.user ORDER BY created_at DESC LIMIT $1 OFFSET $2', [perPage, (page-1)*perPage]);
+		let users:I.IUser[] = await db.query('SELECT * FROM public.user ORDER BY created_at DESC LIMIT $1 OFFSET $2', [perPage, (page-1)*perPage]);
 		console.log('UserService.getUsers:');
 		return users;
 	} catch(err) {
@@ -26,9 +26,9 @@ export async function getUsers(page: number, perPage: number):Promise<IUser[]> {
 	};
 }
 
-export async function getUserByIdForLogin(id: number): Promise<IUser> {
+export async function getUserByIdForLogin(id: number): Promise<I.IUser> {
 	try {
-		let user:IUser = await db.one('SELECT id, username, email, is_admin, created_at, login_at, slug FROM public.user WHERE id=$1 AND verification_code IS NULL AND is_blocked = false', [id]);
+		let user:I.IUser = await db.one('SELECT id, username, email, is_admin, created_at, login_at, slug FROM public.user WHERE id=$1 AND verification_code IS NULL AND is_blocked = false', [id]);
 		console.log('UserService.getUserByIdForLogin:');
 		return user;
 	} catch(err) {
@@ -50,9 +50,9 @@ export async function getTotalByEmailOrUsername(email:string, username:string, e
 	};
 }
 
-export async function getUserByEmail(email: string): Promise<IUser> {
+export async function getUserByEmail(email: string): Promise<I.IUser> {
 	try {
-		let user:IUser = await db.one('SELECT * FROM public.user WHERE email=$1', [email]);
+		let user:I.IUser = await db.one('SELECT * FROM public.user WHERE email=$1', [email]);
 		console.log('UserService.getUserByEmail:');
 		console.log(user);
 		return user;
@@ -89,10 +89,10 @@ export async function createUser(username:string, email:string, password:string,
 		console.log(slug);
 	} catch(err) {
 		console.log(err);
-		throw INTERNAL_ERROR;
+		throw I.INTERNAL_ERROR;
 	}
 
-	let user:IUser = {
+	let user:I.IUser = {
 		id: null,
 		username: username,
 		email: email,
@@ -111,7 +111,7 @@ export async function createUser(username:string, email:string, password:string,
 		return res.id;
 	} catch(err) {
 		console.log(err);
-		throw INTERNAL_ERROR;
+		throw I.INTERNAL_ERROR;
 	}
 }
 
@@ -127,7 +127,7 @@ export async function changePasswordWithToken(email:string, password:string, tok
 		if (err.constructor.name =='QueryResultError') {
 			throw 'User with token not found';
 		} else {
-			throw INTERNAL_ERROR;
+			throw I.INTERNAL_ERROR;
 		}
 	}
 }
@@ -144,7 +144,7 @@ export async function updatePassword(userId: number, password:string): Promise<n
 		if (err.constructor.name =='QueryResultError') {
 			throw 'User not found';
 		} else {
-			throw INTERNAL_ERROR;
+			throw I.INTERNAL_ERROR;
 		}
 	}
 }
@@ -160,7 +160,7 @@ export async function verifyEmail(email: string, code: string) {
 		if (err.constructor.name =='QueryResultError') {
 			throw 'User with email or token not found';
 		} else {
-			throw INTERNAL_ERROR;
+			throw I.INTERNAL_ERROR;
 		}
 	}
 }
@@ -178,7 +178,7 @@ export async function resetPassword(email: string): Promise<string> {
 		if (err.constructor.name =='QueryResultError') {
 			throw 'User with email not found';
 		} else {
-			throw INTERNAL_ERROR;
+			throw I.INTERNAL_ERROR;
 		}
 	}
 }
@@ -195,7 +195,7 @@ export async function updateUsername(userId: number, username: string): Promise<
 		if (err.constructor.name =='QueryResultError') {
 			throw 'User with email not found';
 		} else {
-			throw INTERNAL_ERROR;
+			throw I.INTERNAL_ERROR;
 		}
 	}
 }

@@ -21,7 +21,13 @@ class Admin {
 
 		let objects:any[];
 		try {
-			objects = await ObjectService.getObjects(state.object, state.page, state.perPage);
+			if (state.object == 'user') {
+				objects = await UserService.getUsers(state.page, state.perPage);
+			} else if (state.object == 'topic') {
+				objects = await TopicService.getTopics(state.page, state.perPage);
+			} else {
+				throw 'Object not found';
+			}
 		} catch(err) {
 			console.log(err);
 			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
@@ -29,15 +35,15 @@ class Admin {
 		}
 		state.list = objects;
 
-		let totalObjects;
+		let total;
 		try {
-			totalObjects = await ObjectService.getTotalObjects(state.object);
+			total = await ObjectService.getTotalObjects(state.object);
 		} catch(err) {
 			console.log(err);
 			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 			return;
 		}
-		state.totalPages = Math.ceil(totalObjects / state.perPage);
+		state.totalPages = Math.ceil(total / state.perPage);
 		resp.json({ status: I.ResultStatus.SUCCESS, payload: state } as I.IResults);
 	}
 
