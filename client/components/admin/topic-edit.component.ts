@@ -19,7 +19,8 @@ export class TopicEditComponent implements OnInit, OnDestroy {
 	fields:I.IField[] = [
 		//{name: 'id', label: 'Id', type: I.FieldTypes.STRING, editable: false},
 		{name: 'title', label: 'Title', type: I.FieldTypes.STRING, editable: true},
-		{name: 'order', label: 'Order', type: I.FieldTypes.NUMBER, editable: true}
+		{name: 'order', label: 'Order', type: I.FieldTypes.NUMBER, editable: true},
+		{name: 'is_hidden', label: 'Is Hidden', type: I.FieldTypes.BOOLEAN, editable: true}
 	]
 
 	constructor(private ngRedux: NgRedux<I.IAppState>, private zone:NgZone) {

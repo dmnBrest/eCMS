@@ -123,3 +123,16 @@ footer {
 	padding: 4px 10px;
 	line-height: 1rem;
 }
+
+.c-breadbrumbs {
+	padding: 20px 20px 0 20px;
+}
+
+.slds-breadcrumb .slds-list__item, .slds-breadcrumb__item {
+	position: relative;
+	display: inline-block;
+}
+
+.slds-form--stacked .slds-form-element {
+    margin: 12px 0;
+}

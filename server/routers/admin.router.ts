@@ -24,7 +24,7 @@ class Admin {
 			if (state.object == 'user') {
 				objects = await UserService.getUsers(state.page, state.perPage);
 			} else if (state.object == 'topic') {
-				objects = await TopicService.getTopics(state.page, state.perPage);
+				objects = await TopicService.getTopics(state.page, state.perPage, true);
 			} else {
 				throw 'Object not found';
 			}

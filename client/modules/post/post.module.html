@@ -1,0 +1,9 @@
+Mode: {{mode}}
+<div *ngIf="mode">
+	<c-post-edit
+		*ngIf="post"
+		[post]="post"
+		(savePostHandler)="savePost()"
+		(cancelEditingHandler)="cancelEditing()"
+	></c-post-edit>
+</div>

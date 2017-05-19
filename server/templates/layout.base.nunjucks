@@ -43,7 +43,7 @@
 			<div class="slds-col">
 				<ul class="c-top-menu">
 					<li><a href="/">Home</a></li>
-					<li><a href="/forum">Forum</a></li>
+					<li><a href="/topics">Topics</a></li>
 				</ul>
 			</div>
 		</div>
@@ -59,10 +59,22 @@
 		<messages-module />
 	</div>
 
+	{% if breadcrumbs and (breadcrumbs.length > 1) %}
+	<div class="c-breadbrumbs">
+		<nav role="navigation" aria-label="Breadcrumbs">
+			<ol class="slds-breadcrumb slds-list_horizontal slds-wrap">
+				{% for link in breadcrumbs %}
+				<li class="slds-breadcrumb__item slds-text-title_caps">
+					<a href="{{ link.url }}">{{ link.label }}</a>
+				</li>
+				{% endfor %}
+			</ol>
+		</nav>
+	</div>
+	{% endif %}
+
 	<div class="c-body">
-
 		{% block main %}{% endblock %}
-
 	</div>
 	<footer>
 

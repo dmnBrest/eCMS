@@ -20,7 +20,7 @@ var flash = require('connect-flash');
 import { appConfig } from './config';
 import { HomeRouter } from './routers/home.router';
 import { AuthRouter } from './routers/auth.router';
-import { ForumRouter } from './routers/forum.router';
+import { TopicRouter } from './routers/topic.router';
 import { ProfileRouter } from './routers/profile.router';
 import { AdminRouter } from './routers/admin.router';
 import { serializeUser, deserializeUser } from './services/security.service'
@@ -124,14 +124,16 @@ export class ExpressServer {
 			res.locals.initialState.info = res.locals.initialState.info.concat(m2);
 			res.locals.csrfToken = req.csrfToken();
 			res.locals.appConfig = appConfig;
+			res.locals.breadcrumbs = [{label: 'Home', url: '/'}];
+
 			next();
 		});
 
 		this.app.use('/auth', AuthRouter);
-		this.app.use('/forum', ForumRouter);
+		this.app.use('/topics', TopicRouter);
 		this.app.use('/profile', ProfileRouter);
 		this.app.use('/admin', AdminRouter);
-		this.app.get('/', HomeRouter);
+		this.app.use('/', HomeRouter);
 
 		// Handle 404
 		this.app.use(function(req, res) {

@@ -20,7 +20,9 @@ export class TopicsComponent implements OnInit, OnDestroy {
 		{name: 'id', label: 'Id', type: I.FieldTypes.STRING},
 		{name: 'title', label: 'Title', type: I.FieldTypes.STRING},
 		{name: 'order', label: 'Order', type: I.FieldTypes.NUMBER},
-		{name: 'total_posts', label: 'Total Posts', type: I.FieldTypes.NUMBER}
+		{name: 'total_posts', label: 'Total Posts', type: I.FieldTypes.NUMBER},
+		{name: 'slug', label: 'Slug', type: I.FieldTypes.STRING},
+		{name: 'is_hidden', label: 'Is Hidden', type: I.FieldTypes.BOOLEAN}
 	]
 
 	constructor(private ngRedux: NgRedux<I.IAppState>, private zone:NgZone) {

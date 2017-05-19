@@ -1,0 +1,33 @@
+{% extends "./layout.base.nunjucks" %}
+
+{% block main %}
+<div class="container-fluid" style="padding: 20px;">
+	<div class="c-panel c-topic">
+		<div class="c-panel-header">
+			<div class="slds-grid">
+				<div class="slds-col">{{ topic.title }}</div>
+				<div class="slds-col slds-text-align--right">
+					<button onclick="location.hash='#/new-post'" class="slds-button slds-button--brand">Add Post</button>
+				</div>
+			</div>
+		</div>
+		<div class="c-panel-body">
+			<post-module></post-module>
+		</div>
+		<div class="c-panel-body">
+			{% for post in posts %}
+				<div class="c-post-box">
+					<a href="/post-{{ post.slug }}">{{ post.title }}</a> ({{ post.total_comments }} comments)
+				</div>
+			{% else %}
+				<p>Posts not found</p>
+			{% endfor %}
+		</div>
+	</div>
+</div>{% endblock %}
+
+{% block scripts %}
+
+	<script src="/static/js/post.module.js"></script>
+
+{% endblock %}

@@ -35,6 +35,7 @@ export function adminReducer(lastState: I.IAdminState = {}, action: I.IAppAction
 				title: null,
 				order: 0,
 				total_posts: 0,
+				image_ids: [],
 				last_post_id: null,
 				slug: null
 			};

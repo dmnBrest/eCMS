@@ -20,8 +20,23 @@
 				<input
 					type="number"
 					[attr.id]="f.name"
+					[attr.name]="f.name"
 					[(ngModel)]="object[f.name]"
 					class="slds-input" />
+			</div>
+		</div>
+
+		<div class="slds-form-element" *ngIf="f.type == FieldTypes.BOOLEAN">
+			<div class="slds-form-element__control">
+				<label class="slds-checkbox" [attr.for]="f.name">
+					<input
+						[(ngModel)]="object[f.name]"
+						type="checkbox"
+						[attr.name]="f.name"
+						[attr.id]="f.name">
+					<span class="slds-checkbox--faux"></span>
+					<span class="slds-form-element__label">{{f.label}}</span>
+				</label>
 			</div>
 		</div>
 

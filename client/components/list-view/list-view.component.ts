@@ -12,6 +12,7 @@ export class ListViewComponent implements OnInit, OnDestroy {
 	@Input() list: any[];
 	@Input() columns: I.IField[];
 	totalPages: number;
+	FieldTypes = I.FieldTypes;
 
 	@ContentChild('actions') actionsTemplate: TemplateRef<any>;
 

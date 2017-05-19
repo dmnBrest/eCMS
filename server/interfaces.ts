@@ -22,8 +22,26 @@ export interface ITopic {
 	title: string,
 	order: number,
 	slug: string,
+	image_ids: number[],
 	total_posts: number,
 	last_post_id: number
+}
+
+export interface IPost {
+	id: number;
+	title: string,
+	body_raw: string,
+	body_html: string,
+	slug: string,
+	total_posts: number,
+	description: string,
+	keyword: string,
+	created_at: number,
+	updated_at: number,
+	user_id: number,
+	post_id: number,
+	topic_id: number,
+	image_ids: number[]
 }
 
 // FORMS

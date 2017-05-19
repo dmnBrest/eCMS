@@ -20,6 +20,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 		{name: 'id', label: 'Id', type: I.FieldTypes.STRING},
 		{name: 'username', label: 'Username', type: I.FieldTypes.STRING},
 		{name: 'email', label: 'Email', type: I.FieldTypes.STRING},
+		{name: 'slug', label: 'Slug', type: I.FieldTypes.STRING},
 		{name: 'created_at', label: 'Created Date', type: I.FieldTypes.DATE},
 	]
 

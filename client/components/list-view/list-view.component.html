@@ -1,7 +1,10 @@
 <table *ngIf="list" class="slds-table slds-table--bordered slds-table--cell-buffer">
 	<thead>
 		<tr class="slds-text-title--caps">
-			<th scope="col" *ngFor="let column of columns" >
+			<th
+				scope="col"
+				*ngFor="let column of columns"
+				[ngClass]="{'slds-text-align--center': column.type == FieldTypes.BOOLEAN}" >
 				<div class="slds-truncate" title="{{column.label}}">{{column.label}}</div>
 			</th>
 			<th scope="col" class="c-actions">
@@ -12,7 +15,10 @@
 	<tbody>
 		<tr *ngFor="let item of list">
 			<td *ngFor="let column of columns">
-				<div class="slds-truncate" [title]="item[column.name]">
+				<div
+					class="slds-truncate"
+					[title]="item[column.name]"
+					[ngClass]="{'slds-text-align--center': column.type == FieldTypes.BOOLEAN}">
 					<c-output
 						[value]="item[column.name]"
 						[type]="column.type"

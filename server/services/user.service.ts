@@ -2,6 +2,7 @@ import * as bcrypt from 'bcrypt';
 import { v4 as uuidV4} from 'uuid';
 import * as db from './db.service';
 import * as I from './../interfaces';
+import * as Slug from 'slug';
 
 export async function getUserById(id: number): Promise<I.IUser> {
 	try {
@@ -69,7 +70,7 @@ export async function createUser(username:string, email:string, password:string,
 	let verification_code = uuidV4();
 	console.log(verification_code);
 
-	let slug = username;
+	let slug =  Slug(username, {lower: true});
 	let counter = 1;
 	try {
 		let availableSlugs = await db.query('SELECT slug FROM public.user WHERE slug LIKE \'$1#%\'', [slug]);

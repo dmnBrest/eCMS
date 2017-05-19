@@ -1,0 +1,20 @@
+{% extends "./layout.base.nunjucks" %}
+
+{% block main %}
+<div class="container-fluid" style="padding: 20px;">
+	<div class="c-panel c-permissions-box">
+		<div class="c-panel-header">
+			Topics
+		</div>
+		<div class="c-panel-body">
+			{% for topic in topics %}
+				<div class="c-topic-box">
+					<a href="/topic-{{ topic.slug }}">{{ topic.title }}</a> ({{ topic.total_posts }} posts)
+				</div>
+			{% else %}
+				<p>Topics not found</p>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}

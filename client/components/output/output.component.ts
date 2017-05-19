@@ -4,12 +4,22 @@ import * as moment from 'moment';
 
 @Component({
 	selector: 'c-output',
-	template: '{{value}}',
+	template: `<ng-container  [ngSwitch]="type">
+	<ng-container *ngSwitchCase="FieldTypes.BOOLEAN">
+		<span *ngIf="value == true">
+			<svg aria-hidden="true" class="slds-icon slds-icon-text-default c-slds-icon--xsmall">
+				<use xlink:href="/slds/icons/utility-sprite/svg/symbols.svg#check" xmlns:xlink="http://www.w3.org/1999/xlink"></use>
+			</svg>
+		</span>
+	</ng-container>
+	<ng-container *ngSwitchDefault>{{value}}</ng-container>
+</ng-container >`
 })
 
 export class OutputComponent implements OnInit, OnDestroy {
 
 	@Input() type: I.FieldTypes;
+	FieldTypes = I.FieldTypes;
 
 	private _value = '';
 	@Input()
