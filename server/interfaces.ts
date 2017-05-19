@@ -100,6 +100,7 @@ export interface IAppState {
 	hash?: string;
 	errors?: string[];
 	info?: string[];
+	selectedPost?: IPost,
 	spinner?: {
 		counter: number;
 		show: boolean;

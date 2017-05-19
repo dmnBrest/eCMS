@@ -11,6 +11,8 @@ export const REMOVE_ALL_NOTIFICATIONS = 'REMOVE_ALL_NOTIFICATIONS';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 export const AUTH_REGISTER__AJAX_START = 'AUTH_REGISTER__AJAX_START';
 export const AUTH_REGISTER__AJAX_END = 'AUTH_REGISTER__AJAX_END';
+export const INIT_EMPTY_POST = 'INIT_EMPTY_POST';
+export const SET_POST = 'SET_POST';
 
 // REDUCERS
 export function appReducer(lastState: IAppState = {}, action: IAppAction): IAppState {
@@ -67,6 +69,27 @@ export function appReducer(lastState: IAppState = {}, action: IAppAction): IAppS
 
 		case UPDATE_HASH:
 			nextState = { hash: action.payload };
+			return Object.assign({}, lastState, nextState);
+		case INIT_EMPTY_POST:
+			nextState.selectedPost = {
+				id: null,
+				title: null,
+				body_raw: null,
+				body_html: null,
+				slug: null,
+				total_posts: 0,
+				description: null,
+				keyword: null,
+				created_at: null,
+				updated_at: null,
+				user_id: null,
+				post_id: null,
+				topic_id: null,
+				image_ids: []
+			}
+			return Object.assign({}, lastState, nextState);
+		case SET_POST:
+			nextState.selectedPost = action.payload;
 			return Object.assign({}, lastState, nextState);
 
 	}

@@ -16,6 +16,7 @@ import { PostEditComponent } from './../../components/post/post-edit.component';
 import * as I from './../../../server/interfaces';
 
 import { appStore } from './../../services/store.service';
+import * as StoreService from './../../services/app.service';
 
 /* MODULE COMPONENT */
 @Component({
@@ -33,34 +34,20 @@ class ModuleComponent implements OnInit, OnDestroy {
 		this.ngRedux.provideStore(appStore);
 		this.postSubscription = this.ngRedux.select<I.IPost>(['app', 'selectedPost']).subscribe((val) => {
 			this.zone.run(() => {
-				//this.post = val;
-				this.post = {
-					id: 1,
-					title: 'Test Post #1',
-					body_raw: null,
-					body_html: null,
-					slug: null,
-					total_posts: 0,
-					description: null,
-					keyword: null,
-					created_at: null,
-					updated_at: null,
-					user_id: 1,
-					post_id: null,
-					topic_id: 1,
-					image_ids: []
-				}
+				this.post = val;
 			});
 		});
 
 		// ROUTING
 		this.routeSubscription = this.ngRedux.select<string>(['app', 'hash']).subscribe((val) => {
 			this.zone.run(() => {
+				let editPostRegex = /#\/post-edit\/(\d+)/;
 				if (val == '#/new-post') {
 					this.mode = 'newPost';
-				} else if (val.match(/#\/post-(\d+)/)) {
-					let m = val.match(/#\/post-(\d+)/);
-					//AdminStoreService.selectedTopic(+m[1]);
+					StoreService.initEmptyPost();
+				} else if (val.match(editPostRegex)) {
+					let m = val.match(editPostRegex);
+					StoreService.getPost(+m[1]);
 					this.mode = 'editPost';
 				} else {
 					this.mode = null;

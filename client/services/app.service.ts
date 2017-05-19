@@ -125,6 +125,16 @@ export function getUsersForAdmin(page: number, usersPerPage: number) {
 	});
 }
 
+export function initEmptyPost() {
+	appStore.dispatch({ type: AppReducer.INIT_EMPTY_POST });
+}
+
+export function getPost(postId: number) {
+	// TODO load by ID
+	let post = null;
+	appStore.dispatch({ type: AppReducer.SET_POST, payload: post });
+}
+
 export function setCurrentUser(user:IUser) {
 	appStore.dispatch({ type: AppReducer.SET_CURRENT_USER, payload: user });
 }

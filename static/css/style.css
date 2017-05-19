@@ -101,12 +101,12 @@ footer {
 .c-panel-header {
 	padding: 15px 20px;
 	color: #1AB394;
-	border-bottom: 1px solid #e7eaec;
 	font-size: 25px;
 	font-weight: 100;
 }
 
 .c-panel-body {
+	border-top: 1px solid #e7eaec;
 	padding: 20px;
 }
 
