@@ -1,5 +1,5 @@
 import { IUser } from './../../server/interfaces';
-import * as db from './db.service';
+import { db } from './db.service';
 import * as UserService from './user.service';
 
 export function isLoggedIn(req:any, res:any, next:any) {

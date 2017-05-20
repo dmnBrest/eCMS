@@ -1,5 +1,5 @@
 import { v4 as uuidV4} from 'uuid';
-import * as db from './db.service';
+import { db }  from './db.service';
 import * as I from './../interfaces';
 import * as Slug from 'slug';
 

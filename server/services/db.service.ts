@@ -1,9 +1,7 @@
 import { IMain, IDatabase } from 'pg-promise';
 import { appConfig } from './../config';
 import * as pgPromise from 'pg-promise';
-
-// https://github.com/vitaly-t/pg-promise/tree/master/typescript
-// https://github.com/vitaly-t/pg-promise-demo/blob/master/TypeScript/db/index.ts
+import * as Sequelize from 'sequelize';
 
 let pgp:IMain = pgPromise({
 	// Initialization Options
@@ -13,7 +11,15 @@ let pgp:IMain = pgPromise({
 	}
 });
 
-let cn:string = appConfig.dbPath;
-let db:IDatabase<any> = pgp(cn);
+export const db:IDatabase<any> = pgp(appConfig.dbPath);
 
-export = db;
+export const sequelize = new Sequelize(appConfig.dbPath);
+
+sequelize
+	.authenticate()
+	.then(() => {
+		console.log('Sequelize: Connection has been established successfully.');
+	})
+	.catch(err => {
+		console.error('Sequelize: Unable to connect to the database:', err);
+	});

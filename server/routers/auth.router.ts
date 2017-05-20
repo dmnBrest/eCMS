@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as bcrypt from 'bcrypt';
 import { IQueryResultError } from 'pg-promise';
-import * as db from './../services/db.service';
+import { db }  from './../services/db.service';
 import * as passport from 'passport'
 import * as UserService from './../services/user.service';
 import * as EmailService from './../services/mail.service';
