@@ -1,5 +1,27 @@
 <div>
-	<button (click)="savePost()">Save</button>
-	<button (click)="cancel()">Cancel</button>
+	<c-edit-view
+		*ngIf="post"
+		[objType]="'Post'"
+		[object]="post"
+		[fields]="fields"
+	></c-edit-view>
+	<textarea
+		markItUpEditor="true"
+		[(ngModel)]="post.body_raw"
+		name="bodyRaw"
+		id="bodyRaw"
+		rows="10"
+		style="width: 100%;"
+	></textarea>
 </div>
-<div>{{post | json}}</div>
+<br />
+<div>
+	<button (click)="savePost()" class="slds-button slds-button--brand">Save</button>
+	<button (click)="generatePreview()" class="slds-button slds-button--neutral">Preview</button>
+	<button (click)="cancel()" class="slds-button slds-button--neutral">Cancel</button>
+</div>
+
+<div class="c-post-preview" *ngIf="post.body_html">
+	{{post.body_html}}
+</div>
+

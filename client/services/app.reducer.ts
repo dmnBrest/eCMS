@@ -84,7 +84,7 @@ export function appReducer(lastState: IAppState = {}, action: IAppAction): IAppS
 				updated_at: null,
 				user_id: null,
 				post_id: null,
-				topic_id: null,
+				topic_id: lastState.selectedTopic.id,
 				image_ids: []
 			}
 			return Object.assign({}, lastState, nextState);

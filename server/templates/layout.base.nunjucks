@@ -20,6 +20,11 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 	<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
 
+	<script type="text/javascript" src="/static/markitup/markitup/jquery.markitup.js"></script>
+	<script type="text/javascript" src="/static/markitup/markitup/sets/bbcode/set.js"></script>
+	<link rel="stylesheet" type="text/css" href="/static/markitup/markitup/skins/markitup/simple.css" />
+	<link rel="stylesheet" type="text/css" href="/static/markitup/markitup/sets/bbcode/style.css" />
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 
 	<link rel="stylesheet" href="/static/css/style.css"  />

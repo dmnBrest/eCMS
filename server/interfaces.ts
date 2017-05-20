@@ -15,6 +15,7 @@ export interface IUser {
 	verification_code: string;
 	is_blocked: boolean;
 	is_admin: boolean;
+	is_writer: boolean;
 };
 
 export interface ITopic {
@@ -100,6 +101,7 @@ export interface IAppState {
 	hash?: string;
 	errors?: string[];
 	info?: string[];
+	selectedTopic?: ITopic,
 	selectedPost?: IPost,
 	spinner?: {
 		counter: number;

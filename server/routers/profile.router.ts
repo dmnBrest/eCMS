@@ -7,7 +7,7 @@ import { isLoggedIn } from './../services/security.service';
 
 import * as UserService from './../services/user.service';
 
-import { ISettingsForm, IResults, ResultStatus, IUser , INTERNAL_ERROR} from './../interfaces'
+import * as I from './../interfaces'
 
 class Profile {
 
@@ -22,7 +22,7 @@ class Profile {
 
 		resp.setHeader('Content-Type', 'application/json');
 
-		let form = req.body as ISettingsForm;
+		let form = req.body as I.ISettingsForm;
 		console.log(form)
 
 		// Validate form
@@ -37,7 +37,7 @@ class Profile {
 				form.confirmPassword != form.password
 			))
 		) {
-			resp.status(400).send({ status: ResultStatus.ERROR, errors: ['Bad Request'] } as IResults);
+			resp.status(400).send({ status: I.ResultStatus.ERROR, errors: ['Bad Request'] } as I.IResults);
 			return;
 		}
 
@@ -45,13 +45,13 @@ class Profile {
 		try {
 			user = await UserService.getUserById(req.user.id);
 		} catch(err) {
-			resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 			return;
 		}
 
 		// check old password
 		if (form.changePassword && !bcrypt.compareSync(form.oldPassword, user.password)) {
-			resp.status(400).send({ status: ResultStatus.ERROR, errors: ['Old password is wrong'] } as IResults);
+			resp.status(400).send({ status: I.ResultStatus.ERROR, errors: ['Old password is wrong'] } as I.IResults);
 			return;
 		}
 
@@ -60,19 +60,19 @@ class Profile {
 			try {
 				let n = await UserService.getTotalByEmailOrUsername(form.email, form.username, user.id);
 				if (n > 0) {
-					resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Username already in use'] } as IResults);
+					resp.status(400).json({ status: I.ResultStatus.ERROR, errors: ['Username already in use'] } as I.IResults);
 					return;
 				}
 			} catch(err) {
 				console.log(err);
-				resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+				resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 					return;
 			};
 			try {
 				let userId = await UserService.updateUsername(user.id, form.username);
 			} catch(err) {
 				console.log(err);
-				resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+				resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 				return;
 			}
 		}
@@ -82,7 +82,7 @@ class Profile {
 				let userId = await UserService.updatePassword(user.id, form.password);
 			} catch(err) {
 				console.log(err);
-				resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+				resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 				return;
 			}
 		}
@@ -90,11 +90,11 @@ class Profile {
 		try {
 			user = await UserService.getUserById(req.user.id);
 		} catch(err) {
-			resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 			return;
 		}
 
-		resp.json({ status: ResultStatus.SUCCESS, payload: user } as IResults);
+		resp.json({ status: I.ResultStatus.SUCCESS, payload: user } as I.IResults);
 
 	}
 

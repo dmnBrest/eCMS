@@ -12,6 +12,7 @@ import { NgReduxModule, NgRedux } from '@angular-redux/store';
 
 import { EditViewComponent } from './../../components/edit-view/edit-view.component';
 import { PostEditComponent } from './../../components/post/post-edit.component';
+import { MarkItUpEditorDirective } from './../../directives/markitup/markitup.directive';
 
 import * as I from './../../../server/interfaces';
 
@@ -25,19 +26,32 @@ import * as StoreService from './../../services/app.service';
 })
 class ModuleComponent implements OnInit, OnDestroy {
 
-	post: I.IPost;
-	postSubscription: Subscription;
 	mode: string
 	routeSubscription: Subscription;
+	post: I.IPost;
+	postSubscription: Subscription;
+	topic: I.ITopic;
+	topicSubscription: Subscription;
+	user: I.IUser;
+	userSubscription: Subscription;
 
 	constructor(private ngRedux: NgRedux<I.IAppState>,  private zone:NgZone) {
 		this.ngRedux.provideStore(appStore);
+		this.topicSubscription = this.ngRedux.select<I.ITopic>(['app', 'selectedTopic']).subscribe((val) => {
+			this.zone.run(() => {
+				this.topic = val;
+			});
+		});
 		this.postSubscription = this.ngRedux.select<I.IPost>(['app', 'selectedPost']).subscribe((val) => {
 			this.zone.run(() => {
 				this.post = val;
 			});
 		});
-
+		this.userSubscription = this.ngRedux.select<I.IUser>(['app', 'currentUser']).subscribe((val) => {
+			this.zone.run(() => {
+				this.user = val;
+			});
+		});
 		// ROUTING
 		this.routeSubscription = this.ngRedux.select<string>(['app', 'hash']).subscribe((val) => {
 			this.zone.run(() => {
@@ -57,11 +71,16 @@ class ModuleComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	savePost() {
-		console.log('MODULE: SavePost();')
+	savePost(post:I.IPost) {
+		StoreService.savePost(post);
 	}
 
-	cancelEditing() {
+	generatePreview(post:I.IPost) {
+		StoreService.generatePreview(post);
+	}
+
+	cancelEditing(event:any) {
+		console.log(event);
 		location.hash = '';
 	}
 
@@ -70,6 +89,8 @@ class ModuleComponent implements OnInit, OnDestroy {
 	ngOnDestroy() {
 		this.postSubscription.unsubscribe();
 		this.routeSubscription.unsubscribe();
+		this.userSubscription.unsubscribe();
+		this.topicSubscription.unsubscribe();
 	}
 
 }
@@ -85,7 +106,8 @@ class ModuleComponent implements OnInit, OnDestroy {
 	declarations: [
 		ModuleComponent,
 		EditViewComponent,
-		PostEditComponent
+		PostEditComponent,
+		MarkItUpEditorDirective
 	],
 	providers: [
 

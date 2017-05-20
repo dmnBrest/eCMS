@@ -4,6 +4,8 @@ import * as fs from 'fs';
 import * as passport from 'passport';
 import * as TopicService from './../services/topic.service';
 
+import * as I from './../interfaces'
+
 import * as EmailService from './../services/mail.service'
 
 class Home {
@@ -22,6 +24,7 @@ class Home {
 			let topic = await TopicService.getTopicBySlug(topicSlug);
 			res.locals.breadcrumbs.push({label: 'Topics', url: '/topics'});
 			res.locals.breadcrumbs.push({label: topic.title, url: '/topic-'+topic.slug});
+			(res.locals.initialState as I.IAppState).selectedTopic = topic;
 			res.render('topic.view.nunjucks', {topic: topic, posts: []});
 		} catch (err) {
 			console.log(err);

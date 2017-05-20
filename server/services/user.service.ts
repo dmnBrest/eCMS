@@ -29,8 +29,13 @@ export async function getUsers(page: number, perPage: number):Promise<I.IUser[]>
 
 export async function getUserByIdForLogin(id: number): Promise<I.IUser> {
 	try {
-		let user:I.IUser = await db.one('SELECT id, username, email, is_admin, created_at, login_at, slug FROM public.user WHERE id=$1 AND verification_code IS NULL AND is_blocked = false', [id]);
-		console.log('UserService.getUserByIdForLogin:');
+		let user:I.IUser = await db.one(`
+			SELECT
+				id, username, email, is_admin, is_writer, created_at, login_at, slug
+			FROM
+				public.user
+			WHERE
+				id=$1 AND verification_code IS NULL AND is_blocked = false`, [id]);
 		return user;
 	} catch(err) {
 		console.log(err);
@@ -102,7 +107,8 @@ export async function createUser(username:string, email:string, password:string,
 		verification_code: verification_code,
 		slug: slug,
 		is_admin: false,
-		is_blocked: false
+		is_blocked: false,
+		is_writer: false
 	};
 
 	try {

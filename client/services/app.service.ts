@@ -1,17 +1,17 @@
 import * as RemoteService from './remote.service';
 import { appStore } from './store.service';
 import * as AppReducer from './app.reducer';
-import { IUser, ILoginForm, ISettingsForm, IRegisterForm, IResetForm, INewPasswordForm, IAppState, IAppAction, ResultStatus, IResults, INTERNAL_ERROR } from './../../server/interfaces';
+import * as I from './../../server/interfaces';
 
 // ACTION CREATORS
-export function loginFormSubmit(data: ILoginForm) {
+export function loginFormSubmit(data: I.ILoginForm) {
 	return new Promise((resolve, reject) => {
 		removeAllNotifications();
 		showSpinner();
 		return RemoteService.remoteAction('/auth/login', data)
-		.then((resp: IResults) => {
+		.then((resp: I.IResults) => {
 			hideSpinner();
-			if (resp.status == ResultStatus.SUCCESS) {
+			if (resp.status == I.ResultStatus.SUCCESS) {
 				resolve(resp);
 				window.location.href = '/';
 			} else {
@@ -24,14 +24,14 @@ export function loginFormSubmit(data: ILoginForm) {
 	});
 }
 
-export function registerFormSubmit(data: IRegisterForm) {
+export function registerFormSubmit(data: I.IRegisterForm) {
 	return new Promise((resolve, reject) => {
 		removeAllNotifications();
 		showSpinner();
 		return RemoteService.remoteAction('/auth/register', data)
-		.then((resp: IResults) => {
+		.then((resp: I.IResults) => {
 			hideSpinner();
-			if (resp.status == ResultStatus.SUCCESS) {
+			if (resp.status == I.ResultStatus.SUCCESS) {
 				window.location.href = '/';
 				resolve(resp);
 			} else {
@@ -44,14 +44,14 @@ export function registerFormSubmit(data: IRegisterForm) {
 	});
 }
 
-export function resetFormSubmit(data: IResetForm) {
+export function resetFormSubmit(data: I.IResetForm) {
 	return new Promise((resolve, reject) => {
 		removeAllNotifications();
 		showSpinner();
 		return RemoteService.remoteAction('/auth/reset', data)
-		.then((resp: IResults) => {
+		.then((resp: I.IResults) => {
 			hideSpinner();
-			if (resp.status == ResultStatus.SUCCESS) {
+			if (resp.status == I.ResultStatus.SUCCESS) {
 				window.location.href = '/';
 				resolve(resp);
 			} else {
@@ -64,15 +64,15 @@ export function resetFormSubmit(data: IResetForm) {
 	});
 }
 
-export function newPasswordFormSubmit(data: INewPasswordForm) {
+export function newPasswordFormSubmit(data: I.INewPasswordForm) {
 	return new Promise((resolve, reject) => {
 		removeAllNotifications();
 		showSpinner();
 		console.log(data);
 		return RemoteService.remoteAction('/auth/change-password', data)
-		.then((resp: IResults) => {
+		.then((resp: I.IResults) => {
 			hideSpinner();
-			if (resp.status == ResultStatus.SUCCESS) {
+			if (resp.status == I.ResultStatus.SUCCESS) {
 				window.location.href = '/auth#/login';
 				window.location.reload(true);
 			} else {
@@ -85,36 +85,17 @@ export function newPasswordFormSubmit(data: INewPasswordForm) {
 	});
 }
 
-export function profileSettingsFormSubmit(data: ISettingsForm) {
+export function profileSettingsFormSubmit(data: I.ISettingsForm) {
 	return new Promise((resolve, reject) => {
 		removeAllNotifications();
 		showSpinner();
 		console.log(data);
 		return RemoteService.remoteAction('/profile/save-settings', data)
-		.then((resp: IResults) => {
+		.then((resp: I.IResults) => {
 			hideSpinner();
-			if (resp.status == ResultStatus.SUCCESS) {
+			if (resp.status == I.ResultStatus.SUCCESS) {
 				setCurrentUser(resp.payload);
 				resolve(resp);
-			} else {
-				reject(resp);
-			}
-		}).catch(function(ex) {
-			hideSpinner();
-			reject(ex);
-		});
-	});
-}
-
-export function getUsersForAdmin(page: number, usersPerPage: number) {
-	return new Promise((resolve, reject) => {
-		removeAllNotifications();
-		showSpinner();
-		console.log('page:', page, 'usersPerPage:', usersPerPage);
-		return RemoteService.remoteAction('/admin/get-users', {page: page, usersPerPage: usersPerPage}).then((resp: IResults) => {
-			hideSpinner();
-			if (resp.status == ResultStatus.SUCCESS) {
-				resolve(resp.payload);
 			} else {
 				reject(resp);
 			}
@@ -135,7 +116,33 @@ export function getPost(postId: number) {
 	appStore.dispatch({ type: AppReducer.SET_POST, payload: post });
 }
 
-export function setCurrentUser(user:IUser) {
+export function savePost(post: I.IPost) {
+	removeAllNotifications();
+	showSpinner();
+	RemoteService.remoteAction('/post/save', post).then((resp: I.IResults) => {
+		hideSpinner();
+		if (resp.status == I.ResultStatus.SUCCESS) {
+			appStore.dispatch({ type: AppReducer.SET_POST, payload: resp.payload });
+		}
+	}).catch(function(ex) {
+		hideSpinner();
+	});
+}
+
+export async function generatePreview(post: I.IPost) {
+	removeAllNotifications();
+	showSpinner();
+	RemoteService.remoteAction('/post/generate-preview', post).then((resp: I.IResults) => {
+		hideSpinner();
+		if (resp.status == I.ResultStatus.SUCCESS) {
+			appStore.dispatch({ type: AppReducer.SET_POST, payload: resp.payload });
+		}
+	}).catch(function(ex) {
+		hideSpinner();
+	});
+}
+
+export function setCurrentUser(user:I.IUser) {
 	appStore.dispatch({ type: AppReducer.SET_CURRENT_USER, payload: user });
 }
 
