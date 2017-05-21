@@ -13,7 +13,7 @@ let mailTransport:Transporter = createTransport({
 
 // TODO Email Base (Header, Footer) template
 
-export async function sendNewUserEmail(userId: number): Promise<SentMessageInfo> {
+export async function sendNewUserEmail(userId: string): Promise<SentMessageInfo> {
 
 	let user:IUser;
 	try {

@@ -1,22 +1,25 @@
 import { Action } from 'redux';
+import * as Sequelize from 'sequelize';
 
 // CONSTANTS
 export const INTERNAL_ERROR = 'Internal Error';
 
 // MODELS
 export interface IUser {
-	id: number;
-	username: string;
-	password: string;
-	email: string;
-	created_at: number;
+	id?: string;
+	username?: string;
+	password?: string;
+	email?: string;
+	created_at?: number;
 	login_at?: number;
-	slug: string;
-	verification_code: string;
-	is_blocked: boolean;
-	is_admin: boolean;
-	is_writer: boolean;
+	slug?: string;
+	verification_code?: string;
+	is_blocked?: boolean;
+	is_admin?: boolean;
+	is_writer?: boolean;
 };
+export interface UserInstance extends Sequelize.Instance<IUser>, IUser {}
+export interface UserModel extends Sequelize.Model<UserInstance, IUser> {}
 
 export interface ITopic {
 	id: number;
@@ -39,7 +42,7 @@ export interface IPost {
 	keyword: string,
 	created_at: number,
 	updated_at: number,
-	user_id: number,
+	user_id: string,
 	post_id: number,
 	topic_id: number,
 	image_ids: number[]

@@ -8,7 +8,7 @@ import * as passport from 'passport'
 import * as UserService from './../services/user.service';
 import * as EmailService from './../services/mail.service';
 import * as RecaptchaService from './../services/recaptcha.service';
-import { ILoginForm, IRegisterForm, IResetForm, INewPasswordForm, IResults, ResultStatus, IUser , INTERNAL_ERROR} from './../interfaces'
+import * as I from './../interfaces';
 
 class Auth {
 
@@ -29,7 +29,7 @@ class Auth {
 
 		resp.setHeader('Content-Type', 'application/json');
 
-		let form = req.body as ILoginForm
+		let form = req.body as I.ILoginForm
 
 		// Validate form
 		if (
@@ -43,15 +43,15 @@ class Auth {
 		}
 
 		// Get User by email
-		let user:IUser;
+		let user:I.IUser;
 		try {
 			user = await UserService.getUserByEmail(form.email)
 		} catch(err) {
 			if (err.constructor.name =='QueryResultError') {
-				resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Wrong credentials'] } as IResults);
+				resp.status(400).json({ status: I.ResultStatus.ERROR, errors: ['Wrong credentials'] } as I.IResults);
 				return;
 			} else {
-				resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+				resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 				return;
 			}
 		}
@@ -74,10 +74,10 @@ class Auth {
 					req.session.cookie.maxAge = 3600000 * 24 * 7; // 1 week
 				}
 				req.flash('info', 'You have successfully logged in!');
-				resp.json({ status: ResultStatus.SUCCESS } as IResults);
+				resp.json({ status: I.ResultStatus.SUCCESS } as I.IResults);
 			});
 		} else {
-			resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Wrong credentials'] } as IResults);
+			resp.status(400).json({ status: I.ResultStatus.ERROR, errors: ['Wrong credentials'] } as I.IResults);
 		}
 	}
 
@@ -86,7 +86,7 @@ class Auth {
 
 		resp.setHeader('Content-Type', 'application/json');
 
-		let form = req.body as IRegisterForm
+		let form = req.body as I.IRegisterForm
 
 		// Validate form
 		if (
@@ -98,7 +98,7 @@ class Auth {
 			form.password.length > 1024 ||
 			!form.token
 		) {
-			resp.status(400).send({ status: ResultStatus.ERROR, errors: ['Bad Request'] } as IResults);
+			resp.status(400).send({ status: I.ResultStatus.ERROR, errors: ['Bad Request'] } as I.IResults);
 			return;
 		}
 
@@ -106,11 +106,11 @@ class Auth {
 		try {
 			let n = await UserService.getTotalByEmailOrUsername(form.email, form.username, null);
 			if (n > 0) {
-				resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Email or username already in use.'] } as IResults);
+				resp.status(400).json({ status: I.ResultStatus.ERROR, errors: ['Email or username already in use.'] } as I.IResults);
 				return;
 			}
 		} catch(err) {
-			resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 			return;
 		}
 
@@ -118,28 +118,28 @@ class Auth {
 		try {
 			await RecaptchaService.validateCaptcha(form.token);
 		} catch(err) {
-			resp.status(400).json({ status: ResultStatus.ERROR, errors: ['Bad Captcha'] } as IResults);
+			resp.status(400).json({ status: I.ResultStatus.ERROR, errors: ['Bad Captcha'] } as I.IResults);
 			return;
 		}
 
 		// Create new user
-		let userId:number;
+		let user:I.IUser;
 		try {
-			userId = await UserService.createUser(form.username, form.email, form.password, false);
+			user = await UserService.createUser(form.username, form.email, form.password, false);
 		} catch(err) {
-			resp.status(500).json({ status: ResultStatus.ERROR, errors: [INTERNAL_ERROR] } as IResults);
+			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 			return;
 		}
 
 		// Send Email Notification for new user
-		EmailService.sendNewUserEmail(userId).then(
+		EmailService.sendNewUserEmail(user.id).then(
 			(info) => {console.log(info);}
 		).catch(
 			(err) => {console.log(err);}
 		);
 
 		req.flash('info', 'You have successfully registered! Please confirm your email.');
-		resp.json({ status: ResultStatus.SUCCESS } as IResults);
+		resp.json({ status: I.ResultStatus.SUCCESS } as I.IResults);
 
 	}
 
@@ -148,7 +148,7 @@ class Auth {
 
 		resp.setHeader('Content-Type', 'application/json');
 
-		let form = req.body as INewPasswordForm;
+		let form = req.body as I.INewPasswordForm;
 
 		// Validate form
 		if (
@@ -159,7 +159,7 @@ class Auth {
 			!form.password ||
 			form.password.length > 1024
 		) {
-			resp.status(400).send({ status: ResultStatus.ERROR, errors: ['Bad Request'] } as IResults);
+			resp.status(400).send({ status: I.ResultStatus.ERROR, errors: ['Bad Request'] } as I.IResults);
 			return;
 		}
 
@@ -176,11 +176,11 @@ class Auth {
 			// );
 
 			req.flash('info', 'Password was changed. You can login with new password.');
-			resp.json({ status: ResultStatus.SUCCESS } as IResults);
+			resp.json({ status: I.ResultStatus.SUCCESS } as I.IResults);
 
 		} catch(err) {
 			console.log(err);
-			resp.status(400).json({ status: ResultStatus.ERROR, errors: [err] } as IResults);
+			resp.status(400).json({ status: I.ResultStatus.ERROR, errors: [err] } as I.IResults);
 		};
 
 	}
@@ -200,13 +200,13 @@ class Auth {
 
 		resp.setHeader('Content-Type', 'application/json');
 
-		let form = req.body as IResetForm
+		let form = req.body as I.IResetForm
 
 		if (
 			!form.email ||
 			form.email.length > 255
 		) {
-			resp.status(400).send({ status: ResultStatus.ERROR, errors: ['Bad Request'] } as IResults);
+			resp.status(400).send({ status: I.ResultStatus.ERROR, errors: ['Bad Request'] } as I.IResults);
 			return;
 		}
 
@@ -215,13 +215,13 @@ class Auth {
 			token = await UserService.resetPassword(form.email)
 		} catch(err) {
 			console.log(err)
-			resp.status(400).json({status: ResultStatus.ERROR, errors: [err]} as IResults);
+			resp.status(400).json({status: I.ResultStatus.ERROR, errors: [err]} as I.IResults);
 			return;
 		};
 		console.log('email "'+form.email+'" reset password token: ', token);
 
 		req.flash('info', 'Please check your email account for reset password link');
-		resp.json({ status: ResultStatus.SUCCESS } as IResults);
+		resp.json({ status: I.ResultStatus.SUCCESS } as I.IResults);
 
 		// Send Email Notification for new user
 		EmailService.sendResetPasswordEmail(form.email, token).then(
