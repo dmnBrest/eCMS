@@ -14,7 +14,7 @@ export async function getTopics(page: number, perPage: number, withHidden: boole
 	let options:any = {
 		offset: (page-1)*perPage,
 		limit: perPage,
-		order: 'order ASC'
+		order: '"order" ASC'
 	}
 
 	if (!withHidden) {
