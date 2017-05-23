@@ -54,6 +54,14 @@ export let User = sequelize.define<I.UserInstance, I.IUser>("User", {
 			type: Sequelize.STRING(255),
 			allowNull: true
 		},
+		reset_password_token: {
+			type: Sequelize.STRING(255),
+			allowNull: true
+		},
+		reset_password_token_at: {
+			type: Sequelize.INTEGER,
+			allowNull: true
+		},
 		is_blocked: {
 			type: Sequelize.BOOLEAN,
 			allowNull: false,

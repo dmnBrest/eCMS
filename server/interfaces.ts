@@ -14,6 +14,8 @@ export interface IUser {
 	login_at?: number;
 	slug?: string;
 	verification_code?: string;
+	reset_password_token?: string;
+	reset_password_token_at?: number;
 	is_blocked?: boolean;
 	is_admin?: boolean;
 	is_writer?: boolean;

@@ -1,4 +1,4 @@
-import { IUser } from './../../server/interfaces';
+import * as I from './../../server/interfaces';
 import { db } from './db.service';
 import * as UserService from './user.service';
 
@@ -14,10 +14,9 @@ export function isAdmin(req:any, res:any, next:any) {
 	res.redirect('/');
 }
 
-export function serializeUser(user: IUser, done: any) {
+export function serializeUser(user: I.IUser, done: any) {
 	delete user.password;
 	let u = JSON.stringify(user);
-	console.log('serializeUser: ', u);
 	done(null, u);
 }
 
@@ -25,9 +24,7 @@ export async function deserializeUser(user:string, done:any) {
 	let u = JSON.parse(user);
 	if (u && u.id) {
 		try {
-			let user = await UserService.getUserByIdForLogin(u.id)
-			console.log('D1');
-			console.log(user);
+			let user:I.UserInstance = await UserService.getUserByIdForLogin(u.id);
 			done(null, user)
 		} catch(err) {
 			console.log(err);

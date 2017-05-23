@@ -41,60 +41,63 @@ class Profile {
 			return;
 		}
 
-		let user;
 		try {
-			user = await UserService.getUserById(req.user.id);
-		} catch(err) {
-			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
-			return;
-		}
+			let user: I.UserInstance = await UserService.getUserById(req.user.id);
+			if (user == null) {
+				resp.status(400).send({ status: I.ResultStatus.ERROR, errors: ['Bad Request'] } as I.IResults);
+				return;
+			}
 
-		// check old password
-		if (form.changePassword && !bcrypt.compareSync(form.oldPassword, user.password)) {
-			resp.status(400).send({ status: I.ResultStatus.ERROR, errors: ['Old password is wrong'] } as I.IResults);
-			return;
-		}
+			// check old password
+			if (form.changePassword && !bcrypt.compareSync(form.oldPassword, user.password)) {
+				resp.status(400).send({ status: I.ResultStatus.ERROR, errors: ['Old password is wrong'] } as I.IResults);
+				return;
+			}
 
-		// Only Username can be changed. Email change is restricted (TODO make it updatable)
-		if (user.username != form.username) {
-			try {
-				let n = await UserService.getTotalByEmailOrUsername(form.email, form.username, user.id);
-				if (n > 0) {
-					resp.status(400).json({ status: I.ResultStatus.ERROR, errors: ['Username already in use'] } as I.IResults);
+			// Only Username can be changed. Email change is restricted (TODO make it updatable)
+			if (user.username != form.username) {
+				try {
+					let n = await UserService.getTotalByEmailOrUsername(form.email, form.username, user.id);
+					if (n > 0) {
+						resp.status(400).json({ status: I.ResultStatus.ERROR, errors: ['Username already in use'] } as I.IResults);
+						return;
+					}
+				} catch(err) {
+					console.log(err);
+					resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
+						return;
+				};
+				try {
+					let userId = await UserService.updateUser(user.id, form.username);
+				} catch(err) {
+					console.log(err);
+					resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 					return;
 				}
-			} catch(err) {
-				console.log(err);
-				resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
+			}
+
+			if (form.changePassword) {
+				try {
+					let userId = await UserService.updatePassword(user.id, form.password);
+				} catch(err) {
+					console.log(err);
+					resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 					return;
-			};
-			try {
-				let userId = await UserService.updateUsername(user.id, form.username);
-			} catch(err) {
-				console.log(err);
-				resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
-				return;
+				}
 			}
-		}
 
-		if (form.changePassword) {
-			try {
-				let userId = await UserService.updatePassword(user.id, form.password);
-			} catch(err) {
-				console.log(err);
-				resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
-				return;
-			}
-		}
-
-		try {
 			user = await UserService.getUserById(req.user.id);
+			if (user == null) {
+				resp.status(400).send({ status: I.ResultStatus.ERROR, errors: ['Bad Request'] } as I.IResults);
+				return;
+			}
+
+			resp.json({ status: I.ResultStatus.SUCCESS, payload: user } as I.IResults);
+
 		} catch(err) {
 			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 			return;
 		}
-
-		resp.json({ status: I.ResultStatus.SUCCESS, payload: user } as I.IResults);
 
 	}
 

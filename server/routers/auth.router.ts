@@ -43,41 +43,43 @@ class Auth {
 		}
 
 		// Get User by email
-		let user:I.IUser;
 		try {
-			user = await UserService.getUserByEmail(form.email)
-		} catch(err) {
-			if (err.constructor.name =='QueryResultError') {
+			let user:I.UserInstance = await UserService.getUserByEmail(form.email)
+			if (user == null) {
 				resp.status(400).json({ status: I.ResultStatus.ERROR, errors: ['Wrong credentials'] } as I.IResults);
 				return;
-			} else {
-				resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
+			}
+
+			// Check if user confirm email
+			if (user.verification_code) {
+				resp.status(400).json({ status: 'error', errors: ['Please confirm email.'] });
 				return;
 			}
-		}
-		// Check if user confirm email
-		if (user.verification_code) {
-			resp.status(400).json({ status: 'error', errors: ['Please confirm email.'] });
-			return;
-		}
-		// Check is user is not blocked
-		if (user.is_blocked == true) {
-			resp.status(400).json({ status: 'error', errors: ['You are blocked, please contact administrator.'] });
-			return;
-		}
-		// Compare password
-		if (bcrypt.compareSync(form.password, user.password)) {
+			// Check is user is not blocked
+			if (user.is_blocked == true) {
+				resp.status(400).json({ status: 'error', errors: ['You are blocked, please contact administrator.'] });
+				return;
+			}
+			// Compare password
+			if (!bcrypt.compareSync(form.password, user.password)) {
+				resp.status(400).json({ status: I.ResultStatus.ERROR, errors: ['Wrong credentials'] } as I.IResults);
+				return;
+			}
+
 			req.login(user, function(err){
 				if(err) return next(err);
 				req.session.user = req.user;
 				if (form.rememberme === true) {
 					req.session.cookie.maxAge = 3600000 * 24 * 7; // 1 week
 				}
+				UserService.setLoginAt(user);
 				req.flash('info', 'You have successfully logged in!');
 				resp.json({ status: I.ResultStatus.SUCCESS } as I.IResults);
 			});
-		} else {
-			resp.status(400).json({ status: I.ResultStatus.ERROR, errors: ['Wrong credentials'] } as I.IResults);
+
+		} catch(err) {
+			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
+			return;
 		}
 	}
 
@@ -210,21 +212,21 @@ class Auth {
 			return;
 		}
 
-		let token:string;
+		let user:I.UserInstance;
 		try {
-			token = await UserService.resetPassword(form.email)
+			user = await UserService.resetPassword(form.email)
 		} catch(err) {
 			console.log(err)
 			resp.status(400).json({status: I.ResultStatus.ERROR, errors: [err]} as I.IResults);
 			return;
 		};
-		console.log('email "'+form.email+'" reset password token: ', token);
+		console.log('email "'+form.email+'" reset password token: ', user.reset_password_token);
 
 		req.flash('info', 'Please check your email account for reset password link');
 		resp.json({ status: I.ResultStatus.SUCCESS } as I.IResults);
 
 		// Send Email Notification for new user
-		EmailService.sendResetPasswordEmail(form.email, token).then(
+		EmailService.sendResetPasswordEmail(form.email, user.reset_password_token).then(
 			(info) => {console.log(info);}
 		).catch(
 			(err) => {console.log(err);}
@@ -246,7 +248,7 @@ class Auth {
 		}
 
 		try {
-			let userId:number = await UserService.verifyEmail(req.params['email'], req.params['code']);
+			let uset:I.UserInstance = await UserService.verifyEmail(req.params['email'], req.params['code']);
 			console.log('email "'+req.params['email']+'" verified successfully');
 			req.flash('info', 'Your email verified. You can login now.');
 			resp.redirect('/auth#/login');
