@@ -68,20 +68,19 @@ class Admin {
 	public async saveTopic(req: Request, resp: Response, next?: NextFunction) {
 		resp.setHeader('Content-Type', 'application/json');
 
-		let topic = req.body as I.ITopic
-		console.log(topic);
+		let topicObj = req.body as I.ITopic
+		console.log(topicObj);
 
-		let topicId;
+		let topic:I.TopicInstance;
 		try {
-			 topicId = await TopicService.saveTopic(topic);
+			 topic = await TopicService.saveTopic(topicObj);
 		} catch(err) {
 			console.log(err);
 			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 			return;
 		}
-
 		try {
-			 topic = await ObjectService.getObjectById('topic', topicId);
+			 topic = await ObjectService.getObjectById('topic', topic.id);
 		} catch(err) {
 			console.log(err);
 			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);

@@ -26,7 +26,8 @@ sequelize
 		console.error('Sequelize: Unable to connect to the database:', err);
 	});
 
-export let User = sequelize.define<I.UserInstance, I.IUser>("User", {
+export let User = sequelize.define<I.UserInstance, I.IUser>("User",
+	{
 		id: {
 			type: Sequelize.UUID,
 			defaultValue: Sequelize.UUIDV4,
@@ -99,7 +100,174 @@ export let User = sequelize.define<I.UserInstance, I.IUser>("User", {
 		updatedAt: "updated_at",
 	});
 
-sequelize.sync() // CREATE TABLE IF NOT EXIST (DROP - {force: true})
+export let Topic = sequelize.define<I.TopicInstance, I.ITopic>("Topic",
+	{
+		id: {
+			type: Sequelize.UUID,
+			defaultValue: Sequelize.UUIDV4,
+			allowNull: false,
+			primaryKey: true,
+		},
+		title: {
+			type: Sequelize.STRING(255),
+			allowNull: false
+		},
+		order: {
+			type: Sequelize.INTEGER,
+			allowNull: false,
+			defaultValue: 0
+		},
+		slug: {
+			type: Sequelize.STRING(255),
+			allowNull: false
+		},
+		is_hidden: {
+			type: Sequelize.BOOLEAN,
+			allowNull: false,
+			defaultValue: false
+		},
+		total_posts: {
+			type: Sequelize.INTEGER,
+			allowNull: false,
+			defaultValue: 0
+		},
+		// last_post_id: {
+		// 	type: Sequelize.UUID,
+		// 	allowNull: true
+		// },
+		image_ids: {
+			type: Sequelize.ARRAY(Sequelize.UUID),
+			allowNull: true
+		}
+	},
+	{
+		tableName: "topic",
+		timestamps: false,
+	});
+
+export let Post = sequelize.define<I.PostInstance, I.IPost>("Post",
+	{
+		id: {
+			type: Sequelize.UUID,
+			defaultValue: Sequelize.UUIDV4,
+			allowNull: false,
+			primaryKey: true,
+		},
+		title: {
+			type: Sequelize.STRING(255),
+			allowNull: false
+		},
+		slug: {
+			type: Sequelize.STRING(255),
+			allowNull: false
+		},
+		keywords: {
+			type: Sequelize.STRING(255),
+			allowNull: false
+		},
+		description: {
+			type: Sequelize.STRING(1024),
+			allowNull: false
+		},
+		body_raw: {
+			type: Sequelize.TEXT,
+			allowNull: false
+		},
+		body_html: {
+			type: Sequelize.TEXT,
+			allowNull: false
+		},
+		// topic_id: {
+		// 	type: Sequelize.UUID,
+		// 	allowNull: false
+		// },
+		// post_id: {
+		// 	type: Sequelize.UUID,
+		// 	allowNull: true
+		// },
+		total_posts: {
+			type: Sequelize.INTEGER,
+			allowNull: false,
+			defaultValue: 0
+		},
+		// last_post_id: {
+		// 	type: Sequelize.UUID,
+		// 	allowNull: true
+		// },
+		image_ids: {
+			type: Sequelize.ARRAY(Sequelize.UUID),
+			allowNull: true
+		},
+		// user_id: {
+		// 	type: Sequelize.UUID,
+		// 	allowNull: true
+		// },
+		created_at: {
+			type: Sequelize.INTEGER,
+			defaultValue: Sequelize.literal('EXTRACT(EPOCH FROM CURRENT_TIMESTAMP)'),
+			allowNull: false
+		},
+		updated_at: {
+			type: Sequelize.INTEGER,
+			defaultValue: Sequelize.literal('EXTRACT(EPOCH FROM CURRENT_TIMESTAMP)'),
+			allowNull: false
+		},
+	},
+	{
+		tableName: "post",
+		timestamps: true,
+		createdAt: "created_at",
+		updatedAt: "updated_at",
+	});
+
+export let Image = sequelize.define<I.ImageInstance, I.IImage>("Image",
+	{
+		id: {
+			type: Sequelize.UUID,
+			defaultValue: Sequelize.UUIDV4,
+			allowNull: false,
+			primaryKey: true,
+		},
+		filename: {
+			type: Sequelize.STRING(255),
+			allowNull: false
+		},
+		url: {
+			type: Sequelize.STRING(255),
+			allowNull: false
+		},
+		title: {
+			type: Sequelize.STRING(255),
+			allowNull: false
+		},
+		// user_id: {
+		// 	type: Sequelize.UUID,
+		// 	allowNull: true
+		// },
+		created_at: {
+			type: Sequelize.INTEGER,
+			defaultValue: Sequelize.literal('EXTRACT(EPOCH FROM CURRENT_TIMESTAMP)'),
+			allowNull: false
+		},
+		updated_at: {
+			type: Sequelize.INTEGER,
+			defaultValue: Sequelize.literal('EXTRACT(EPOCH FROM CURRENT_TIMESTAMP)'),
+			allowNull: false
+		},
+	},
+	{
+		tableName: "image",
+		timestamps: true,
+		createdAt: "created_at",
+		updatedAt: "updated_at",
+	});
+
+Topic.hasMany(Post, {foreignKey: 'topic_id'})
+Post.hasMany(Post, {foreignKey: 'post_id'})
+Post.belongsTo(Topic, {foreignKey: 'topic_id'})
+Post.belongsTo(User, {foreignKey: 'user_id'})
+
+sequelize.sync({force: true}) // CREATE TABLE IF NOT EXIST (DROP - {force: true})
 // .then(() => {
 // 	// Table created
 // 	return User.create({

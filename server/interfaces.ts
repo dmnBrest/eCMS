@@ -32,6 +32,8 @@ export interface ITopic {
 	total_posts: number,
 	last_post_id: number
 }
+export interface TopicInstance extends Sequelize.Instance<ITopic>, ITopic {}
+export interface TopicModel extends Sequelize.Model<TopicInstance, ITopic> {}
 
 export interface IPost {
 	id: number;
@@ -49,6 +51,20 @@ export interface IPost {
 	topic_id: number,
 	image_ids: number[]
 }
+export interface PostInstance extends Sequelize.Instance<IPost>, IPost {}
+export interface PostModel extends Sequelize.Model<PostInstance, IPost> {}
+
+export interface IImage {
+	id: number;
+	title: string,
+	filename: string,
+	url: string,
+	created_at: number,
+	updated_at: number,
+	user_id: string
+}
+export interface ImageInstance extends Sequelize.Instance<IImage>, IImage {}
+export interface ImageModel extends Sequelize.Model<ImageInstance, IImage> {}
 
 // FORMS
 export interface ILoginForm {

@@ -1,54 +1,68 @@
 import * as bcrypt from 'bcrypt';
 import { v4 as uuidV4} from 'uuid';
-import { db } from './db.service';
+import { Topic } from './db.service';
 import * as I from './../interfaces';
 import * as Slug from 'slug';
 
-export async function getTopics(page: number, perPage: number, withHidden: boolean):Promise<I.ITopic[]> {
-	try {
-		let whereNotHidden = 'WHERE is_hidden IS FALSE';
-		if (withHidden) {
-			whereNotHidden = '';
+export async function getTopics(page: number, perPage: number, withHidden: boolean):Promise<I.TopicInstance[]> {
+	let topics:I.TopicInstance[];
+	// let whereNotHidden = 'WHERE is_hidden IS FALSE';
+	// if (withHidden) {
+	// 	whereNotHidden = '';
+	// }
+	//let topics:I.TopicInstance[] = await db.query('SELECT * FROM topic '+whereNotHidden+' ORDER BY "order" ASC LIMIT $1 OFFSET $2', [perPage, (page-1)*perPage]);
+	let options:any = {
+		offset: (page-1)*perPage,
+		limit: perPage,
+		order: 'order ASC'
+	}
+
+	if (!withHidden) {
+		options.where = {
+			is_hidden: false
 		}
-		let topics:I.ITopic[] = await db.query('SELECT * FROM topic '+whereNotHidden+' ORDER BY "order" ASC LIMIT $1 OFFSET $2', [perPage, (page-1)*perPage]);
-		console.log('TopicService.getTopics:');
-		console.log(topics);
-		return topics;
-	} catch(err) {
-		console.log(err);
-		throw err;
-	};
-}
-
-export async function getTopicBySlug(slug: string):Promise<I.ITopic> {
+	}
 	try {
-		let topic:I.ITopic = await db.one('SELECT * FROM topic WHERE slug=$1', [slug])
-		console.log('TopicService.getTopicBySlug:');
-		console.log(topic);
-		return topic;
+		topics = await Topic.findAll(options);
 	} catch(err) {
 		console.log(err);
-		throw err;
+		throw I.INTERNAL_ERROR;
 	};
+	return topics;
+
 }
 
-export async function saveTopic(topic:I.ITopic): Promise<number> {
-	topic.slug = Slug(topic.title, {lower: true});
+export async function getTopicBySlug(slug: string):Promise<I.TopicInstance> {
+	let topic:I.TopicInstance;
+	try {
+		//let topic:I.TopicInstance = await db.one('SELECT * FROM topic WHERE slug=$1', [slug])
+		topic = await Topic.findOne({
+			where: {
+				slug: slug
+			}
+		});
+	} catch(err) {
+		console.log(err);
+		throw I.INTERNAL_ERROR;
+	};
+	return topic;
+}
+
+export async function saveTopic(topicObj:I.ITopic): Promise<I.TopicInstance> {
 
 	// TODO: count total posts
 
+	let topic = Topic.build(topicObj);
+	topic.slug = Slug(topic.title, {lower: true});
 	try {
-		let res:any;
-		if (!topic.id) {
-			res = await db.one('INSERT INTO topic ("title", "order", "slug", "image_ids", "is_hidden") VALUES(${title}, ${order}, ${slug}, ${image_ids}::integer[], ${is_hidden}) RETURNING id', topic);
-		} else {
-			res = await db.one('UPDATE topic SET "title"=${title}, "order"=${order}, "slug"=${slug}, "image_ids"= ${image_ids}::integer[], "is_hidden"=${is_hidden} WHERE id=${id} RETURNING id', topic);
-		}
-		console.log('TopicService.saveTopic:');
-		console.log(res);
-		return res.id;
+
+		// TODO Check all possible issues with currentUser/fields
+
+		await topic.save()
 	} catch(err) {
 		console.log(err);
-		throw err;
+		throw I.INTERNAL_ERROR;
 	};
+
+	return topic;
 }

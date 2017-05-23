@@ -17,7 +17,12 @@ export async function getUserById(id: string): Promise<I.UserInstance> {
 
 export async function setLoginAt(user: I.UserInstance) {
 	user.login_at = Math.floor(Date.now() / 1000);
-	user.save();
+	try {
+		await user.save();
+	} catch(err) {
+		console.log(err);
+		throw I.INTERNAL_ERROR;
+	}
 }
 
 export async function getUsers(page: number, perPage: number):Promise<I.UserInstance[]> {
@@ -48,7 +53,13 @@ export async function updateUser(userId: string, username: string): Promise<I.Us
 		throw I.INTERNAL_ERROR;
 	}
 	user.username = username;
-	user.save();
+	try {
+		await user.save();
+	} catch(err) {
+		console.log(err);
+		throw I.INTERNAL_ERROR;
+	};
+
 	return user;
 }
 
@@ -180,7 +191,12 @@ export async function changePasswordWithToken(email:string, password:string, tok
 		user.password = hash;
 		user.reset_password_token = null;
 		user.reset_password_token_at = null;
-		user.save();
+		try {
+			await user.save();
+		} catch(err) {
+			console.log(err);
+			throw I.INTERNAL_ERROR;
+		};
 		return user;
 	} catch(err) {
 		console.log(err);
@@ -222,7 +238,12 @@ export async function verifyEmail(email: string, code: string): Promise<I.UserIn
 			throw 'User with email "'+email+'" and verification code "'+code+'" not found';
 		}
 		user.verification_code = null;
-		user.save();
+		try {
+			await user.save();
+		} catch(err) {
+			console.log(err);
+			throw I.INTERNAL_ERROR;
+		};
 		return user;
 	} catch(err) {
 		console.log(err);
@@ -243,7 +264,12 @@ export async function resetPassword(email: string): Promise<I.UserInstance> {
 		}
 		user.reset_password_token = token;
 		user.reset_password_token_at = Math.floor(Date.now() / 1000);
-		user.save();
+		try {
+			await user.save();
+		} catch(err) {
+			console.log(err);
+			throw I.INTERNAL_ERROR;
+		};
 		return user;
 	} catch(err) {
 		console.log(err);
