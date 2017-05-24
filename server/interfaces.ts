@@ -124,12 +124,14 @@ export interface IAppState {
 	info?: string[];
 	selectedTopic?: ITopic,
 	selectedPost?: IPost,
-	spinner?: {
-		counter: number;
-		show: boolean;
-	};
+	spinner?: ISpinner;
 	currentUser?: IUser;
 };
+
+export interface ISpinner {
+	counter: number;
+	show: boolean;
+}
 
 export interface IAdminState {
 	selectedTopic?: ITopic;

@@ -267,7 +267,7 @@ Post.hasMany(Post, {foreignKey: 'post_id'})
 Post.belongsTo(Topic, {foreignKey: 'topic_id'})
 Post.belongsTo(User, {foreignKey: 'user_id'})
 
-sequelize.sync({force: true}) // CREATE TABLE IF NOT EXIST (DROP - {force: true})
+sequelize.sync() // CREATE TABLE IF NOT EXIST (DROP - {force: true})
 // .then(() => {
 // 	// Table created
 // 	return User.create({
