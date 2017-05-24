@@ -20,7 +20,7 @@ export async function getTotalObjects(objType:string):Promise<number> {
 	};
 }
 
-export async function getObjectById(objType:string, id:number):Promise<any> {
+export async function getObjectById(objType:string, id:string):Promise<any> {
 	if (OBJECTS_AVAILABLE.indexOf(objType) < 0) {
 		throw '"'+objType+'" Object not found.';
 	}

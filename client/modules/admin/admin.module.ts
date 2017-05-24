@@ -43,6 +43,7 @@ class ModuleComponent implements OnInit, OnDestroy {
 		this.routeSubscription = this.ngRedux.select<string>(['app', 'hash']).subscribe((val) => {
 			this.zone.run(() => {
 				this.route = val;
+				let r1 = /#\/topic\/([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})/;
 				if (this.route == '#/dashboard') {
 					this.mode = 'dashboard';
 				} else if (this.route == '#/users') {
@@ -52,9 +53,9 @@ class ModuleComponent implements OnInit, OnDestroy {
 				} else if (this.route == '#/topic/new') {
 					AdminStoreService.newSelectedTopic();
 					this.mode = 'topicEdit';
-				} else if (this.route.match(/#\/topic\/(\d+)/)) {
-					let m = this.route.match(/#\/topic\/(\d+)/);
-					AdminStoreService.selectedTopic(+m[1]);
+				} else if (this.route.match(r1)) {
+					let m = this.route.match(r1);
+					AdminStoreService.selectedTopic(m[1]);
 					this.mode = 'topicEdit';
 				} else {
 					this.mode = null;

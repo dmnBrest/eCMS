@@ -42,7 +42,7 @@ export let nextPage = (objType:string) => {
 	getObjects(objType);
 }
 
-let getObjectById = async (objType:string, id:number) => {
+let getObjectById = async (objType:string, id:string) => {
 	AppService.removeAllNotifications();
 	AppService.showSpinner();
 
@@ -58,8 +58,7 @@ let getObjectById = async (objType:string, id:number) => {
 	});
 }
 
-export let selectedTopic = async (topicId:number) => {
-	console.log('topicId', topicId);
+export let selectedTopic = async (topicId:string) => {
 	let topic;
 	try {
 		topic = await getObjectById('topic', topicId);

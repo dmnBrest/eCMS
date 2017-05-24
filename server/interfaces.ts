@@ -24,44 +24,44 @@ export interface UserInstance extends Sequelize.Instance<IUser>, IUser {}
 export interface UserModel extends Sequelize.Model<UserInstance, IUser> {}
 
 export interface ITopic {
-	id: number;
-	title: string,
-	order: number,
-	slug: string,
-	image_ids: number[],
-	total_posts: number,
-	last_post_id: number
+	id?: string;
+	title?: string,
+	order?: number,
+	slug?: string,
+	image_ids?: number[],
+	total_posts?: number,
+	last_post_id?: number
 }
 export interface TopicInstance extends Sequelize.Instance<ITopic>, ITopic {}
 export interface TopicModel extends Sequelize.Model<TopicInstance, ITopic> {}
 
 export interface IPost {
-	id: number;
-	title: string,
-	body_raw: string,
-	body_html: string,
-	slug: string,
-	total_posts: number,
-	description: string,
-	keyword: string,
-	created_at: number,
-	updated_at: number,
-	user_id: string,
-	post_id: number,
-	topic_id: number,
-	image_ids: number[]
+	id?: string;
+	title?: string,
+	body_raw?: string,
+	body_html?: string,
+	slug?: string,
+	total_posts?: number,
+	description?: string,
+	keywords?: string,
+	created_at?: number,
+	updated_at?: number,
+	user_id?: string,
+	post_id?: number,
+	topic_id?: number,
+	image_ids?: number[]
 }
 export interface PostInstance extends Sequelize.Instance<IPost>, IPost {}
 export interface PostModel extends Sequelize.Model<PostInstance, IPost> {}
 
 export interface IImage {
-	id: number;
-	title: string,
-	filename: string,
-	url: string,
-	created_at: number,
-	updated_at: number,
-	user_id: string
+	id?: string;
+	title?: string,
+	filename?: string,
+	url?: string,
+	created_at?: number,
+	updated_at?: number,
+	user_id?: string
 }
 export interface ImageInstance extends Sequelize.Instance<IImage>, IImage {}
 export interface ImageModel extends Sequelize.Model<ImageInstance, IImage> {}

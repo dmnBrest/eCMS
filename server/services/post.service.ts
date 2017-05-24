@@ -3,84 +3,59 @@ import { Post }  from './db.service';
 import * as I from './../interfaces';
 import * as Slug from 'slug';
 
+export async function getPostById(id: string): Promise<I.PostInstance> {
+	let post:I.PostInstance;
+	try {
+		post = await Post.findById(id);
+	} catch(err) {
+		console.log(err);
+		throw I.INTERNAL_ERROR;
+	};
+	return post;
+}
+
 export async function savePost(postObj:I.IPost, user:I.IUser): Promise<I.PostInstance> {
 
-	let post = Post.build(postObj);
+	let post;
+	if (postObj.id) {
+		try {
+			post = await Post.findOne(postObj.id);
+			if (post == null) {
+				throw 'Post with ID "'+postObj.id+'" not found';
+			}
+			if (post.user_id != user.id) {
+				throw 'Permission denied';
+			}
+		} catch(err) {
+			console.log(err);
+			throw I.INTERNAL_ERROR;
+		}
+	} else {
+		post = Post.build({});
+		post.user_id = user.id;
+		post.topic_id = postObj.topic_id;
+	}
 
-	post.slug = Slug(post.title, {lower: true});
-	post.body_html = bodyToHtml(post.body_raw);
+	post.title = postObj.title;
+	post.body_raw = postObj.body_raw;
 
 	// TODO: check for slug duplicates
+	if (!post.slug) {
+		post.slug = Slug(post.title, {lower: true});
+	}
+
+	post.body_html = bodyToHtml(post.body_raw);
+
+	if (user.is_writer) {
+		post.keywords = postObj.keywords;
+		post.description = postObj.description;
+	}
+
+	post.image_ids = postObj.image_ids;
 
 	// TODO: count total related posts
-
-	post.user_id = user.id;
 	post.total_posts = 0;
 
-	// if (user.is_writer) {
-	// 	// WRITER
-	// 	q = `
-	// 	INSERT INTO post (
-	// 		"title",
-	// 		"body_raw",
-	// 		"body_html",
-	// 		"slug",
-	// 		"image_ids",
-	// 		"created_at",
-	// 		"user_id",
-	// 		"topic_id",
-	// 		"total_posts",
-	// 		"keywords",
-	// 		"description"
-	// 	)
-	// 	VALUES(
-	// 		\${title},
-	// 		\${body_raw},
-	// 		\${body_html},
-	// 		\${slug},
-	// 		\${image_ids}::integer[],
-	// 		\${created_at},
-	// 		\${user_id},
-	// 		\${topic_id},
-	// 		\${total_posts},
-	// 		\${keywords},
-	// 		\${description}
-	// 	)
-	// 	RETURNING id`
-	// } else {
-	// 	// REGULAR USER
-	// 	q = `
-	// 	INSERT INTO post (
-	// 		"title",
-	// 		"body_raw",
-	// 		"body_html",
-	// 		"slug",
-	// 		"image_ids",
-	// 		"created_at",
-	// 		"user_id",
-	// 		"topic_id",
-	// 		"total_posts"
-	// 	)
-	// 	VALUES(
-	// 		\${title},
-	// 		\${body_raw},
-	// 		\${body_html},
-	// 		\${slug},
-	// 		\${image_ids}::integer[],
-	// 		\${created_at},
-	// 		\${user_id},
-	// 		\${topic_id},
-	// 		\${total_posts}
-	// 	)
-	// 	RETURNING id`
-	// }
-
-	// UPDATE topic SET
-	// 	"title"=\${title},
-	// 	"slug"=\${slug},
-	// 	"image_ids"=\${image_ids}::integer[]
-	// WHERE id=\${id}
-	// RETURNING id
 	try {
 		await post.save();
 	} catch(err) {

@@ -31,13 +31,9 @@ export function adminReducer(lastState: I.IAdminState = {}, action: I.IAppAction
 			return Object.assign({}, lastState, nextState);
 		case SET_EMPTY_SELECTED_TOPIC:
 			nextState.selectedTopic = {
-				id: null,
 				title: null,
 				order: 0,
-				total_posts: 0,
 				image_ids: [],
-				last_post_id: null,
-				slug: null
 			};
 			return Object.assign({}, lastState, nextState);
 		case SET_SELECTED_TOPIC:
