@@ -131,10 +131,6 @@ export let Topic = sequelize.define<I.TopicInstance, I.ITopic>("Topic",
 			allowNull: false,
 			defaultValue: 0
 		},
-		// last_post_id: {
-		// 	type: Sequelize.UUID,
-		// 	allowNull: true
-		// },
 		image_ids: {
 			type: Sequelize.ARRAY(Sequelize.UUID),
 			allowNull: true
@@ -163,11 +159,11 @@ export let Post = sequelize.define<I.PostInstance, I.IPost>("Post",
 		},
 		keywords: {
 			type: Sequelize.STRING(255),
-			allowNull: false
+			allowNull: true
 		},
 		description: {
 			type: Sequelize.STRING(1024),
-			allowNull: false
+			allowNull: true
 		},
 		body_raw: {
 			type: Sequelize.TEXT,
@@ -177,31 +173,15 @@ export let Post = sequelize.define<I.PostInstance, I.IPost>("Post",
 			type: Sequelize.TEXT,
 			allowNull: false
 		},
-		// topic_id: {
-		// 	type: Sequelize.UUID,
-		// 	allowNull: false
-		// },
-		// post_id: {
-		// 	type: Sequelize.UUID,
-		// 	allowNull: true
-		// },
-		total_posts: {
+		total_comments: {
 			type: Sequelize.INTEGER,
 			allowNull: false,
 			defaultValue: 0
 		},
-		// last_post_id: {
-		// 	type: Sequelize.UUID,
-		// 	allowNull: true
-		// },
 		image_ids: {
 			type: Sequelize.ARRAY(Sequelize.UUID),
 			allowNull: true
 		},
-		// user_id: {
-		// 	type: Sequelize.UUID,
-		// 	allowNull: true
-		// },
 		created_at: {
 			type: Sequelize.INTEGER,
 			defaultValue: Sequelize.literal('EXTRACT(EPOCH FROM CURRENT_TIMESTAMP)'),
@@ -215,6 +195,40 @@ export let Post = sequelize.define<I.PostInstance, I.IPost>("Post",
 	},
 	{
 		tableName: "post",
+		timestamps: true,
+		createdAt: "created_at",
+		updatedAt: "updated_at",
+	});
+
+export let Comment = sequelize.define<I.CommentInstance, I.IComment>("Comment",
+	{
+		id: {
+			type: Sequelize.UUID,
+			defaultValue: Sequelize.UUIDV4,
+			allowNull: false,
+			primaryKey: true,
+		},
+		body_raw: {
+			type: Sequelize.TEXT,
+			allowNull: false
+		},
+		body_html: {
+			type: Sequelize.TEXT,
+			allowNull: false
+		},
+		created_at: {
+			type: Sequelize.INTEGER,
+			defaultValue: Sequelize.literal('EXTRACT(EPOCH FROM CURRENT_TIMESTAMP)'),
+			allowNull: false
+		},
+		updated_at: {
+			type: Sequelize.INTEGER,
+			defaultValue: Sequelize.literal('EXTRACT(EPOCH FROM CURRENT_TIMESTAMP)'),
+			allowNull: false
+		},
+	},
+	{
+		tableName: "comment",
 		timestamps: true,
 		createdAt: "created_at",
 		updatedAt: "updated_at",
@@ -240,10 +254,6 @@ export let Image = sequelize.define<I.ImageInstance, I.IImage>("Image",
 			type: Sequelize.STRING(255),
 			allowNull: false
 		},
-		// user_id: {
-		// 	type: Sequelize.UUID,
-		// 	allowNull: true
-		// },
 		created_at: {
 			type: Sequelize.INTEGER,
 			defaultValue: Sequelize.literal('EXTRACT(EPOCH FROM CURRENT_TIMESTAMP)'),
@@ -262,26 +272,17 @@ export let Image = sequelize.define<I.ImageInstance, I.IImage>("Image",
 		updatedAt: "updated_at",
 	});
 
-Topic.hasMany(Post, {foreignKey: 'topic_id'})
-Post.hasMany(Post, {foreignKey: 'post_id'})
-Post.belongsTo(Topic, {foreignKey: 'topic_id'})
-Post.belongsTo(User, {foreignKey: 'user_id'})
+Topic.belongsTo(Post, {foreignKey: 'last_post_id', as: 'LastPost', constraints: false});
+Topic.hasMany(Post, {foreignKey: 'topic_id'});
+
+Post.belongsTo(Topic, {foreignKey: 'topic_id'});
+Post.belongsTo(User, {foreignKey: 'user_id'});
+Post.belongsTo(Comment, {foreignKey: 'last_comment_id', as: 'LastComment', constraints: false});
+Post.hasMany(Comment, {foreignKey: 'post_id'});
+
+Comment.belongsTo(Post, {foreignKey: 'post_id'});
+Comment.belongsTo(User, {foreignKey: 'user_id'});
+
+Image.belongsTo(User, {foreignKey: 'user_id'});
 
 sequelize.sync() // CREATE TABLE IF NOT EXIST (DROP - {force: true})
-// .then(() => {
-// 	// Table created
-// 	return User.create({
-// 		username: 'Doom1',
-// 		email: 'doom1@doom1.com',
-// 		password: 'XXXXXXXXX',
-// 		created_at: 0,
-// 		slug: 'x1'
-// 	});
-// })
-// .then((user) => {
-// 	setTimeout(() => {
-// 		user.update({
-// 			username: 'Doom2'
-// 		})
-// 	}, 3000)
-// });

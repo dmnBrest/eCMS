@@ -1,7 +1,9 @@
 <div *ngIf="mode"  class="c-panel-body">
+	<h2>{{mode == 'newPost' ? 'New Post' : 'Edit Post'}}</h2>
 	<c-post-edit
 		*ngIf="post"
 		[post]="post"
+		[preview]="preview"
 		[user]="user"
 		(savePostHandler)="savePost($event)"
 		(generatePreviewHandler)="generatePreview($event)"

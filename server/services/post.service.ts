@@ -1,12 +1,46 @@
 import { v4 as uuidV4} from 'uuid';
-import { Post }  from './db.service';
-import * as I from './../interfaces';
 import * as Slug from 'slug';
+import { Post, Topic, Comment }  from './db.service';
+import * as I from './../interfaces';
+import * as TopicService from './topic.service';
 
 export async function getPostById(id: string): Promise<I.PostInstance> {
 	let post:I.PostInstance;
 	try {
 		post = await Post.findById(id);
+	} catch(err) {
+		console.log(err);
+		throw I.INTERNAL_ERROR;
+	};
+	return post;
+}
+
+export async function getPostsByTopicId(topicId: string): Promise<I.PostInstance[]> {
+	let posts:I.PostInstance[];
+	try {
+		posts = await Post.findAll({
+			where: {
+				topic_id: topicId
+			}
+		});
+	} catch(err) {
+		console.log(err);
+		throw I.INTERNAL_ERROR;
+	};
+	return posts;
+}
+
+export async function getPostBySlug(slug: string): Promise<I.PostInstance> {
+	let post:I.PostInstance;
+	try {
+		post = await Post.findOne({
+			where: {
+				slug: slug
+			},
+			include: [
+				{model: Topic}
+			]
+		});
 	} catch(err) {
 		console.log(err);
 		throw I.INTERNAL_ERROR;
@@ -54,7 +88,21 @@ export async function savePost(postObj:I.IPost, user:I.IUser): Promise<I.PostIns
 	post.image_ids = postObj.image_ids;
 
 	// TODO: count total related posts
-	post.total_posts = 0;
+	post.total_comments = 0;
+
+	let totalComments:number = 0;
+	if (post.id) {
+		try {
+			totalComments = await Comment.count({
+				where: {
+					post_id: post.id
+				}
+			});
+		} catch(err) {
+			console.log(err);
+			throw I.INTERNAL_ERROR;
+		}
+	}
 
 	try {
 		await post.save();
@@ -62,6 +110,9 @@ export async function savePost(postObj:I.IPost, user:I.IUser): Promise<I.PostIns
 		console.log(err);
 		throw I.INTERNAL_ERROR;
 	};
+
+	TopicService.updateTotals(post.topic_id);
+
 	return post;
 }
 

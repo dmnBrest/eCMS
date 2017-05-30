@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import { v4 as uuidV4} from 'uuid';
-import { Topic } from './db.service';
+import { Topic, Post } from './db.service';
 import * as I from './../interfaces';
 import * as Slug from 'slug';
 
@@ -34,6 +34,31 @@ export async function getTopics(page: number, perPage: number, withHidden: boole
 		throw I.INTERNAL_ERROR;
 	};
 	return topics;
+}
+
+export async function updateTotals(id: string): Promise<I.TopicInstance> {
+	let topic:I.TopicInstance;
+	try {
+		topic = await Topic.findOne({
+			where: {
+				id: id
+			},
+			include: [{model: Post}],
+			order: [
+				[Post, 'created_at', 'DESC']
+			]
+		});
+		let totalPosts = topic.Posts.length;
+		topic.total_posts = totalPosts;
+		if (totalPosts > 0) {
+			topic.last_post_id = topic.Posts[0].id;
+		}
+		topic.save();
+	} catch(err) {
+		console.log(err);
+		throw I.INTERNAL_ERROR;
+	};
+	return topic;
 }
 
 export async function getTopicBySlug(slug: string):Promise<I.TopicInstance> {

@@ -30,7 +30,9 @@ export interface ITopic {
 	slug?: string,
 	image_ids?: number[],
 	total_posts?: number,
-	last_post_id?: number
+	last_post_id?: string,
+	Posts?: IPost[]
+
 }
 export interface TopicInstance extends Sequelize.Instance<ITopic>, ITopic {}
 export interface TopicModel extends Sequelize.Model<TopicInstance, ITopic> {}
@@ -41,18 +43,34 @@ export interface IPost {
 	body_raw?: string,
 	body_html?: string,
 	slug?: string,
-	total_posts?: number,
 	description?: string,
 	keywords?: string,
 	created_at?: number,
 	updated_at?: number,
 	user_id?: string,
-	post_id?: number,
-	topic_id?: number,
-	image_ids?: number[]
+	topic_id?: string,
+	Topic?: ITopic,
+	image_ids?: string[],
+	last_comment_id?: string;
+	total_comments?: number,
+	Comments?: IComment[]
 }
 export interface PostInstance extends Sequelize.Instance<IPost>, IPost {}
 export interface PostModel extends Sequelize.Model<PostInstance, IPost> {}
+
+export interface IComment {
+	id?: string;
+	body_raw?: string,
+	body_html?: string,
+	created_at?: number,
+	updated_at?: number,
+	user_id?: string,
+	post_id?: number,
+	Post?: IPost
+}
+export interface CommentInstance extends Sequelize.Instance<IComment>, IComment {}
+export interface CommentModel extends Sequelize.Model<CommentInstance, IComment> {}
+
 
 export interface IImage {
 	id?: string;
@@ -126,6 +144,7 @@ export interface IAppState {
 	selectedPost?: IPost,
 	spinner?: ISpinner;
 	currentUser?: IUser;
+	preview?: string;
 };
 
 export interface ISpinner {

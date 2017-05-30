@@ -28,7 +28,7 @@ export async function setLoginAt(user: I.UserInstance) {
 export async function getUsers(page: number, perPage: number):Promise<I.UserInstance[]> {
 	let users:I.UserInstance[];
 	try {
-		let users = await User.findAll({
+		users = await User.findAll({
 			offset: (page-1)*perPage,
 			limit: perPage,
 			order: 'created_at DESC'

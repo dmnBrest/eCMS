@@ -1,8 +1,8 @@
 import { createLogger } from 'redux-logger';
 import * as I from './../../server/interfaces';
 
-export const SET_OBJECTS_LIST = 'OBJECTS_LIST_SET';
-export const RESET_OBJECT_LIST = 'OBJECTS_LIST_SET';
+export const SET_OBJECTS_LIST = 'SET_OBJECTS_LIST';
+export const RESET_OBJECT_LIST = 'RESET_OBJECT_LIST';
 export const OBJECTS_LIST_NEXT_PAGE = 'OBJECTS_LIST_NEXT_PAGE';
 export const OBJECTS_LIST_PREV_PAGE = 'OBJECTS_LIST_PREV_PAGE';
 export const SET_EMPTY_SELECTED_TOPIC = 'SET_EMPTY_SELECTED_TOPIC';

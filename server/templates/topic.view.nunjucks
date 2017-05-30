@@ -15,13 +15,14 @@
 		<div class="c-panel-body">
 			{% for post in posts %}
 				<div class="c-post-box">
-					<a href="/post-{{ post.slug }}">{{ post.title }}</a> ({{ post.total_comments }} comments)
+					<a href="/post-{{ post.slug }}">{{ post.title }}</a> ({{ post.total_related_posts }} comments)
 				</div>
 			{% else %}
 				<p>Posts not found</p>
 			{% endfor %}
 		</div>
 	</div>
+
 </div>{% endblock %}
 
 {% block scripts %}

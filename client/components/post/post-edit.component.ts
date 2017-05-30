@@ -3,12 +3,14 @@ import * as I from './../../../server/interfaces';
 
 @Component({
 	selector: 'c-post-edit',
-	templateUrl: './post-edit.component.html'
+	templateUrl: './post-edit.component.html',
+	styleUrls: ['./post-edit.component.css']
 })
 
 export class PostEditComponent implements OnInit, OnDestroy, OnChanges {
 
 	@Input() post: I.IPost;
+	@Input() preview: string;
 	@Input() user: I.IUser;
 	@Output() savePostHandler:EventEmitter<I.IPost> = new EventEmitter();
 	@Output() generatePreviewHandler:EventEmitter<I.IPost> = new EventEmitter();

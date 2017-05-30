@@ -1,0 +1,43 @@
+{% extends "./layout.base.nunjucks" %}
+
+{% block main %}
+<div class="container-fluid" style="padding: 20px;">
+	<div class="c-panel c-topic">
+		<div class="c-panel-header">
+			<div class="slds-grid">
+				<div class="slds-col">{{ post.title }}</div>
+				<div class="slds-col slds-text-align--right">
+					<button onclick="location.hash='#/edit'" class="slds-button slds-button--neutral">Edit</button>
+				</div>
+			</div>
+		</div>
+		<post-module></post-module>
+		<div class="c-panel-body">
+			<div class="c-post-content">
+				{{ post.body_html | safe }}
+			</div>
+		</div>
+		<div class="c-panel-body">
+			<div class="slds-col slds-text-align--left">
+				<button onclick="location.hash='#/new-comment'" class="slds-button slds-button--brand">Add Comment</button>
+			</div>
+			<br />
+			{% for post in comments %}
+				<div class="c-post-box">
+					<a href="/post-{{ post.slug }}">{{ post.title }}</a> ({{ post.total_comments }} comments)
+				</div>
+			{% else %}
+				<p>Comments not found</p>
+			{% endfor %}
+		</div>
+	</div>
+
+	<div><pre>{{ post | dump(2) }}</pre></div>
+
+</div>{% endblock %}
+
+{% block scripts %}
+
+	<script src="/static/js/post.module.js"></script>
+
+{% endblock %}

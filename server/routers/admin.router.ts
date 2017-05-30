@@ -35,7 +35,7 @@ class Admin {
 		}
 		state.list = objects;
 
-		let total;
+		let total:number;
 		try {
 			total = await ObjectService.getTotalObjects(state.object);
 		} catch(err) {

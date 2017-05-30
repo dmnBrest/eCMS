@@ -9,10 +9,10 @@ export const REMOVE_ERROR = 'REMOVE_ERROR';
 export const REMOVE_INFO = 'REMOVE_INFO';
 export const REMOVE_ALL_NOTIFICATIONS = 'REMOVE_ALL_NOTIFICATIONS';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
-export const AUTH_REGISTER__AJAX_START = 'AUTH_REGISTER__AJAX_START';
-export const AUTH_REGISTER__AJAX_END = 'AUTH_REGISTER__AJAX_END';
 export const INIT_EMPTY_POST = 'INIT_EMPTY_POST';
+export const INIT_EMPTY_COMMENT = 'INIT_EMPTY_COMMENT';
 export const SET_POST = 'SET_POST';
+export const SET_PREVIEW = 'SET_PREVIEW';
 
 // REDUCERS
 export function appReducer(lastState: IAppState = {}, action: IAppAction): IAppState {
@@ -72,24 +72,22 @@ export function appReducer(lastState: IAppState = {}, action: IAppAction): IAppS
 			return Object.assign({}, lastState, nextState);
 		case INIT_EMPTY_POST:
 			nextState.selectedPost = {
-				id: null,
-				title: null,
-				body_raw: null,
-				body_html: null,
-				slug: null,
-				total_posts: 0,
-				description: null,
-				keyword: null,
-				created_at: null,
-				updated_at: null,
-				user_id: null,
-				post_id: null,
 				topic_id: lastState.selectedTopic.id,
 				image_ids: []
 			}
 			return Object.assign({}, lastState, nextState);
+		// case INIT_EMPTY_COMMENT:
+		// 	nextState.selectedComment = {
+		// 		post_id: lastState.selectedPost.id,
+		// 		topic_id: lastState.selectedTopic.id,
+		// 		image_ids: []
+		// 	}
+		// 	return Object.assign({}, lastState, nextState);
 		case SET_POST:
 			nextState.selectedPost = action.payload;
+			return Object.assign({}, lastState, nextState);
+		case SET_PREVIEW:
+			nextState.preview = action.payload;
 			return Object.assign({}, lastState, nextState);
 
 	}

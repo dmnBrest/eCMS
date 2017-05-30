@@ -30,6 +30,8 @@ class ModuleComponent implements OnInit, OnDestroy {
 	routeSubscription: Subscription;
 	post: I.IPost;
 	postSubscription: Subscription;
+	preview: I.IPost;
+	previewSubscription: Subscription;
 	topic: I.ITopic;
 	topicSubscription: Subscription;
 	user: I.IUser;
@@ -45,6 +47,11 @@ class ModuleComponent implements OnInit, OnDestroy {
 		this.postSubscription = this.ngRedux.select<I.IPost>(['app', 'selectedPost']).subscribe((val) => {
 			this.zone.run(() => {
 				this.post = val;
+			});
+		});
+		this.previewSubscription = this.ngRedux.select<I.IPost>(['app', 'preview']).subscribe((val) => {
+			this.zone.run(() => {
+				this.preview = val;
 			});
 		});
 		this.userSubscription = this.ngRedux.select<I.IUser>(['app', 'currentUser']).subscribe((val) => {
@@ -91,6 +98,7 @@ class ModuleComponent implements OnInit, OnDestroy {
 		this.routeSubscription.unsubscribe();
 		this.userSubscription.unsubscribe();
 		this.topicSubscription.unsubscribe();
+		this.previewSubscription.unsubscribe();
 	}
 
 }

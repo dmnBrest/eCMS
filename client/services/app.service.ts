@@ -110,6 +110,10 @@ export function initEmptyPost() {
 	appStore.dispatch({ type: AppReducer.INIT_EMPTY_POST });
 }
 
+export function initEmptyComment() {
+	appStore.dispatch({ type: AppReducer.INIT_EMPTY_COMMENT });
+}
+
 export function getPost(postId: number) {
 	// TODO load by ID
 	let post = null;
@@ -135,7 +139,7 @@ export async function generatePreview(post: I.IPost) {
 	RemoteService.remoteAction('/post/generate-preview', post).then((resp: I.IResults) => {
 		hideSpinner();
 		if (resp.status == I.ResultStatus.SUCCESS) {
-			appStore.dispatch({ type: AppReducer.SET_POST, payload: resp.payload });
+			appStore.dispatch({ type: AppReducer.SET_PREVIEW, payload: resp.payload });
 		}
 	}).catch(function(ex) {
 		hideSpinner();

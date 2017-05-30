@@ -11,9 +11,6 @@ class Post {
 
 		let post = req.body as I.IPost
 
-		console.log('XXXXX');
-		console.log(post);
-
 		if (
 			!post.title ||
 			post.title.length > 255 ||
@@ -40,18 +37,6 @@ class Post {
 
 		let post = req.body as I.IPost
 
-		console.log('ZZZZZ');
-		console.log(post);
-
-		if (
-			!post.title ||
-			post.title.length > 255 ||
-			!post.body_raw
-		) {
-			resp.status(400).send({ status: I.ResultStatus.ERROR, errors: ['Bad Request'] } as I.IResults);
-			return;
-		}
-
 		try {
 			post = await PostService.generatePreview(post);
 		} catch(err) {
@@ -59,7 +44,7 @@ class Post {
 			return;
 		}
 
-		resp.json({ status: I.ResultStatus.SUCCESS, payload: post} as I.IResults);
+		resp.json({ status: I.ResultStatus.SUCCESS, payload: post.body_html} as I.IResults);
 
 	}
 
