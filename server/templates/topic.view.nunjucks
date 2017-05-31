@@ -7,15 +7,15 @@
 			<div class="slds-grid">
 				<div class="slds-col">{{ topic.title }}</div>
 				<div class="slds-col slds-text-align--right">
-					<button onclick="location.hash='#/new-post'" class="slds-button slds-button--brand">Add Post</button>
+					<button onclick="window.startPostModule('new')" class="slds-button slds-button--brand">Add Post</button>
 				</div>
 			</div>
 		</div>
-		<post-module></post-module>
+		<post-module-container></post-module-container>
 		<div class="c-panel-body">
 			{% for post in posts %}
 				<div class="c-post-box">
-					<a href="/post-{{ post.slug }}">{{ post.title }}</a> ({{ post.total_related_posts }} comments)
+					<a href="/post-{{ post.slug }}">{{ post.title }}</a> ({{ post.total_comments }} comments)
 				</div>
 			{% else %}
 				<p>Posts not found</p>

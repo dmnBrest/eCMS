@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import * as I from './../../../server/interfaces';
 
 @Component({
@@ -10,7 +11,8 @@ import * as I from './../../../server/interfaces';
 export class PostEditComponent implements OnInit, OnDestroy, OnChanges {
 
 	@Input() post: I.IPost;
-	@Input() preview: string;
+	@Input() preview: I.IBBCodeRarserResponse;
+	previewSafe: SafeHtml
 	@Input() user: I.IUser;
 	@Output() savePostHandler:EventEmitter<I.IPost> = new EventEmitter();
 	@Output() generatePreviewHandler:EventEmitter<I.IPost> = new EventEmitter();
@@ -18,7 +20,11 @@ export class PostEditComponent implements OnInit, OnDestroy, OnChanges {
 
 	fields:I.IField[];
 
-	constructor() {}
+	constructor(private sanitizer: DomSanitizer) {}
+
+	// previewSafe(): SafeHtml {
+	// 	return this.sanitizer.bypassSecurityTrustHtml(this.preview.html);
+	// }
 
 	ngOnChanges(changes: SimpleChanges) {
 		if (changes.user) {
@@ -34,6 +40,10 @@ export class PostEditComponent implements OnInit, OnDestroy, OnChanges {
 					{name: 'title', label: 'Title', type: I.FieldTypes.STRING, editable: true}
 				];
 			}
+		}
+		if (changes.preview && changes.preview.currentValue) {
+			console.log('GENERATE PREVIEW SAFE');
+			this.previewSafe = this.sanitizer.bypassSecurityTrustHtml(changes.preview.currentValue.html);
 		}
 	}
 

@@ -21,7 +21,11 @@
 	<button (click)="cancel()" class="slds-button slds-button--neutral">Cancel</button>
 </div>
 
-<div class="c-post-preview" *ngIf="preview">
-	{{preview}}
+<div class="c-post-preview" *ngIf="preview && !preview.error" [innerHTML]="previewSafe"></div>
+<div class="c-post-preview" *ngIf="preview && preview.error">
+	<span
+		*ngFor="let err of preview.errorQueue"
+		style="color: red;"
+	>{{err}}</span>
 </div>
 

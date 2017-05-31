@@ -1,5 +1,5 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { Component, NgModule, NgZone, OnInit, OnDestroy } from '@angular/core';
+import { Component, NgModule, NgZone, OnInit, OnDestroy, NgModuleRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
@@ -20,8 +20,9 @@ import { appStore } from './../../services/store.service';
 import * as StoreService from './../../services/app.service';
 
 /* MODULE COMPONENT */
+let postModuleEl = 'post-module';
 @Component({
-	selector: 'post-module',
+	selector: postModuleEl,
 	templateUrl: './post.module.html'
 })
 class ModuleComponent implements OnInit, OnDestroy {
@@ -30,7 +31,7 @@ class ModuleComponent implements OnInit, OnDestroy {
 	routeSubscription: Subscription;
 	post: I.IPost;
 	postSubscription: Subscription;
-	preview: I.IPost;
+	preview: I.IBBCodeRarserResponse;
 	previewSubscription: Subscription;
 	topic: I.ITopic;
 	topicSubscription: Subscription;
@@ -49,8 +50,9 @@ class ModuleComponent implements OnInit, OnDestroy {
 				this.post = val;
 			});
 		});
-		this.previewSubscription = this.ngRedux.select<I.IPost>(['app', 'preview']).subscribe((val) => {
+		this.previewSubscription = this.ngRedux.select<I.IBBCodeRarserResponse>(['app', 'preview']).subscribe((val) => {
 			this.zone.run(() => {
+				console.log('Z');
 				this.preview = val;
 			});
 		});
@@ -89,6 +91,7 @@ class ModuleComponent implements OnInit, OnDestroy {
 	cancelEditing(event:any) {
 		console.log(event);
 		location.hash = '';
+		(window as any).destroyPostModule();
 	}
 
 	ngOnInit() {}
@@ -125,4 +128,15 @@ class ModuleComponent implements OnInit, OnDestroy {
 class MainModule { }
 
 /* BOOTSTRAP */
-platformBrowserDynamic().bootstrapModule(MainModule);
+let moduleRef:NgModuleRef<MainModule>;
+
+(window as any).startPostModule = async (mode:string) => {
+	jQuery('post-module-container').append(document.createElement(postModuleEl));
+	if (mode == 'new') {
+		location.hash = '#/new-post';
+	}
+	moduleRef = await platformBrowserDynamic().bootstrapModule(MainModule);
+}
+(window as any).destroyPostModule = async () => {
+	moduleRef.destroy();
+};

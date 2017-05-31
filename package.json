@@ -25,6 +25,7 @@
     "@salesforce-ux/design-system": "2.2.2",
     "@types/sequelize": "^4.0.55",
     "angular2-recaptcha": "^0.4.1",
+    "bbcode-parser": "^1.0.10",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.1",
     "connect-flash": "^0.1.1",

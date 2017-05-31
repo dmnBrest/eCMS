@@ -1,4 +1,4 @@
-import { IAppState, IAppAction } from './../../server/interfaces';
+import * as I from './../../server/interfaces';
 
 export const SHOW_SPINNER = 'SHOW_SPINNER';
 export const UPDATE_HASH = 'UPDATE_HASH';
@@ -15,7 +15,7 @@ export const SET_POST = 'SET_POST';
 export const SET_PREVIEW = 'SET_PREVIEW';
 
 // REDUCERS
-export function appReducer(lastState: IAppState = {}, action: IAppAction): IAppState {
+export function appReducer(lastState: I.IAppState = {}, action: I.IAppAction): I.IAppState {
 	let nextState:any = {};
 	switch(action.type) {
 		case SHOW_SPINNER:
@@ -71,6 +71,7 @@ export function appReducer(lastState: IAppState = {}, action: IAppAction): IAppS
 			nextState = { hash: action.payload };
 			return Object.assign({}, lastState, nextState);
 		case INIT_EMPTY_POST:
+			nextState.preview = null;
 			nextState.selectedPost = {
 				topic_id: lastState.selectedTopic.id,
 				image_ids: []
@@ -85,9 +86,10 @@ export function appReducer(lastState: IAppState = {}, action: IAppAction): IAppS
 		// 	return Object.assign({}, lastState, nextState);
 		case SET_POST:
 			nextState.selectedPost = action.payload;
+			nextState.preview = null;
 			return Object.assign({}, lastState, nextState);
 		case SET_PREVIEW:
-			nextState.preview = action.payload;
+			nextState.preview = action.payload as I.IBBCodeRarserResponse;
 			return Object.assign({}, lastState, nextState);
 
 	}

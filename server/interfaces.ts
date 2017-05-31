@@ -144,7 +144,7 @@ export interface IAppState {
 	selectedPost?: IPost,
 	spinner?: ISpinner;
 	currentUser?: IUser;
-	preview?: string;
+	preview?: IBBCodeRarserResponse;
 };
 
 export interface ISpinner {
@@ -183,7 +183,6 @@ export interface IConfig {
     recaptchaSecret: string;
 }
 
-
 export enum FieldTypes {
     STRING,
     DATE,
@@ -198,4 +197,10 @@ export interface IField {
 	label: string;
 	type: FieldTypes;
 	editable?: boolean;
+}
+
+export interface IBBCodeRarserResponse {
+	html: string;
+	error: boolean;
+	errorQueue: string[];
 }

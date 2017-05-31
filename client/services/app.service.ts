@@ -124,9 +124,11 @@ export function savePost(post: I.IPost) {
 	removeAllNotifications();
 	showSpinner();
 	RemoteService.remoteAction('/post/save', post).then((resp: I.IResults) => {
-		hideSpinner();
+		//hideSpinner();
 		if (resp.status == I.ResultStatus.SUCCESS) {
-			appStore.dispatch({ type: AppReducer.SET_POST, payload: resp.payload });
+			//appStore.dispatch({ type: AppReducer.SET_POST, payload: resp.payload });
+			console.log(resp.payload);
+			location.href = '/post-'+resp.payload.slug;
 		}
 	}).catch(function(ex) {
 		hideSpinner();

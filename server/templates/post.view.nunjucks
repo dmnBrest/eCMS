@@ -22,9 +22,9 @@
 				<button onclick="location.hash='#/new-comment'" class="slds-button slds-button--brand">Add Comment</button>
 			</div>
 			<br />
-			{% for post in comments %}
-				<div class="c-post-box">
-					<a href="/post-{{ post.slug }}">{{ post.title }}</a> ({{ post.total_comments }} comments)
+			{% for comment in comments %}
+				<div class="c-comment-box">
+					{{comment.body_html}}
 				</div>
 			{% else %}
 				<p>Comments not found</p>
@@ -33,6 +33,7 @@
 	</div>
 
 	<div><pre>{{ post | dump(2) }}</pre></div>
+	<div>Comments:<pre>{{ comments | dump(2) }}</pre></div>
 
 </div>{% endblock %}
 

@@ -37,14 +37,15 @@ class Post {
 
 		let post = req.body as I.IPost
 
+		let res:I.IBBCodeRarserResponse;
 		try {
-			post = await PostService.generatePreview(post);
+			res = await PostService.generatePreview(post);
 		} catch(err) {
 			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
 			return;
 		}
 
-		resp.json({ status: I.ResultStatus.SUCCESS, payload: post.body_html} as I.IResults);
+		resp.json({ status: I.ResultStatus.SUCCESS, payload: res} as I.IResults);
 
 	}
 

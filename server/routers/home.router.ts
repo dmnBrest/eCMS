@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as passport from 'passport';
 import * as TopicService from './../services/topic.service';
 import * as PostService from './../services/post.service';
+import * as CommentsService from './../services/comment.service';
 
 import * as I from './../interfaces'
 
@@ -56,7 +57,7 @@ class Home {
 				res.status(404).send('404: Page not Found');
 				return;
 			}
-			comments = await PostService.getRelatedPosts(post.id);
+			comments = await CommentsService.getPostComments(post.id);
 		} catch (err) {
 			console.log(err);
 			res.status(500).send(I.INTERNAL_ERROR);

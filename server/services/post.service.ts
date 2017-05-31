@@ -3,6 +3,7 @@ import * as Slug from 'slug';
 import { Post, Topic, Comment }  from './db.service';
 import * as I from './../interfaces';
 import * as TopicService from './topic.service';
+import { BBCodesParser } from './bbcode.service';
 
 export async function getPostById(id: string): Promise<I.PostInstance> {
 	let post:I.PostInstance;
@@ -78,7 +79,16 @@ export async function savePost(postObj:I.IPost, user:I.IUser): Promise<I.PostIns
 		post.slug = Slug(post.title, {lower: true});
 	}
 
-	post.body_html = bodyToHtml(post.body_raw);
+	try {
+		let res: I.IBBCodeRarserResponse = bodyToHtml(post.body_raw);
+		if (res.error) {
+			throw res.errorQueue;
+		}
+		post.body_html = res.html
+	} catch(err) {
+		console.log(err);
+		throw I.INTERNAL_ERROR;
+	}
 
 	if (user.is_writer) {
 		post.keywords = postObj.keywords;
@@ -116,22 +126,28 @@ export async function savePost(postObj:I.IPost, user:I.IUser): Promise<I.PostIns
 	return post;
 }
 
-export async function generatePreview(post:I.IPost): Promise<I.IPost> {
-
+export async function generatePreview(post:I.IPost): Promise<I.IBBCodeRarserResponse> {
 	try {
-
-		post.body_html = bodyToHtml(post.body_raw);
-
-		return post;
+		let res = bodyToHtml(post.body_raw);
+		return res;
 	} catch(err) {
 		console.log(err);
 		throw err;
 	};
 }
 
-function bodyToHtml(bbStr: string): string {
+function bodyToHtml(bbStr: string): I.IBBCodeRarserResponse {
 
-	//TODO BBCode -> HTML
+	var result = BBCodesParser.process({
+		text: bbStr,
+		removeMisalignedTags: false,
+		addInLineBreaks: true
+	});
+	if (result.error) {
+		console.error("Errors", result.error);
+		console.dir(result.errorQueue);
+	}
+	console.log(result.html);  //=> <span class="xbbcode-b">Hello world</span>
 
-	return bbStr;
+	return result;
 }
