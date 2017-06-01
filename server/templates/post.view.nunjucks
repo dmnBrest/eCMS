@@ -18,10 +18,6 @@
 			</div>
 		</div>
 		<div class="c-panel-body">
-			<div class="slds-col slds-text-align--left">
-				<button onclick="location.hash='#/new-comment'" class="slds-button slds-button--brand">Add Comment</button>
-			</div>
-			<br />
 			{% for comment in comments %}
 				<div class="c-comment-box">
 					{{comment.body_html}}
@@ -29,6 +25,11 @@
 			{% else %}
 				<p>Comments not found</p>
 			{% endfor %}
+		</div>
+		<div class="c-panel-body">
+			<div class="slds-col slds-text-align--left">
+				<button onclick="location.hash='#/new-comment'" class="slds-button slds-button--brand">Add Comment</button>
+			</div>
 		</div>
 	</div>
 

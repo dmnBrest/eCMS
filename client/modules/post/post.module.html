@@ -3,10 +3,15 @@
 	<c-post-edit
 		*ngIf="post"
 		[post]="post"
-		[preview]="preview"
 		[user]="user"
 		(savePostHandler)="savePost($event)"
 		(generatePreviewHandler)="generatePreview($event)"
 		(cancelEditingHandler)="cancelEditing($event)"
 	></c-post-edit>
+</div>
+
+<div *ngIf="mode && preview"  class="c-panel-body">
+	<c-post-preview
+		[preview]="preview"
+	></c-post-preview>
 </div>

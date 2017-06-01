@@ -1,11 +1,10 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, OnChanges, SimpleChanges, NgZone } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import * as I from './../../../server/interfaces';
 
 @Component({
 	selector: 'c-post-edit',
-	templateUrl: './post-edit.component.html',
-	styleUrls: ['./post-edit.component.css']
+	templateUrl: './post-edit.component.html'
 })
 
 export class PostEditComponent implements OnInit, OnDestroy, OnChanges {
@@ -20,7 +19,7 @@ export class PostEditComponent implements OnInit, OnDestroy, OnChanges {
 
 	fields:I.IField[];
 
-	constructor(private sanitizer: DomSanitizer) {}
+	constructor(private sanitizer: DomSanitizer,  private zone:NgZone) {}
 
 	// previewSafe(): SafeHtml {
 	// 	return this.sanitizer.bypassSecurityTrustHtml(this.preview.html);
@@ -50,10 +49,12 @@ export class PostEditComponent implements OnInit, OnDestroy, OnChanges {
 	ngOnInit() {}
 
 	savePost() {
+		this.post.body_raw = jQuery('[markitupeditor="true"]').val();
 		this.savePostHandler.emit(this.post);
 	}
 
 	generatePreview() {
+		this.post.body_raw = jQuery('[markitupeditor="true"]').val();
 		this.generatePreviewHandler.emit(this.post);
 	}
 

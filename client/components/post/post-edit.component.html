@@ -16,16 +16,23 @@
 </div>
 <br />
 <div>
-	<button (click)="savePost()" class="slds-button slds-button--brand">Save</button>
-	<button (click)="generatePreview()" class="slds-button slds-button--neutral">Preview</button>
-	<button (click)="cancel()" class="slds-button slds-button--neutral">Cancel</button>
+	<button
+		(click)="savePost()"
+		class="slds-button slds-button--brand"
+		[disabled]="!post.title || !post.body_raw">
+		Save
+	</button>
+	<button
+		(click)="generatePreview()"
+		class="slds-button slds-button--neutral"
+		[disabled]="!post.title || !post.body_raw">
+		Preview
+	</button>
+	<button
+		(click)="cancel()"
+		class="slds-button slds-button--neutral">
+		Cancel
+	</button>
 </div>
 
-<div class="c-post-preview" *ngIf="preview && !preview.error" [innerHTML]="previewSafe"></div>
-<div class="c-post-preview" *ngIf="preview && preview.error">
-	<span
-		*ngFor="let err of preview.errorQueue"
-		style="color: red;"
-	>{{err}}</span>
-</div>
 

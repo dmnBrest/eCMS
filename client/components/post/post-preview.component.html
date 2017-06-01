@@ -1,0 +1,7 @@
+<div *ngIf="preview && !preview.error" [innerHTML]="previewSafe"></div>
+<div *ngIf="preview && preview.error">
+	<span
+		*ngFor="let err of preview.errorQueue"
+		style="color: red;"
+	>{{err}}</span>
+</div>

@@ -12,12 +12,15 @@ import { NgReduxModule, NgRedux } from '@angular-redux/store';
 
 import { EditViewComponent } from './../../components/edit-view/edit-view.component';
 import { PostEditComponent } from './../../components/post/post-edit.component';
+import { PostPreviewComponent } from './../../components/post/post-preview.component';
 import { MarkItUpEditorDirective } from './../../directives/markitup/markitup.directive';
 
 import * as I from './../../../server/interfaces';
 
 import { appStore } from './../../services/store.service';
 import * as StoreService from './../../services/app.service';
+
+declare let window:any;
 
 /* MODULE COMPONENT */
 let postModuleEl = 'post-module';
@@ -91,7 +94,7 @@ class ModuleComponent implements OnInit, OnDestroy {
 	cancelEditing(event:any) {
 		console.log(event);
 		location.hash = '';
-		(window as any).destroyPostModule();
+		window.destroyPostModule();
 	}
 
 	ngOnInit() {}
@@ -118,6 +121,7 @@ class ModuleComponent implements OnInit, OnDestroy {
 		ModuleComponent,
 		EditViewComponent,
 		PostEditComponent,
+		PostPreviewComponent,
 		MarkItUpEditorDirective
 	],
 	providers: [
@@ -130,13 +134,17 @@ class MainModule { }
 /* BOOTSTRAP */
 let moduleRef:NgModuleRef<MainModule>;
 
-(window as any).startPostModule = async (mode:string) => {
+window.startPostModule = async (mode:string) => {
 	jQuery('post-module-container').append(document.createElement(postModuleEl));
 	if (mode == 'new') {
 		location.hash = '#/new-post';
 	}
 	moduleRef = await platformBrowserDynamic().bootstrapModule(MainModule);
 }
-(window as any).destroyPostModule = async () => {
+window.destroyPostModule = async () => {
 	moduleRef.destroy();
 };
+
+if (location.hash == '#/new-post') {
+	window.startPostModule();
+}

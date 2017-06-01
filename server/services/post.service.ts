@@ -22,7 +22,8 @@ export async function getPostsByTopicId(topicId: string): Promise<I.PostInstance
 		posts = await Post.findAll({
 			where: {
 				topic_id: topicId
-			}
+			},
+			order: 'created_at DESC'
 		});
 	} catch(err) {
 		console.log(err);
@@ -79,16 +80,19 @@ export async function savePost(postObj:I.IPost, user:I.IUser): Promise<I.PostIns
 		post.slug = Slug(post.title, {lower: true});
 	}
 
+	let res:I.IBBCodeRarserResponse;
 	try {
-		let res: I.IBBCodeRarserResponse = bodyToHtml(post.body_raw);
-		if (res.error) {
-			throw res.errorQueue;
-		}
-		post.body_html = res.html
+		res = bodyToHtml(post.body_raw);
 	} catch(err) {
 		console.log(err);
 		throw I.INTERNAL_ERROR;
 	}
+
+	if (res.error) {
+		console.log(res.errorQueue);
+		throw res.errorQueue;
+	}
+	post.body_html = res.html
 
 	if (user.is_writer) {
 		post.keywords = postObj.keywords;

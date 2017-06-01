@@ -23,7 +23,17 @@ class Post {
 		try {
 			post = await PostService.savePost(post, req.user);
 		} catch(err) {
-			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
+
+			console.log('XXXXX');
+			console.log(err);
+
+			if (err == I.INTERNAL_ERROR) {
+				resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
+				return;
+			} else {
+				err = [].concat( err );
+				resp.status(400).json({ status: I.ResultStatus.ERROR, errors: err } as I.IResults);
+			}
 			return;
 		}
 
