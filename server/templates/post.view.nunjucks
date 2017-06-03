@@ -7,11 +7,11 @@
 			<div class="slds-grid">
 				<div class="slds-col">{{ post.title }}</div>
 				<div class="slds-col slds-text-align--right">
-					<button onclick="location.hash='#/edit'" class="slds-button slds-button--neutral">Edit</button>
+					<button onclick="window.startPostModule('edit')" class="slds-button slds-button--neutral">Edit</button>
 				</div>
 			</div>
 		</div>
-		<post-module></post-module>
+		<post-module-container></post-module-container>
 		<div class="c-panel-body">
 			<div class="c-post-content">
 				{{ post.body_html | safe }}

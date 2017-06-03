@@ -114,10 +114,22 @@ export function initEmptyComment() {
 	appStore.dispatch({ type: AppReducer.INIT_EMPTY_COMMENT });
 }
 
-export function getPost(postId: number) {
+export function getPost(postId: string) {
 	// TODO load by ID
-	let post = null;
-	appStore.dispatch({ type: AppReducer.SET_POST, payload: post });
+
+	console.log('DD');
+
+	let post:I.IPost;
+	RemoteService.remoteAction('/post/get', {postId: postId}).then((resp: I.IResults) => {
+		if (resp.status == I.ResultStatus.SUCCESS) {
+			//appStore.dispatch({ type: AppReducer.SET_POST, payload: resp.payload });
+			appStore.dispatch({ type: AppReducer.SET_POST, payload: (resp.payload as I.IPost) });
+		} else {
+			hideSpinner();
+		}
+	}).catch(function(ex) {
+		hideSpinner();
+	});
 }
 
 export function savePost(post: I.IPost) {

@@ -55,7 +55,7 @@ export async function savePost(postObj:I.IPost, user:I.IUser): Promise<I.PostIns
 	let post;
 	if (postObj.id) {
 		try {
-			post = await Post.findOne(postObj.id);
+			post = await Post.findById(postObj.id);
 			if (post == null) {
 				throw 'Post with ID "'+postObj.id+'" not found';
 			}

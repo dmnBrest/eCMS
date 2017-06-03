@@ -5,6 +5,29 @@ import * as I from './../interfaces';
 
 class Post {
 
+	public async getPost(req: Request, resp: Response, next?: NextFunction) {
+
+		resp.setHeader('Content-Type', 'application/json');
+
+		let postId = req.body.postId;
+
+		let post:I.IPost;
+		try {
+			post = await PostService.getPostById(postId);
+			if (post == null) {
+				throw 'Post not found';
+			}
+		} catch(err) {
+			console.log();
+			resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
+			return;
+		}
+
+		resp.json({ status: I.ResultStatus.SUCCESS, payload: post} as I.IResults);
+
+	}
+
+
 	public async save(req: Request, resp: Response, next?: NextFunction) {
 
 		resp.setHeader('Content-Type', 'application/json');
@@ -23,9 +46,6 @@ class Post {
 		try {
 			post = await PostService.savePost(post, req.user);
 		} catch(err) {
-
-			console.log('XXXXX');
-			console.log(err);
 
 			if (err == I.INTERNAL_ERROR) {
 				resp.status(500).json({ status: I.ResultStatus.ERROR, errors: [I.INTERNAL_ERROR] } as I.IResults);
@@ -65,4 +85,5 @@ const post = new Post();
 
 export const PostRouter = Router();
 PostRouter.post('/save', isLoggedIn, post.save);
+PostRouter.post('/get', isLoggedIn, post.getPost);
 PostRouter.post('/generate-preview', isLoggedIn, post.generatePreview);

@@ -67,13 +67,13 @@ class ModuleComponent implements OnInit, OnDestroy {
 		// ROUTING
 		this.routeSubscription = this.ngRedux.select<string>(['app', 'hash']).subscribe((val) => {
 			this.zone.run(() => {
-				let editPostRegex = /#\/post-edit\/(\d+)/;
+				//let editPostRegex = /#\/post-edit\/(\d+)/;
 				if (val == '#/new-post') {
 					this.mode = 'newPost';
 					StoreService.initEmptyPost();
-				} else if (val.match(editPostRegex)) {
-					let m = val.match(editPostRegex);
-					StoreService.getPost(+m[1]);
+				} else if (val == '#/edit-post') {
+					// let m = val.match(editPostRegex);
+					StoreService.getPost(this.post.id);
 					this.mode = 'editPost';
 				} else {
 					this.mode = null;
@@ -135,9 +135,15 @@ class MainModule { }
 let moduleRef:NgModuleRef<MainModule>;
 
 window.startPostModule = async (mode:string) => {
-	jQuery('post-module-container').append(document.createElement(postModuleEl));
+	if (jQuery('post-module-container post-module').length == 0) {
+		jQuery('post-module-container').append(document.createElement(postModuleEl));
+	}
 	if (mode == 'new') {
 		location.hash = '#/new-post';
+	} else if (mode == 'edit') {
+		location.hash = '#/edit-post';
+	} else {
+		return;
 	}
 	moduleRef = await platformBrowserDynamic().bootstrapModule(MainModule);
 }
