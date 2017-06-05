@@ -152,5 +152,7 @@ window.destroyPostModule = async () => {
 };
 
 if (location.hash == '#/new-post') {
-	window.startPostModule();
+	window.startPostModule('new');
+} else if (location.hash == '#/edit-post') {
+	window.startPostModule('edit');
 }

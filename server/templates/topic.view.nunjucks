@@ -7,7 +7,11 @@
 			<div class="slds-grid">
 				<div class="slds-col">{{ topic.title }}</div>
 				<div class="slds-col slds-text-align--right">
-					<button onclick="window.startPostModule('new')" class="slds-button slds-button--brand">Add Post</button>
+					{% if user != null %}
+						<button onclick="window.startPostModule('new')" class="slds-button slds-button--brand">Add Post</button>
+					{% else %}
+						<button onclick="alert('Please login')" class="slds-button slds-button--brand">Add Post</button>
+					{% endif %}
 				</div>
 			</div>
 		</div>

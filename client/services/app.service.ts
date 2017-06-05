@@ -117,8 +117,6 @@ export function initEmptyComment() {
 export function getPost(postId: string) {
 	// TODO load by ID
 
-	console.log('DD');
-
 	let post:I.IPost;
 	RemoteService.remoteAction('/post/get', {postId: postId}).then((resp: I.IResults) => {
 		if (resp.status == I.ResultStatus.SUCCESS) {

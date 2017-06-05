@@ -75,10 +75,35 @@ export async function savePost(postObj:I.IPost, user:I.IUser): Promise<I.PostIns
 	post.title = postObj.title;
 	post.body_raw = postObj.body_raw;
 
-	// TODO: check for slug duplicates
-	if (!post.slug) {
-		post.slug = Slug(post.title, {lower: true});
+	// GENERATE SLUG
+	let slug =  Slug(post.title, {lower: true});
+	let counter = 1;
+	let availableSlugs: I.UserInstance[];
+	try {
+		availableSlugs = await Post.findAll({
+			where: {
+				slug: {
+					$like: slug+'%'
+				}
+			}
+		});
+	} catch(err) {
+		console.log(err);
+		throw I.INTERNAL_ERROR;
 	}
+
+	let slugSet = new Set();
+	for (let s of availableSlugs) {
+		slugSet.add(s.slug);
+	}
+	let originalSlug = slug;
+	while(slugSet.has(slug)) {
+		slug = originalSlug + '-' + counter;
+		counter++;
+	}
+	// END GENERATE SLUG
+
+	post.slug = Slug(slug, {lower: true});
 
 	let res:I.IBBCodeRarserResponse;
 	try {

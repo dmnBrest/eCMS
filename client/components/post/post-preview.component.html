@@ -1,7 +1,15 @@
-<div *ngIf="preview && !preview.error" [innerHTML]="previewSafe"></div>
-<div *ngIf="preview && preview.error">
-	<span
-		*ngFor="let err of preview.errorQueue"
-		style="color: red;"
-	>{{err}}</span>
+<div>
+	<div class="c-preview-header slds-theme--alert-texture">
+		PREVIEW
+	</div>
+	<div *ngIf="!preview.error" [innerHTML]="previewSafe"></div>
+	<div *ngIf="preview.error">
+		<span
+			*ngFor="let err of preview.errorQueue"
+			style="color: red;"
+		>{{err}}</span>
+	</div>
+	<div class="c-preview-footer slds-theme--alert-texture">
+		END of PREVIEW
+	</div>
 </div>

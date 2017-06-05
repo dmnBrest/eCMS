@@ -7,7 +7,9 @@
 			<div class="slds-grid">
 				<div class="slds-col">{{ post.title }}</div>
 				<div class="slds-col slds-text-align--right">
-					<button onclick="window.startPostModule('edit')" class="slds-button slds-button--neutral">Edit</button>
+					{% if user != null and post.user_id == user.id %}
+						<button onclick="window.startPostModule('edit')" class="slds-button slds-button--neutral">Edit</button>
+					{% endif %}
 				</div>
 			</div>
 		</div>
@@ -33,13 +35,11 @@
 		</div>
 	</div>
 
-	<div><pre>{{ post | dump(2) }}</pre></div>
-	<div>Comments:<pre>{{ comments | dump(2) }}</pre></div>
-
 </div>{% endblock %}
 
 {% block scripts %}
-
-	<script src="/static/js/post.module.js"></script>
+	{% if user != null %}
+		<script src="/static/js/post.module.js"></script>
+	{% endif %}
 
 {% endblock %}

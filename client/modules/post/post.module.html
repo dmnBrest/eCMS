@@ -1,17 +1,19 @@
-<div *ngIf="mode"  class="c-panel-body">
-	<h2>{{mode == 'newPost' ? 'New Post' : 'Edit Post'}}</h2>
-	<c-post-edit
-		*ngIf="post"
-		[post]="post"
-		[user]="user"
-		(savePostHandler)="savePost($event)"
-		(generatePreviewHandler)="generatePreview($event)"
-		(cancelEditingHandler)="cancelEditing($event)"
-	></c-post-edit>
-</div>
+<div *ngIf="mode">
+	<div class="c-panel-body">
+		<h2>{{mode == 'newPost' ? 'New Post' : 'Edit Post'}}</h2>
+		<c-post-edit
+			*ngIf="post"
+			[post]="post"
+			[user]="user"
+			(savePostHandler)="savePost($event)"
+			(generatePreviewHandler)="generatePreview($event)"
+			(cancelEditingHandler)="cancelEditing($event)"
+		></c-post-edit>
+	</div>
 
-<div *ngIf="mode && preview"  class="c-panel-body">
-	<c-post-preview
-		[preview]="preview"
-	></c-post-preview>
+	<div *ngIf="preview" class="c-panel-body">
+		<c-post-preview
+			[preview]="preview"
+		></c-post-preview>
+	</div>
 </div>
