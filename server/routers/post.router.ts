@@ -37,7 +37,8 @@ class Post {
 		if (
 			!post.title ||
 			post.title.length > 255 ||
-			!post.body_raw
+			!post.body_raw ||
+			!post.topic_id
 		) {
 			resp.status(400).send({ status: I.ResultStatus.ERROR, errors: ['Bad Request'] } as I.IResults);
 			return;

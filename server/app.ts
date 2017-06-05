@@ -22,6 +22,7 @@ import { HomeRouter } from './routers/home.router';
 import { AuthRouter } from './routers/auth.router';
 import { TopicRouter } from './routers/topic.router';
 import { PostRouter } from './routers/post.router';
+import { CommentRouter } from './routers/comment.router';
 import { ProfileRouter } from './routers/profile.router';
 import { AdminRouter } from './routers/admin.router';
 import { serializeUser, deserializeUser } from './services/security.service'
@@ -133,6 +134,7 @@ export class ExpressServer {
 		this.app.use('/auth', AuthRouter);
 		this.app.use('/topics', TopicRouter);
 		this.app.use('/post', PostRouter);
+		this.app.use('/comment', CommentRouter);
 		this.app.use('/profile', ProfileRouter);
 		this.app.use('/admin', AdminRouter);
 		this.app.use('/', HomeRouter);

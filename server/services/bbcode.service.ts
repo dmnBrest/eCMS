@@ -65,6 +65,24 @@ class XBBCodes {
 	 * --------------------------------------------------------------------------- */
 
 	tags = {
+		"h2": {
+			openTag: (params:any, content:any) => {
+				return '<h2>';
+			},
+			closeTag: (params:any, content:any) => {
+				return '</h2>';
+			}
+		},
+
+		"h3": {
+			openTag: (params:any, content:any) => {
+				return '<h3>';
+			},
+			closeTag: (params:any, content:any) => {
+				return '</h3>';
+			}
+		},
+
 		"b": {
 			openTag: (params:any, content:any) => {
 				return '<b>';

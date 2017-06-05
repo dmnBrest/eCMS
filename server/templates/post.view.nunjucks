@@ -3,6 +3,7 @@
 {% block main %}
 <div class="container-fluid" style="padding: 20px;">
 	<div class="c-panel c-topic">
+
 		<div class="c-panel-header">
 			<div class="slds-grid">
 				<div class="slds-col">{{ post.title }}</div>
@@ -13,25 +14,36 @@
 				</div>
 			</div>
 		</div>
+
 		<post-module-container></post-module-container>
+
 		<div class="c-panel-body">
 			<div class="c-post-content">
 				{{ post.body_html | safe }}
 			</div>
 		</div>
-		<div class="c-panel-body">
-			{% for comment in comments %}
-				<div class="c-comment-box">
-					{{comment.body_html}}
+
+		{% for comment in comments %}
+			<div class="c-panel-body c-comment-box">
+
+				<div class="slds-grid">
+					<div class="slds-col">
+					</div>
+					<div class="slds-col">
+					</div>
 				</div>
-			{% else %}
-				<p>Comments not found</p>
-			{% endfor %}
-		</div>
-		<div class="c-panel-body">
-			<div class="slds-col slds-text-align--left">
-				<button onclick="location.hash='#/new-comment'" class="slds-button slds-button--brand">Add Comment</button>
+
+				{{ comment.body_html | safe }}
 			</div>
+		{% else %}
+			<div class="c-panel-body">
+				<p>No Comments</p>
+			</div>
+		{% endfor %}
+
+		<div class="c-panel-body">
+			<div class="c-new-comment-placeholder"></div>
+			<comment-module></comment-module>
 		</div>
 	</div>
 
@@ -40,6 +52,7 @@
 {% block scripts %}
 	{% if user != null %}
 		<script src="/static/js/post.module.js"></script>
+		<script src="/static/js/comment.module.js"></script>
 	{% endif %}
 
 {% endblock %}

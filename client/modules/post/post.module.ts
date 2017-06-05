@@ -67,20 +67,26 @@ class ModuleComponent implements OnInit, OnDestroy {
 		// ROUTING
 		this.routeSubscription = this.ngRedux.select<string>(['app', 'hash']).subscribe((val) => {
 			this.zone.run(() => {
-				//let editPostRegex = /#\/post-edit\/(\d+)/;
 				if (val == '#/new-post') {
-					this.mode = 'newPost';
-					StoreService.initEmptyPost();
+					this.initNewPost();
 				} else if (val == '#/edit-post') {
-					// let m = val.match(editPostRegex);
-					StoreService.getPost(this.post.id);
+					this.initPost(this.post.id);
 					this.mode = 'editPost';
 				} else {
 					this.mode = null;
 				}
-
 			});
 		});
+	}
+
+	initNewPost() {
+		this.mode = 'newPost';
+		StoreService.initEmptyPost();
+	}
+
+	initPost(postId:string) {
+		StoreService.getPost(postId);
+		this.mode = 'editPost';
 	}
 
 	savePost(post:I.IPost) {

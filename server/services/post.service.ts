@@ -126,9 +126,6 @@ export async function savePost(postObj:I.IPost, user:I.IUser): Promise<I.PostIns
 
 	post.image_ids = postObj.image_ids;
 
-	// TODO: count total related posts
-	post.total_comments = 0;
-
 	let totalComments:number = 0;
 	if (post.id) {
 		try {
@@ -142,6 +139,7 @@ export async function savePost(postObj:I.IPost, user:I.IUser): Promise<I.PostIns
 			throw I.INTERNAL_ERROR;
 		}
 	}
+	post.total_comments = totalComments;
 
 	try {
 		await post.save();

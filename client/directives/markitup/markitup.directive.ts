@@ -1,10 +1,10 @@
 import { Directive, ElementRef, Input } from '@angular/core';
 
-declare const mySettings: any;
+declare const markitupSettings: any;
 
 @Directive({ selector: '[markItUpEditor]' })
 export class MarkItUpEditorDirective {
 	constructor(el: ElementRef) {
-		jQuery(el.nativeElement).markItUp(mySettings);
+		jQuery(el.nativeElement).markItUp(markitupSettings);
 	}
 }

@@ -65,7 +65,7 @@ export interface IComment {
 	created_at?: number,
 	updated_at?: number,
 	user_id?: string,
-	post_id?: number,
+	post_id?: string,
 	Post?: IPost
 }
 export interface CommentInstance extends Sequelize.Instance<IComment>, IComment {}
