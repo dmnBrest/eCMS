@@ -72,12 +72,13 @@ class ModuleComponent implements OnInit, OnDestroy {
 
 	initNewCommentForm() {
 		let pl = jQuery('.c-new-comment-placeholder');
+		let initialBody = pl.text();
 		console.log('New Comment init');
 		console.log(pl);
 		pl.html(this.tmpl);
-		pl.find('textarea').markItUp(markitupSettings);
+		pl.find('textarea').markItUp(markitupSettings).val(initialBody);
 		pl.find('.c-comment-cancel-btn').click(()=>{
-			location.hash = '';
+			this.cancelEditing();
 		});
 		pl.find('.c-comment-save-btn').click(()=>{
 			let commentRaw = pl.find('textarea').val();
@@ -99,7 +100,7 @@ class ModuleComponent implements OnInit, OnDestroy {
 		pl.html(this.tmpl);
 		pl.find('textarea').markItUp(markitupSettings);
 		pl.find('.c-comment-cancel-btn').click(()=>{
-			location.hash = '';
+			this.cancelEditing();
 		});
 		pl.find('.c-comment-save-btn').click(()=>{
 			let commentRaw = pl.find('textarea').val();
@@ -116,19 +117,21 @@ class ModuleComponent implements OnInit, OnDestroy {
 		let comment;
 		try {
 			comment = await StoreService.saveComment({id: commentId, body_raw: commentRaw, post_id: this.post.id} as I.IComment);
+
+			console.log('D:', comment);
+
 			if (comment == null) {
 				throw 'Bad response';
 			}
+			location.hash = '#'+comment.id;
+			location.reload();
 		} catch(err) {
 			console.log(err);
 		}
-		console.log('COMMENT:');
-		console.log(comment);
 	}
 
-	cancelEditing(event:any) {
-		console.log(event);
-		location.hash = '';
+	cancelEditing() {
+		location.hash = '#/';
 	}
 
 	ngOnInit() {}

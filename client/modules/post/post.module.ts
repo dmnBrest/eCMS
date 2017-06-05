@@ -98,8 +98,7 @@ class ModuleComponent implements OnInit, OnDestroy {
 	}
 
 	cancelEditing(event:any) {
-		console.log(event);
-		location.hash = '';
+		location.hash = '#/';
 		window.destroyPostModule();
 	}
 

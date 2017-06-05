@@ -1,7 +1,8 @@
 import { v4 as uuidV4} from 'uuid';
 import * as Slug from 'slug';
-import { Comment }  from './db.service';
+import { Comment, Post, User }  from './db.service';
 import * as I from './../interfaces';
+import * as PostService from './post.service';
 import { BBCodesParser } from './bbcode.service';
 
 export async function getPostComments(postId: string): Promise<I.CommentInstance[]> {
@@ -11,7 +12,8 @@ export async function getPostComments(postId: string): Promise<I.CommentInstance
 			where: {
 				post_id: postId
 			},
-			order: 'created_at ASC'
+			order: 'created_at ASC',
+			include: [{model: Post}, {model: User}]
 		});
 	} catch(err) {
 		console.log(err);
@@ -76,7 +78,7 @@ export async function saveComment(commentObj:I.IComment, user:I.IUser): Promise<
 		throw I.INTERNAL_ERROR;
 	};
 
-	//PostService.updateTotals(comment.post_id);
+	PostService.updateTotals(comment.post_id);
 
 	return comment;
 }

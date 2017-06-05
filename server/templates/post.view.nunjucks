@@ -24,16 +24,34 @@
 		</div>
 
 		{% for comment in comments %}
-			<div class="c-panel-body c-comment-box">
+			<div class="c-panel-body c-comment-box" id="{{ comment.id }}">
 
 				<div class="slds-grid">
 					<div class="slds-col">
+						<div class="slds-grid">
+							<div class="slds-col c-comment-info">
+								5 Jun 2017 15:51
+							</div>
+							<div class="slds-col slds-text-align--right">
+								<button class="slds-button" onclick="">Edit</button>
+								<button class="slds-button" onclick="quoteComment(this)">Quote</button>
+							</div>
+						</div>
+						<div>
+							{{ comment.body_html | safe }}
+						</div>
+						<noindex>
+							<div class="c-comment-raw-content" style="display: none;">{{ comment.body_raw }}</div>
+							<div class="c-comment-raw-username" style="display: none;">{{ comment.User.username }}</div>
+						</noindex>
 					</div>
-					<div class="slds-col">
+					<div class="c-comment-user-info">
+						<div>
+							<img src="https://salesforce-developer.ru/wp-content/uploads/avatars/no-avatar.jpg" alt="">
+						</div>
+						<div>{{user.username}}</div>
 					</div>
 				</div>
-
-				{{ comment.body_html | safe }}
 			</div>
 		{% else %}
 			<div class="c-panel-body">
@@ -42,7 +60,7 @@
 		{% endfor %}
 
 		<div class="c-panel-body">
-			<div class="c-new-comment-placeholder"></div>
+			<div id="c-new-comment-placeholder" class="c-new-comment-placeholder"></div>
 			<comment-module></comment-module>
 		</div>
 	</div>
@@ -53,6 +71,30 @@
 	{% if user != null %}
 		<script src="/static/js/post.module.js"></script>
 		<script src="/static/js/comment.module.js"></script>
+		<script>
+
+			function quoteComment(el) {
+				var t = jQuery(el).parent().parent().parent().find('.c-comment-raw-content').text();
+				var username = jQuery(el).parent().parent().parent().find('.c-comment-raw-username').text();
+				console.log(t);
+				var ta = jQuery('.c-new-comment-placeholder textarea');
+				var quote = '[quote="'+username+'"]'+t+'[/quote]';
+				if (ta.length > 0) {
+					ta.val(ta.val()+quote);
+				} else {
+					jQuery('.c-new-comment-placeholder').text(quote);
+				}
+				location.hash = '#/new-comment';
+				animateScrollToHash('#c-new-comment-placeholder', 500, function(){});
+			}
+
+			function animateScrollToHash(hash, speed, callback) {
+				$('html, body').animate({
+					scrollTop: $(hash).offset().top
+				}, speed, callback());
+			}
+
+		</script>
 	{% endif %}
 
 {% endblock %}

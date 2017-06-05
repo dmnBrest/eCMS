@@ -159,3 +159,26 @@ footer {
 	font-size: 16px;
 	color: #404040;
 }
+
+.c-comment-info {
+	color: #808080;
+}
+
+.c-comment-user-info {
+	width: 150px; padding-left: 20px;
+}
+
+.c-comment-box blockquote {
+	margin-left: 0;
+}
+
+.c-comment-box blockquote cite {
+	display: block;
+}
+.c-comment-box blockquote > div {
+	font: 14px/22px normal helvetica, sans-serif;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding-left: 15px;
+	border-left: 3px solid #ccc;
+}

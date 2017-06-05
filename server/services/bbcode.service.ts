@@ -311,10 +311,20 @@ class XBBCodes {
 		},
 		"quote": {
 			openTag: (params:any, content:any) => {
-				return '<blockquote class="xbbcode-blockquote">';
+
+				let r = /="([^<>'"]*)"/;
+				let cite = '';
+				if (params && params.match(r)) {
+					let m = params.match(r);
+					console.log(m[1]);
+					cite = '<cite>'+m[1]+'</cite>';
+
+				}
+
+				return '<blockquote>'+cite+'<div>';
 			},
 			closeTag: (params:any, content:any) => {
-				return '</blockquote>';
+				return '</div></blockquote>';
 			}
 		},
 		"right": {
@@ -660,6 +670,10 @@ class XBBCodes {
 			processedContent = "";
 		}
 
+		if (processedContent) {
+			processedContent = processedContent.trim();
+		}
+
 		return openTag + processedContent + closeTag;
 	};
 
@@ -731,6 +745,9 @@ class XBBCodes {
 			errorQueue: []};
 
 		var errQueue = [];
+
+		// config.text = config.text.replace(/\]\r\n/g, "]");
+		// config.text = config.text.replace(/\]\n/g, "]");
 
 		config.text = config.text.replace(/</g, "&lt;"); // escape HTML tag brackets
 		config.text = config.text.replace(/>/g, "&gt;"); // escape HTML tag brackets

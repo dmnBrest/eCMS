@@ -153,18 +153,20 @@ export async function getComment() {
 export async function saveComment(comment:I.IComment):Promise<I.IComment> {
 	removeAllNotifications();
 	showSpinner();
-	RemoteService.remoteAction('/comment/save', comment).then((resp: I.IResults) => {
-		if (resp.status == I.ResultStatus.SUCCESS) {
-			console.log(resp.payload);
-			// location.href = '/post-'+resp.payload.slug;
-			return resp.payload;
-		} else {
-			hideSpinner();
-		}
-	}).catch(function(ex) {
+	let resp:I.IResults;
+	try {
+		resp = await RemoteService.remoteAction('/comment/save', comment);
+	} catch(err) {
 		hideSpinner();
-	});
-	return null;
+		return null;
+	};
+	if (resp.status == I.ResultStatus.SUCCESS) {
+		console.log(resp.payload);
+		return resp.payload;
+	} else {
+		hideSpinner();
+		return null;
+	}
 }
 
 export async function generatePreview(post: I.IPost) {

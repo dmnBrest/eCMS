@@ -126,21 +126,6 @@ export async function savePost(postObj:I.IPost, user:I.IUser): Promise<I.PostIns
 
 	post.image_ids = postObj.image_ids;
 
-	let totalComments:number = 0;
-	if (post.id) {
-		try {
-			totalComments = await Comment.count({
-				where: {
-					post_id: post.id
-				}
-			});
-		} catch(err) {
-			console.log(err);
-			throw I.INTERNAL_ERROR;
-		}
-	}
-	post.total_comments = totalComments;
-
 	try {
 		await post.save();
 	} catch(err) {
@@ -148,8 +133,41 @@ export async function savePost(postObj:I.IPost, user:I.IUser): Promise<I.PostIns
 		throw I.INTERNAL_ERROR;
 	};
 
+	updateTotals(post.id);
 	TopicService.updateTotals(post.topic_id);
 
+	return post;
+}
+
+export async function updateTotals (postId: string) {
+
+	console.log('DDDDD');
+
+	let post:I.PostInstance;
+	try {
+		post = await Post.findOne({
+			where: {
+				id: postId
+			},
+			include: [{model: Comment}],
+			order: [
+				[Comment, 'created_at', 'DESC']
+			]
+		});
+		let totalComments = post.Comments.length;
+
+		console.log('XXXXX');
+		console.log(totalComments);
+
+		post.total_comments = totalComments;
+		if (totalComments > 0) {
+			post.last_comment_id = post.Comments[0].id;
+		}
+		post.save();
+	} catch(err) {
+		console.log(err);
+		throw I.INTERNAL_ERROR;
+	};
 	return post;
 }
 
