@@ -34,6 +34,9 @@ class Comment {
 
 		let comment = req.body as I.IComment
 
+		console.log('XXXXX');
+		console.log(comment);
+
 		if (
 			!comment.body_raw ||
 			!comment.post_id

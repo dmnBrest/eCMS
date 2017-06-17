@@ -56,14 +56,15 @@ class ModuleComponent implements OnInit, OnDestroy {
 		// ROUTING
 		this.routeSubscription = this.ngRedux.select<string>(['app', 'hash']).subscribe((val) => {
 			this.zone.run(() => {
-				let editPostRegex = /#\/edit-comment\/(\d+)/;
+
+				this.clearCommentEditor();
+
+				let editPostRegex = /#\/edit-comment\/([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})/;
 				if (val == '#/new-comment') {
 					this.initNewCommentForm();
 				} else if (val.match(editPostRegex)) {
 					let m = val.match(editPostRegex);
 					this.initCommentEditForm(m[1]);
-				} else {
-					this.clearCommentEditor();
 				}
 
 			});
@@ -73,8 +74,6 @@ class ModuleComponent implements OnInit, OnDestroy {
 	initNewCommentForm() {
 		let pl = jQuery('.c-new-comment-placeholder');
 		let initialBody = pl.text();
-		console.log('New Comment init');
-		console.log(pl);
 		pl.html(this.tmpl);
 		pl.find('textarea').markItUp(markitupSettings).val(initialBody);
 		pl.find('.c-comment-cancel-btn').click(()=>{
@@ -88,23 +87,23 @@ class ModuleComponent implements OnInit, OnDestroy {
 	}
 
 	clearCommentEditor() {
-		jQuery('.c-new-comment-placeholder').html('');
-		jQuery('.c-comment-placeholder').html('');
+		jQuery('.c-new-comment-placeholder .c-comment-editor-wrapper').remove();
+		jQuery('.c-comment-placeholder .c-comment-editor-wrapper').remove();
 		this.mode = null;
 	}
 
 	initCommentEditForm(commentId: string) {
-		let pl = jQuery('.c-comment-placeholder[data-id="'+commentId+'"]');
-		console.log('Comment init: ', commentId);
-		console.log(pl);
+		let pl = jQuery('.c-comment-placeholder#comment-'+commentId);
+		let initialBody = pl.text();
+		console.log('X1');
+		console.log(initialBody);
 		pl.html(this.tmpl);
-		pl.find('textarea').markItUp(markitupSettings);
+		pl.find('textarea').markItUp(markitupSettings).val(initialBody);
 		pl.find('.c-comment-cancel-btn').click(()=>{
 			this.cancelEditing();
 		});
 		pl.find('.c-comment-save-btn').click(()=>{
 			let commentRaw = pl.find('textarea').val();
-			let commentId = pl.data('id');
 			this.saveComment(commentRaw, commentId);
 		});
 		this.mode = 'edit';
@@ -123,8 +122,9 @@ class ModuleComponent implements OnInit, OnDestroy {
 			if (comment == null) {
 				throw 'Bad response';
 			}
-			location.hash = '#'+comment.id;
-			location.reload();
+			let v = location.protocol+'//'+location.host+location.pathname;
+			let d = new Date().getTime();
+			location.href = v+'?'+d+'#'+comment.id;
 		} catch(err) {
 			console.log(err);
 		}

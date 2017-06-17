@@ -24,8 +24,7 @@
 		</div>
 
 		{% for comment in comments %}
-			<div class="c-panel-body c-comment-box" id="{{ comment.id }}">
-
+			<div class="c-panel-body c-comment-box" data-id="{{ comment.id }}">
 				<div class="slds-grid">
 					<div class="slds-col">
 						<div class="slds-grid">
@@ -33,7 +32,7 @@
 								5 Jun 2017 15:51
 							</div>
 							<div class="slds-col slds-text-align--right">
-								<button class="slds-button" onclick="">Edit</button>
+								<button class="slds-button" onclick="editComment(this)">Edit</button>
 								<button class="slds-button" onclick="quoteComment(this)">Quote</button>
 							</div>
 						</div>
@@ -52,6 +51,7 @@
 						<div>{{user.username}}</div>
 					</div>
 				</div>
+				<div class="c-comment-placeholder" id="comment-{{ comment.id }}"></div>
 			</div>
 		{% else %}
 			<div class="c-panel-body">
@@ -74,9 +74,9 @@
 		<script>
 
 			function quoteComment(el) {
-				var t = jQuery(el).parent().parent().parent().find('.c-comment-raw-content').text();
-				var username = jQuery(el).parent().parent().parent().find('.c-comment-raw-username').text();
-				console.log(t);
+				var box = jQuery(el).parent().parent().parent();
+				var t = box.find('.c-comment-raw-content').text();
+				var username = box.find('.c-comment-raw-username').text();
 				var ta = jQuery('.c-new-comment-placeholder textarea');
 				var quote = '[quote="'+username+'"]'+t+'[/quote]';
 				if (ta.length > 0) {
@@ -86,6 +86,20 @@
 				}
 				location.hash = '#/new-comment';
 				animateScrollToHash('#c-new-comment-placeholder', 500, function(){});
+			}
+
+			function editComment(el) {
+				var box = jQuery(el).parents('.c-comment-box');
+				var commentRaw = box.find('.c-comment-raw-content').text();
+				var commentId = box.data('id');
+				var ta = box.find('textarea');
+				if (ta.length > 0) {
+					ta.val(commentRaw);
+				} else {
+					box.find('.c-comment-placeholder').text(commentRaw);
+				}
+				location.hash = '#/edit-comment/'+commentId;
+				//animateScrollToHash('.c-comment-placeholder#comment-'+commentId, 500, function(){});
 			}
 
 			function animateScrollToHash(hash, speed, callback) {

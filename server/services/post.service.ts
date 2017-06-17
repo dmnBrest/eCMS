@@ -156,9 +156,6 @@ export async function updateTotals (postId: string) {
 		});
 		let totalComments = post.Comments.length;
 
-		console.log('XXXXX');
-		console.log(totalComments);
-
 		post.total_comments = totalComments;
 		if (totalComments > 0) {
 			post.last_comment_id = post.Comments[0].id;
