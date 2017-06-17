@@ -32,7 +32,8 @@ export class PostEditComponent implements OnInit, OnDestroy, OnChanges {
 				this.fields = [
 					{name: 'title', label: 'Title', type: I.FieldTypes.STRING, editable: true},
 					{name: 'description', label: 'Description', type: I.FieldTypes.STRING, editable: true},
-					{name: 'keywords', label: 'Keywords', type: I.FieldTypes.STRING, editable: true}
+					{name: 'keywords', label: 'Keywords', type: I.FieldTypes.STRING, editable: true},
+					{name: 'show_in_blog', label: 'Show in Blog', type: I.FieldTypes.BOOLEAN, editable: true},
 				];
 			} else {
 				this.fields = [

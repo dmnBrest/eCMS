@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, SimpleChange, ContentChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, SimpleChange, ContentChild, TemplateRef, Pipe, PipeTransform } from '@angular/core';
 import * as I from './../../../server/interfaces';
 
 @Component({
@@ -6,7 +6,6 @@ import * as I from './../../../server/interfaces';
 	templateUrl: './edit-view.component.html',
 	styleUrls : ['./edit-view.component.css']
 })
-
 export class EditViewComponent implements OnInit, OnDestroy {
 
 	@Input() object: any;
@@ -24,3 +23,4 @@ export class EditViewComponent implements OnInit, OnDestroy {
 	ngOnDestroy() {}
 
 }
+

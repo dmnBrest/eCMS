@@ -22,6 +22,7 @@ export class TopicsComponent implements OnInit, OnDestroy {
 		{name: 'order', label: 'Order', type: I.FieldTypes.NUMBER},
 		{name: 'total_posts', label: 'Total Posts', type: I.FieldTypes.NUMBER},
 		{name: 'slug', label: 'Slug', type: I.FieldTypes.STRING},
+		{name: 'type', label: 'Type', type: I.FieldTypes.STRING},
 		{name: 'is_hidden', label: 'Is Hidden', type: I.FieldTypes.BOOLEAN}
 	]
 

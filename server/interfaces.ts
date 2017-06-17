@@ -23,14 +23,21 @@ export interface IUser {
 export interface UserInstance extends Sequelize.Instance<IUser>, IUser {}
 export interface UserModel extends Sequelize.Model<UserInstance, IUser> {}
 
+export enum TopicType {
+	FORUM = <any>"FORUM",
+	BLOG = <any>"BLOG",
+}
+
 export interface ITopic {
 	id?: string;
 	title?: string,
 	order?: number,
 	slug?: string,
+	type?: string,
 	image_ids?: number[],
 	total_posts?: number,
 	last_post_id?: string,
+	is_hidden?: boolean,
 	Posts?: IPost[]
 
 }
@@ -45,6 +52,7 @@ export interface IPost {
 	slug?: string,
 	description?: string,
 	keywords?: string,
+	show_in_blog?: boolean,
 	created_at?: number,
 	updated_at?: number,
 	user_id?: string,
@@ -103,8 +111,8 @@ export interface INewPasswordForm {
 };
 
 export const enum ResultStatus {
-    SUCCESS,
-    ERROR
+	SUCCESS,
+	ERROR
 }
 
 export interface IResults {
@@ -173,23 +181,24 @@ export interface IAppAction extends Action {
 }
 
 export interface IConfig {
-    dbPath: string;
-    modules: string[];
-    baseUrl: string;
-    title: string;
-    adminEmail: string;
-    noreplyEmail: string
-    recaptchaKey: string;
-    recaptchaSecret: string;
+	dbPath: string;
+	modules: string[];
+	baseUrl: string;
+	title: string;
+	adminEmail: string;
+	noreplyEmail: string
+	recaptchaKey: string;
+	recaptchaSecret: string;
 }
 
 export enum FieldTypes {
-    STRING,
-    DATE,
+	STRING,
+	DATE,
 	DATETIME,
 	BOOLEAN,
 	NUMBER,
-	CURRENCY
+	CURRENCY,
+	PICKLIST
 }
 
 export interface IField {
@@ -197,6 +206,7 @@ export interface IField {
 	label: string;
 	type: FieldTypes;
 	editable?: boolean;
+	options?: any;
 }
 
 export interface IBBCodeRarserResponse {

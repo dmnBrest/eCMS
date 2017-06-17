@@ -15,6 +15,8 @@ import { PostEditComponent } from './../../components/post/post-edit.component';
 import { PostPreviewComponent } from './../../components/post/post-preview.component';
 import { MarkItUpEditorDirective } from './../../directives/markitup/markitup.directive';
 
+import { KeysPipe } from './../../pipes/keys.pipe';
+
 import * as I from './../../../server/interfaces';
 
 import { appStore } from './../../services/store.service';
@@ -127,7 +129,8 @@ class ModuleComponent implements OnInit, OnDestroy {
 		EditViewComponent,
 		PostEditComponent,
 		PostPreviewComponent,
-		MarkItUpEditorDirective
+		MarkItUpEditorDirective,
+		KeysPipe
 	],
 	providers: [
 

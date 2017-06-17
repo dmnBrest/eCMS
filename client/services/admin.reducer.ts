@@ -19,7 +19,9 @@ export function adminReducer(lastState: I.IAdminState = {}, action: I.IAppAction
 			return Object.assign({}, lastState, nextState);
 		case RESET_OBJECT_LIST:
 			nextState.listViews = Object.assign({}, lastState.listViews);
-			nextState.listViews[action.payload.objType].page = 1;
+			if (nextState.listViews[action.payload.objType]) {
+				nextState.listViews[action.payload.objType].page = 1;
+			}
 			return Object.assign({}, lastState, nextState);
 		case OBJECTS_LIST_NEXT_PAGE:
 			nextState.listViews = Object.assign({}, lastState.listViews);

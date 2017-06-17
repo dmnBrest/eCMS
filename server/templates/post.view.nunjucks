@@ -24,7 +24,7 @@
 		</div>
 
 		{% for comment in comments %}
-			<div class="c-panel-body c-comment-box" data-id="{{ comment.id }}">
+			<div class="c-panel-body c-comment-box" id="{{ comment.id }}">
 				<div class="slds-grid">
 					<div class="slds-col">
 						<div class="slds-grid">
@@ -32,8 +32,12 @@
 								5 Jun 2017 15:51
 							</div>
 							<div class="slds-col slds-text-align--right">
-								<button class="slds-button" onclick="editComment(this)">Edit</button>
-								<button class="slds-button" onclick="quoteComment(this)">Quote</button>
+								{% if user != null and comment.user_id == user.id %}
+									<button class="slds-button" onclick="editComment(this)">Edit</button>
+								{% endif %}
+								{% if user != null %}
+									<button class="slds-button" onclick="quoteComment(this)">Quote</button>
+								{% endif %}
 							</div>
 						</div>
 						<div>
@@ -91,7 +95,7 @@
 			function editComment(el) {
 				var box = jQuery(el).parents('.c-comment-box');
 				var commentRaw = box.find('.c-comment-raw-content').text();
-				var commentId = box.data('id');
+				var commentId = box.attr('id');
 				var ta = box.find('textarea');
 				if (ta.length > 0) {
 					ta.val(commentRaw);

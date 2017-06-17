@@ -15,11 +15,13 @@ export class TopicEditComponent implements OnInit, OnDestroy {
 
 	topic: I.ITopic;
 	topicSubscription: Subscription;
+	topicTypes = I.TopicType;
 
 	fields:I.IField[] = [
 		//{name: 'id', label: 'Id', type: I.FieldTypes.STRING, editable: false},
 		{name: 'title', label: 'Title', type: I.FieldTypes.STRING, editable: true},
 		{name: 'order', label: 'Order', type: I.FieldTypes.NUMBER, editable: true},
+		{name: 'type', label: 'Type', type: I.FieldTypes.PICKLIST, editable: true, options: I.TopicType},
 		{name: 'is_hidden', label: 'Is Hidden', type: I.FieldTypes.BOOLEAN, editable: true}
 	]
 

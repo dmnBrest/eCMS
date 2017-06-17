@@ -18,6 +18,8 @@ import { ListViewComponent } from './../../components/list-view/list-view.compon
 import { EditViewComponent } from './../../components/edit-view/edit-view.component';
 import { OutputComponent } from './../../components/output/output.component';
 
+import { KeysPipe } from './../../pipes/keys.pipe';
+
 import * as AdminStoreService from './../../services/admin.service';
 
 import * as I from './../../../server/interfaces';
@@ -88,7 +90,8 @@ class ModuleComponent implements OnInit, OnDestroy {
 		ListViewComponent,
 		EditViewComponent,
 		TopicEditComponent,
-		OutputComponent
+		OutputComponent,
+		KeysPipe
 	],
 	providers: [
 

@@ -121,6 +121,10 @@ export let Topic = sequelize.define<I.TopicInstance, I.ITopic>("Topic",
 			type: Sequelize.STRING(255),
 			allowNull: false
 		},
+		type: {
+			type: Sequelize.STRING(255),
+			allowNull: false
+		},
 		is_hidden: {
 			type: Sequelize.BOOLEAN,
 			allowNull: false,
@@ -172,6 +176,11 @@ export let Post = sequelize.define<I.PostInstance, I.IPost>("Post",
 		body_html: {
 			type: Sequelize.TEXT,
 			allowNull: false
+		},
+		show_in_blog: {
+			type: Sequelize.BOOLEAN,
+			allowNull: false,
+			defaultValue: false
 		},
 		total_comments: {
 			type: Sequelize.INTEGER,

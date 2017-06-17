@@ -52,6 +52,10 @@ export async function getPostBySlug(slug: string): Promise<I.PostInstance> {
 
 export async function savePost(postObj:I.IPost, user:I.IUser): Promise<I.PostInstance> {
 
+	console.log('FFFFF');
+	console.log(postObj);
+
+
 	let post;
 	if (postObj.id) {
 		try {
@@ -119,9 +123,11 @@ export async function savePost(postObj:I.IPost, user:I.IUser): Promise<I.PostIns
 	}
 	post.body_html = res.html
 
+	// WRITER
 	if (user.is_writer) {
 		post.keywords = postObj.keywords;
 		post.description = postObj.description;
+		post.show_in_blog = postObj.show_in_blog;
 	}
 
 	post.image_ids = postObj.image_ids;
@@ -140,8 +146,6 @@ export async function savePost(postObj:I.IPost, user:I.IUser): Promise<I.PostIns
 }
 
 export async function updateTotals (postId: string) {
-
-	console.log('DDDDD');
 
 	let post:I.PostInstance;
 	try {
