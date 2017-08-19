@@ -182,6 +182,32 @@ export async function generatePreview(post: I.IPost) {
 	});
 }
 
+/* IMAGE GALLERY */
+export function initGallery(component: any) {
+	console.log('init Gallery Component');
+	(window as any).galleryComponent = component;
+}
+
+export function openImageGallery() {
+	if ((window as any).galleryComponent) {
+		(window as any).galleryComponent.openGallery();
+	}
+}
+
+export function getImages(search: string) {
+	removeAllNotifications();
+	showSpinner();
+	return RemoteService.remoteAction('/gallery/images', {search: search}).then((resp: I.IResults) => {
+		hideSpinner();
+		if (resp.status == I.ResultStatus.SUCCESS) {
+			return resp.payload;
+		}
+	}).catch(function(ex) {
+		hideSpinner();
+	});
+}
+/* end IMAGE GALLERY */
+
 export function setCurrentUser(user:I.IUser) {
 	appStore.dispatch({ type: AppReducer.SET_CURRENT_USER, payload: user });
 }

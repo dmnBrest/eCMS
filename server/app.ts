@@ -25,6 +25,7 @@ import { PostRouter } from './routers/post.router';
 import { CommentRouter } from './routers/comment.router';
 import { ProfileRouter } from './routers/profile.router';
 import { AdminRouter } from './routers/admin.router';
+import { GalleryRouter } from './routers/gallery.router';
 import { serializeUser, deserializeUser } from './services/security.service'
 
 require('source-map-support').install();
@@ -136,6 +137,7 @@ export class ExpressServer {
 		this.app.use('/post', PostRouter);
 		this.app.use('/comment', CommentRouter);
 		this.app.use('/profile', ProfileRouter);
+		this.app.use('/gallery', GalleryRouter);
 		this.app.use('/admin', AdminRouter);
 		this.app.use('/', HomeRouter);
 

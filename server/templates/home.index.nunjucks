@@ -1,7 +1,7 @@
 {% extends "./layout.base.nunjucks" %}
 
 {% block main %}
-<div class="uk-container uk-container-expand">
+<div>
 	<h1>Home</h1>
 
 </div>
