@@ -14,15 +14,25 @@ import * as StoreService from './../../services/app.service';
 
 import * as I from './../../../server/interfaces';
 
+import { FileUploadModule, FileUploader } from "ng2-file-upload";
+
+const URL = '/gallery/upload';
+
 /* MODULE COMPONENT */
 @Component({
 	selector: 'gallery-module',
-	templateUrl: 'gallery.module.html'
+	templateUrl: './gallery.module.html'
 })
 class ModuleComponent implements OnInit, OnDestroy {
 
-	mode: string;
+	show: boolean = false;
+	mode: string = 'list'; // list, upload
 	search: string;
+
+	uploader:FileUploader = new FileUploader({
+		url: URL,
+		headers: [{name: 'csrf-token', value: (window as any).csrfToken}]
+	});
 
 	constructor(private ngRedux: NgRedux<I.IAppState>,  private zone:NgZone) {
 		this.ngRedux.provideStore(appStore);
@@ -31,9 +41,21 @@ class ModuleComponent implements OnInit, OnDestroy {
 
 	openGallery() {
 		this.zone.run(() => {
-			alert('open Gallery');
+			this.show = true;
 			this.getImages();
 		});
+	}
+
+	closeGallery() {
+		this.show = false;
+	}
+
+	showListView() {
+		this.mode = 'list';
+	}
+
+	showUploadView() {
+		this.mode = 'upload';
 	}
 
 	getImages() {
@@ -57,10 +79,11 @@ class ModuleComponent implements OnInit, OnDestroy {
 @NgModule({
 	imports: [
 		BrowserModule,
-		NgReduxModule
+		NgReduxModule,
+		FileUploadModule
 	],
 	declarations: [
-		ModuleComponent,
+		ModuleComponent
 	],
 	providers: [
 
